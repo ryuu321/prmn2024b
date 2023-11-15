@@ -1,14 +1,24 @@
 package jp.ac.chitose.ir.views.helloworld;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import jp.ac.chitose.ir.service.Hello;
+import jp.ac.chitose.ir.service.HelloService;
 import jp.ac.chitose.ir.views.MainLayout;
+
+import java.util.Arrays;
 
 @PageTitle("Hello World")
 @Route(value = "hello", layout = MainLayout.class)
@@ -18,18 +28,113 @@ public class HelloWorldView extends HorizontalLayout {
     private TextField name;
     private Button sayHello;
 
-    public HelloWorldView() {
+    private HelloService helloService;
+
+    public HelloWorldView(HelloService helloService) {
+        this.helloService = helloService;
+
         name = new TextField("Your name");
         sayHello = new Button("Say hello");
         sayHello.addClickListener(e -> {
+            Hello reply = helloService.sayHello(new HelloService.SayHelloRequestBody(name.getValue()));
+            reply.message();
+            add(new H6(reply.message()));
             Notification.show("Hello " + name.getValue());
         });
         sayHello.addClickShortcut(Key.ENTER);
 
+
         setMargin(true);
         setVerticalComponentAlignment(Alignment.END, name, sayHello);
 
-        add(name, sayHello);
+        //add(name, sayHello);
+
+
+        //add(new Hr());
+        //HelloWorld helloWorld = new HelloWorld();
+        //add(helloWorld);
+
+        viewGoogleChart();
+
+        var div = new Div();
+        div.setId("chart_div");
+        add(div);
     }
 
+    void viewGoogleChart() {
+        // グラフの表示の仕方の参考実装。GoogleChartクラス
+
+        // 1. カラムを設定
+        var cols = Arrays.asList(
+                new GoogleChart.Col("string", "month"),
+                new GoogleChart.Col("number", "score")
+        );
+
+        // 2. 行を設定
+        var rows = Arrays.asList(
+                new GoogleChart.Row(new GoogleChart.RowValue( "jan") , new GoogleChart.RowValue(15)),
+                new GoogleChart.Row(new GoogleChart.RowValue("oct") , new GoogleChart.RowValue(50))
+        );
+
+        /* data structure
+            _________________
+            | month | score |
+            -----------------
+            |  jan  |  15   |
+            |  oct  |  50   |
+            -----------------
+
+            reference :
+             https://developers.google.com/chart/interactive/docs/reference?hl=en#chartwrapperobject
+             https://github.com/GoogleWebComponents/google-chart/blob/main/google-chart.ts
+             https://qiita.com/cy-hiroshi-chiba/items/84096f9c44dc292f6c5f
+         */
+
+        try {
+            // debug print
+            ObjectMapper objectMapper = new ObjectMapper();
+            System.out.println(objectMapper.writeValueAsString(cols));
+            System.out.println(objectMapper.writeValueAsString(rows));
+        } catch (JsonProcessingException e) { e.printStackTrace(); }
+
+        // 3. カラムと行をGoogleChartに設定して表示
+        add(new GoogleChart(cols, rows, GoogleChart.CHART_TYPE.AREA));
+
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        // javascriptを直書きして動作の確認をとった。この方法は非推奨。推奨はGoogleChartクラスを利用すること。
+        UI ui = getUI().get();
+        ui.getPage().executeJs(
+                """                                        
+                        google.charts.load('current', {'packages':['corechart']});
+                        google.charts.setOnLoadCallback(drawChart1);
+                                        
+                        function drawChart1() {
+                                
+                            // Create the data table.
+                            var data = new google.visualization.DataTable();
+                            data.addColumn('string', '月');
+                            data.addColumn('number', 'PV');
+                            data.addRows([
+                              ['9月', 10],
+                              ['10月', 30],
+                              ['11月', 100],
+                              ['12月', 200],
+                              ['1月', 300]
+                            ]);
+                                    
+                            // Set chart options
+                            var options = {
+                              'title':'ブログのPV推移',
+                              'height':300
+                            };
+                                                    
+                            // Instantiate and draw our chart, passing in some options.
+                            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                            chart.draw(data, options);
+                        }
+                        """);
+    }
 }
