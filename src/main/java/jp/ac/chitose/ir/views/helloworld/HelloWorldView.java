@@ -58,6 +58,8 @@ public class HelloWorldView extends HorizontalLayout {
         //add(helloWorld);
 
         viewGoogleChart();
+        年度別成績分布();
+        アンケート分析の散布図();
 
         var div = new Div();
         div.setId("chart_div");
@@ -115,6 +117,84 @@ public class HelloWorldView extends HorizontalLayout {
 
         // 3. カラムと行をGoogleChartに設定して表示
         add(new GoogleChart(cols, rows, GoogleChart.CHART_TYPE.AREA));
+
+    }
+
+    void 年度別成績分布() {
+        // グラフの表示の仕方の参考実装。GoogleChartクラス
+        var sampleTwos = sampleService.getSampleTwo();
+        System.out.println("sampleOnes is "+ sampleTwos);
+
+        // 1. カラムを設定
+        var cols = Arrays.asList(
+                new GoogleChart.Col("string", "年度"),
+                new GoogleChart.Col("number", "秀"),
+                new GoogleChart.Col("number", "優"),
+                new GoogleChart.Col("number", "良"),
+                new GoogleChart.Col("number", "可"),
+                new GoogleChart.Col("number", "不可"),
+                new GoogleChart.Col("number", "欠席")
+        );
+
+        var rows = sampleTwos.data().stream()
+                .map(sampleTwo ->
+                        new GoogleChart.Row(
+                                new GoogleChart.RowValue(sampleTwo.年度()),
+                                new GoogleChart.RowValue(sampleTwo.秀()),
+                                new GoogleChart.RowValue(sampleTwo.優()),
+                                new GoogleChart.RowValue(sampleTwo.良()),
+                                new GoogleChart.RowValue(sampleTwo.可()),
+                                new GoogleChart.RowValue(sampleTwo.不可()),
+                                new GoogleChart.RowValue(sampleTwo.欠席())
+                        )
+                )
+                .toList();
+
+        // 3. カラムと行をGoogleChartに設定して表示
+        var options = "{\"isStacked\": \"percent\"}";
+        add(new GoogleChart(cols, rows, GoogleChart.CHART_TYPE.BAR, options));
+
+    }
+
+    void アンケート分析の散布図() {
+        // グラフの表示の仕方の参考実装。GoogleChartクラス
+        var sampleThrees = sampleService.getSampleThrees();
+        System.out.println("sampleOnes is "+ sampleThrees);
+
+        // 1. カラムを設定
+        var cols = Arrays.asList(
+                new GoogleChart.Col("string", "年度"),
+                new GoogleChart.Col("number", "難易度")
+        );
+
+        var rows = sampleThrees.data().stream()
+                .map(sampleThree ->
+                        new GoogleChart.Row(
+                                new GoogleChart.RowValue(sampleThree.年度()),
+                                new GoogleChart.RowValue(sampleThree.難易度())
+                        )
+                )
+                .toList();
+
+        // 3. カラムと行をGoogleChartに設定して表示
+        add(new GoogleChart(cols, rows, GoogleChart.CHART_TYPE.SCATTER));
+
+        cols = Arrays.asList(
+                new GoogleChart.Col("string", "年度"),
+                new GoogleChart.Col("number", "学習量")
+        );
+
+        rows = sampleThrees.data().stream()
+                .map(sampleThree ->
+                        new GoogleChart.Row(
+                                new GoogleChart.RowValue(sampleThree.年度()),
+                                new GoogleChart.RowValue(sampleThree.学習量())
+                        )
+                )
+                .toList();
+
+        // 3. カラムと行をGoogleChartに設定して表示
+        add(new GoogleChart(cols, rows, GoogleChart.CHART_TYPE.SCATTER));
 
     }
 

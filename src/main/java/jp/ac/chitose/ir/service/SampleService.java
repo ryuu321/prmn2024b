@@ -8,4 +8,10 @@ public interface SampleService {
 
     @GetExchange("/one")
     SampleOnes getSampleOne();
+
+    @GetExchange("/two")
+    SampleTwos getSampleTwo();
+
+    @GetExchange("/three")
+    SampleThrees getSampleThrees();
 }
