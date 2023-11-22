@@ -14,11 +14,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
-import jp.ac.chitose.ir.service.Hello;
-import jp.ac.chitose.ir.service.HelloService;
+import jp.ac.chitose.ir.service.*;
 import jp.ac.chitose.ir.views.MainLayout;
 
 import java.util.Arrays;
+import java.util.List;
 
 @PageTitle("Hello World")
 @Route(value = "hello", layout = MainLayout.class)
@@ -30,8 +30,11 @@ public class HelloWorldView extends HorizontalLayout {
 
     private HelloService helloService;
 
-    public HelloWorldView(HelloService helloService) {
+    private SampleService sampleService;
+
+    public HelloWorldView(HelloService helloService, SampleService sampleService) {
         this.helloService = helloService;
+        this.sampleService = sampleService;
 
         name = new TextField("Your name");
         sayHello = new Button("Say hello");
@@ -63,6 +66,8 @@ public class HelloWorldView extends HorizontalLayout {
 
     void viewGoogleChart() {
         // グラフの表示の仕方の参考実装。GoogleChartクラス
+        var sampleOnes = sampleService.getSampleOne();
+        System.out.println("sampleOnes is "+ sampleOnes);
 
         // 1. カラムを設定
         var cols = Arrays.asList(
@@ -71,10 +76,21 @@ public class HelloWorldView extends HorizontalLayout {
         );
 
         // 2. 行を設定
+        /*
         var rows = Arrays.asList(
                 new GoogleChart.Row(new GoogleChart.RowValue( "jan") , new GoogleChart.RowValue(15)),
                 new GoogleChart.Row(new GoogleChart.RowValue("oct") , new GoogleChart.RowValue(50))
         );
+         */
+
+        var rows = sampleOnes.data().stream()
+                .map(sampleOne ->
+                        new GoogleChart.Row(
+                                new GoogleChart.RowValue(sampleOne.month()),
+                                new GoogleChart.RowValue(sampleOne.score())
+                        )
+                )
+                .toList();
 
         /* data structure
             _________________
