@@ -2,9 +2,7 @@ package jp.ac.chitose.ir.views.helloworld;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H6;
@@ -16,9 +14,11 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import jp.ac.chitose.ir.service.*;
 import jp.ac.chitose.ir.views.MainLayout;
+import jp.ac.chitose.ir.views.component.GoogleChart;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @PageTitle("Hello World")
 @Route(value = "hello", layout = MainLayout.class)
@@ -68,13 +68,13 @@ public class HelloWorldView extends HorizontalLayout {
 
     void viewGoogleChart() {
         // グラフの表示の仕方の参考実装。GoogleChartクラス
-        var sampleOnes = sampleService.getSampleOne();
-        System.out.println("sampleOnes is "+ sampleOnes);
+        var sampleOne = sampleService.getSampleOne();
+        System.out.println("sampleOnes is "+ sampleOne);
 
         // 1. カラムを設定
         var cols = Arrays.asList(
-                new GoogleChart.Col("string", "month"),
-                new GoogleChart.Col("number", "score")
+                new GoogleChart.Column("string", "month"),
+                new GoogleChart.Column("number", "score")
         );
 
         // 2. 行を設定
@@ -85,11 +85,11 @@ public class HelloWorldView extends HorizontalLayout {
         );
          */
 
-        var rows = sampleOnes.data().stream()
-                .map(sampleOne ->
+        var rows = sampleOne.data().stream()
+                .map(row ->
                         new GoogleChart.Row(
-                                new GoogleChart.RowValue(sampleOne.month()),
-                                new GoogleChart.RowValue(sampleOne.score())
+                                new GoogleChart.RowValue(row.month()),
+                                new GoogleChart.RowValue(row.score())
                         )
                 )
                 .toList();
@@ -122,56 +122,59 @@ public class HelloWorldView extends HorizontalLayout {
 
     void 年度別成績分布() {
         // グラフの表示の仕方の参考実装。GoogleChartクラス
-        var sampleTwos = sampleService.getSampleTwo();
-        System.out.println("sampleOnes is "+ sampleTwos);
+        var sampleTwo = sampleService.getSampleTwo();
+        System.out.println("sampleOnes is "+ sampleTwo);
 
         // 1. カラムを設定
         var cols = Arrays.asList(
-                new GoogleChart.Col("string", "年度"),
-                new GoogleChart.Col("number", "秀"),
-                new GoogleChart.Col("number", "優"),
-                new GoogleChart.Col("number", "良"),
-                new GoogleChart.Col("number", "可"),
-                new GoogleChart.Col("number", "不可"),
-                new GoogleChart.Col("number", "欠席")
+                new GoogleChart.Column("string", "年度"),
+                new GoogleChart.Column("number", "秀"),
+                new GoogleChart.Column("number", "優"),
+                new GoogleChart.Column("number", "良"),
+                new GoogleChart.Column("number", "可"),
+                new GoogleChart.Column("number", "不可"),
+                new GoogleChart.Column("number", "欠席")
         );
 
-        var rows = sampleTwos.data().stream()
-                .map(sampleTwo ->
+        var rows = sampleTwo.data().stream()
+                .map(row ->
                         new GoogleChart.Row(
-                                new GoogleChart.RowValue(sampleTwo.年度()),
-                                new GoogleChart.RowValue(sampleTwo.秀()),
-                                new GoogleChart.RowValue(sampleTwo.優()),
-                                new GoogleChart.RowValue(sampleTwo.良()),
-                                new GoogleChart.RowValue(sampleTwo.可()),
-                                new GoogleChart.RowValue(sampleTwo.不可()),
-                                new GoogleChart.RowValue(sampleTwo.欠席())
+                                new GoogleChart.RowValue(row.年度()),
+                                new GoogleChart.RowValue(row.秀()),
+                                new GoogleChart.RowValue(row.優()),
+                                new GoogleChart.RowValue(row.良()),
+                                new GoogleChart.RowValue(row.可()),
+                                new GoogleChart.RowValue(row.不可()),
+                                new GoogleChart.RowValue(row.欠席())
                         )
                 )
                 .toList();
 
         // 3. カラムと行をGoogleChartに設定して表示
-        var options = "{\"isStacked\": \"percent\"}";
+        //var options = "{\"isStacked\": \"percent\"}";
+        Map<String, Object> options = new HashMap<>();
+        options.put("isStacked", "percent");
+        options.put("title", "成績分布");
         add(new GoogleChart(cols, rows, GoogleChart.CHART_TYPE.BAR, options));
 
     }
 
     void アンケート分析の散布図() {
         // グラフの表示の仕方の参考実装。GoogleChartクラス
-        var sampleThrees = sampleService.getSampleThrees();
-        System.out.println("sampleOnes is "+ sampleThrees);
+        var sampleThree = sampleService.getSampleThrees();
+        System.out.println("sampleOnes is "+ sampleThree);
 
         // 1. カラムを設定
         var cols = Arrays.asList(
-                new GoogleChart.Col("string", "年度"),
-                new GoogleChart.Col("number", "難易度")
+                new GoogleChart.Column("string", "年度"),
+                new GoogleChart.Column("number", "難易度")
         );
 
-        var rows = sampleThrees.data().stream()
-                .map(sampleThree ->
+        var rows = sampleThree.data().stream()
+                .map(row ->
                         new GoogleChart.Row(
-                                new GoogleChart.RowValue(sampleThree.年度()),
-                                new GoogleChart.RowValue(sampleThree.難易度())
+                                new GoogleChart.RowValue(row.年度()),
+                                new GoogleChart.RowValue(row.難易度())
                         )
                 )
                 .toList();
@@ -180,15 +183,15 @@ public class HelloWorldView extends HorizontalLayout {
         add(new GoogleChart(cols, rows, GoogleChart.CHART_TYPE.SCATTER));
 
         cols = Arrays.asList(
-                new GoogleChart.Col("string", "年度"),
-                new GoogleChart.Col("number", "学習量")
+                new GoogleChart.Column("string", "年度"),
+                new GoogleChart.Column("number", "学習量")
         );
 
-        rows = sampleThrees.data().stream()
-                .map(sampleThree ->
+        rows = sampleThree.data().stream()
+                .map(row ->
                         new GoogleChart.Row(
-                                new GoogleChart.RowValue(sampleThree.年度()),
-                                new GoogleChart.RowValue(sampleThree.学習量())
+                                new GoogleChart.RowValue(row.年度()),
+                                new GoogleChart.RowValue(row.学習量())
                         )
                 )
                 .toList();
@@ -198,39 +201,4 @@ public class HelloWorldView extends HorizontalLayout {
 
     }
 
-    @Override
-    protected void onAttach(AttachEvent attachEvent) {
-        // javascriptを直書きして動作の確認をとった。この方法は非推奨。推奨はGoogleChartクラスを利用すること。
-        UI ui = getUI().get();
-        ui.getPage().executeJs(
-                """                                        
-                        google.charts.load('current', {'packages':['corechart']});
-                        google.charts.setOnLoadCallback(drawChart1);
-                                        
-                        function drawChart1() {
-                                
-                            // Create the data table.
-                            var data = new google.visualization.DataTable();
-                            data.addColumn('string', '月');
-                            data.addColumn('number', 'PV');
-                            data.addRows([
-                              ['9月', 10],
-                              ['10月', 30],
-                              ['11月', 100],
-                              ['12月', 200],
-                              ['1月', 300]
-                            ]);
-                                    
-                            // Set chart options
-                            var options = {
-                              'title':'ブログのPV推移',
-                              'height':300
-                            };
-                                                    
-                            // Instantiate and draw our chart, passing in some options.
-                            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-                            chart.draw(data, options);
-                        }
-                        """);
-    }
 }

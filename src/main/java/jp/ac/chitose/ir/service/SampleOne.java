@@ -1,9 +1,13 @@
 package jp.ac.chitose.ir.service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
-public record SampleOne (
-        String month,
-        long score
-)
-{}
+public record SampleOne(
+        List<Row> data
+) {
+    public record Row(
+            String month,
+            long score
+    )
+    {}
+}
