@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.service;
+package jp.ac.chitose.ir.service.sample;
 
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;

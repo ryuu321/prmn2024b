@@ -14,7 +14,6 @@ export class GoogleChartWrapper extends LitElement {
 
     render() {
         return html`
-            <div>${this.data}</div>
             <google-chart type="${this.type}" .data="${dataTable({cols: this.cols, rows: this.rows})}" options="${this.options}"></google-chart>
         `;
     }

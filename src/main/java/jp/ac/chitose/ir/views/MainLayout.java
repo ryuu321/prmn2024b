@@ -28,6 +28,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
 import com.vaadin.flow.theme.lumo.LumoUtility.Width;
 import jp.ac.chitose.ir.views.about.AboutView;
 import jp.ac.chitose.ir.views.feed.FeedView;
+import jp.ac.chitose.ir.views.helloworld.HelloTableView;
 import jp.ac.chitose.ir.views.helloworld.HelloWorldView;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
@@ -104,11 +105,9 @@ public class MainLayout extends AppLayout {
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
                 new MenuItemInfo("Hello World", LineAwesomeIcon.GLOBE_SOLID.create(), HelloWorldView.class), //
-
+                new MenuItemInfo("テーブル使用例", LineAwesomeIcon.TABLE_SOLID.create(), HelloTableView.class),
                 new MenuItemInfo("About", LineAwesomeIcon.FILE.create(), AboutView.class), //
-
                 new MenuItemInfo("Feed", LineAwesomeIcon.LIST_SOLID.create(), FeedView.class), //
-
         };
     }
 
