@@ -7,5 +7,11 @@ import org.springframework.web.service.annotation.HttpExchange;
 public interface SampleService {
 
     @GetExchange("/one")
-    SampleOnes getSampleOne();
+    SampleOne getSampleOne();
+
+    @GetExchange("/two")
+    SampleTwo getSampleTwo();
+
+    @GetExchange("/three")
+    SampleThree getSampleThrees();
 }
