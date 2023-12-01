@@ -1,7 +1,7 @@
 package jp.ac.chitose.ir.config;
 
 import jp.ac.chitose.ir.service.HelloService;
-import jp.ac.chitose.ir.service.SampleService;
+import jp.ac.chitose.ir.service.sample.SampleService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

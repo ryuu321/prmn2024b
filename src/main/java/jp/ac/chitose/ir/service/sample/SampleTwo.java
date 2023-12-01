@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.service;
+package jp.ac.chitose.ir.service.sample;
 
 import java.util.List;
 
