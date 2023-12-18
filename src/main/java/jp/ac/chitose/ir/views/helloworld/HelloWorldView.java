@@ -29,7 +29,7 @@ import java.util.Map;
 @PageTitle("Hello World")
 @Route(value = "hello", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
-public class HelloWorldView extends VerticalLayout {
+public class  HelloWorldView extends VerticalLayout {
 
     private TextField name;
     private Button sayHello;

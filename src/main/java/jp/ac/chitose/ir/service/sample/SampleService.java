@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.service.sample;
 
+import jp.ac.chitose.ir.service.TableData;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
@@ -7,11 +8,11 @@ import org.springframework.web.service.annotation.HttpExchange;
 public interface SampleService {
 
     @GetExchange("/one")
-    SampleOne getSampleOne();
+    TableData<SampleOne> getSampleOne();
 
     @GetExchange("/two")
-    SampleTwo getSampleTwo();
+    TableData<SampleTwo> getSampleTwo();
 
     @GetExchange("/three")
-    SampleThree getSampleThrees();
+    TableData<SampleThree> getSampleThrees();
 }
