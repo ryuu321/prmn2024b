@@ -2,11 +2,17 @@ package jp.ac.chitose.ir.views.helloworld;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vaadin.flow.component.Key;
+import com.github.appreciated.apexcharts.ApexCharts;
+import com.github.appreciated.apexcharts.ApexChartsBuilder;
+import com.github.appreciated.apexcharts.config.DataLabels;
+import com.github.appreciated.apexcharts.config.builder.*;
+import com.github.appreciated.apexcharts.config.chart.Type;
+import com.github.appreciated.apexcharts.config.chart.animations.Easing;
+import com.github.appreciated.apexcharts.config.chart.animations.builder.DynamicAnimationBuilder;
+import com.github.appreciated.apexcharts.config.chart.builder.AnimationsBuilder;
+import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -19,12 +25,11 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import jp.ac.chitose.ir.service.*;
 import jp.ac.chitose.ir.service.sample.SampleService;
 import jp.ac.chitose.ir.views.MainLayout;
+import jp.ac.chitose.ir.views.component.ChartJS;
 import jp.ac.chitose.ir.views.component.GoogleChart;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.SecureRandom;
+import java.util.*;
 
 @PageTitle("Hello World")
 @Route(value = "hello", layout = MainLayout.class)
@@ -51,8 +56,10 @@ public class  HelloWorldView extends VerticalLayout {
 
         // グラフ表示の例；
         // 　データはPythonから取得
-        GoogleChart googleChart = googleChartの使用例();
-        add(googleChart);
+        //GoogleChart googleChart = googleChartの使用例();
+        //add(googleChart);
+
+        add(散布図ApechCharts版());
 
         // ボタン（なんらかの動作をさせるときに利用する）の表示と動作の使用例
         Button graphButton = new Button("成績分布やアンケートの散布図を表示する");
@@ -71,6 +78,8 @@ public class  HelloWorldView extends VerticalLayout {
         graphButton.addClassNames(LumoUtility.FontSize.XLARGE, LumoUtility.Padding.XLARGE);
         add(graphButton);
 
+        add(new H1("addon chartjs"), chartjs());
+        //add(new H1("chart js"),new ChartJS());
     }
 
     private GoogleChart googleChartの使用例() {
@@ -157,6 +166,7 @@ public class  HelloWorldView extends VerticalLayout {
                 )
                 .toList();
 
+
         // 3. カラムと行をGoogleChartに設定して表示
         //var options = "{\"isStacked\": \"percent\"}";
         Map<String, Object> options = new HashMap<>();
@@ -209,4 +219,58 @@ public class  HelloWorldView extends VerticalLayout {
         return List.of(chart1, chart2);
     }
 
+    private ApexCharts 散布図ApechCharts版() {
+        var sampleThrees = sampleService.getSampleThrees();
+        var 学習量 = sampleThrees.data().stream().map(row -> row.学習量()).toList().toArray(new Double[0]);
+        Series<Double> series = new Series<>("2023");
+        series.setData(学習量);
+
+        ApexCharts chart = ApexChartsBuilder.get().withChart(
+                        ChartBuilder.get()
+                                .withType(Type.SCATTER)
+                                .withAnimations(AnimationsBuilder.get()
+                                        .withEnabled(false)
+                                        .build())
+                                .build())
+                .withDataLabels(DataLabelsBuilder.get()
+                        .withEnabled(false)
+                        .build())
+                .withSeries(series)
+                .withYaxis(YAxisBuilder.get().withForceNiceScale(true).build())
+                .build();
+        return chart;
+    }
+
+    private ApexCharts chartjs() {
+        final ApexCharts chart = ApexChartsBuilder.get().withChart(
+                ChartBuilder.get()
+                        .withType(Type.LINE)
+                        .withAnimations(AnimationsBuilder.get()
+                                .withEnabled(false)
+                                .withEasing(Easing.LINEAR)
+                                .build())
+                        .build())
+                .withDataLabels(DataLabelsBuilder.get()
+                        .withEnabled(false)
+                        .build())
+                .withSeries(new Series<>(0))
+                .withXaxis(XAxisBuilder.get()
+                        .withCategories()
+                        .withMax(10.0)
+                        .build())
+                .build();
+
+
+        chart.setHeight("400px");
+        chart.setWidth("400px");
+        final SecureRandom random = new SecureRandom();
+        final Series<Double> series = new Series<>("2021", 25.2, 30.2, 25.77, 45.66, 60.00, 55.5);
+        final Series<Double> serie1 = new Series<>("2022", 30.3, 34.10, 20.11, 12.15, 55.66, 82.5, 64.35, 100.4, 77.66, 14.32, 25.77);
+        final Series<Double> serie2 = new Series<>("2023", 25.5, 55.3, 44.5, 99.6, 10.3, 44.6, 36.6);
+        final Series[] randomSeries = new Series[]{series, serie1, serie2, series};
+        //chart.updateSeries(radomSeries[SECURE_RANDOM.nextInt(randomSeries .length)]);
+
+        chart.updateSeries(randomSeries);
+        return chart;
+    }
 }
