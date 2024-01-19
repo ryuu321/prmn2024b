@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.DataLabels;
 import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.animations.Easing;
-import com.github.appreciated.apexcharts.config.chart.animations.builder.DynamicAnimationBuilder;
 import com.github.appreciated.apexcharts.config.chart.builder.AnimationsBuilder;
+import com.github.appreciated.apexcharts.config.plotoptions.Bar;
+import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
+import com.github.appreciated.apexcharts.config.series.SeriesType;
+import com.github.appreciated.apexcharts.helper.Coordinate;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -25,7 +27,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import jp.ac.chitose.ir.service.*;
 import jp.ac.chitose.ir.service.sample.SampleService;
 import jp.ac.chitose.ir.views.MainLayout;
-import jp.ac.chitose.ir.views.component.ChartJS;
 import jp.ac.chitose.ir.views.component.GoogleChart;
 
 import java.security.SecureRandom;
@@ -78,7 +79,9 @@ public class  HelloWorldView extends VerticalLayout {
         graphButton.addClassNames(LumoUtility.FontSize.XLARGE, LumoUtility.Padding.XLARGE);
         add(graphButton);
 
-        add(new H1("addon chartjs"), chartjs());
+        add(new H1("addon ヒストグラム"), ヒストグラム());
+
+        add(new H1("addon 箱ひげ図"), 箱ひげ図());
         //add(new H1("chart js"),new ChartJS());
     }
 
@@ -241,36 +244,76 @@ public class  HelloWorldView extends VerticalLayout {
         return chart;
     }
 
-    private ApexCharts chartjs() {
+    private ApexCharts ヒストグラム() {
+
+        // ヒストグラムで表示するデータを用意する
+        // データはSeriesクラスを使う
+        // Seriesクラスのコンストラクタには、名前、データの中身、を設定する。
+        // データの中身は、Coordinateクラスを設定する。Coordinateクラスが一つで柱（棒）；階級が一つできる
+        // 柱（棒）；階級には、データ数、があるので、Coordinateクラスのコンストラクタの第２引数にデータ数を設定する
+        // 階級の幅の数に応じてCoordinateクラスをnewして設定する（階級数が7なら7個Cooridnateクラスを設定する）
+        final Series<Coordinate<String, Integer>> series = new Series<>("2021",
+                new Coordinate<>("10", 25), // 第一引数に階級、第二引数にデータ数
+                new Coordinate<>("20", 30), // 第一引数に階級、第二引数にデータ数
+                new Coordinate<>("30", 40), // 第一引数に階級、第二引数にデータ数
+                new Coordinate<>("40", 60), // 第一引数に階級、第二引数にデータ数
+                new Coordinate<>("50", 40), // 第一引数に階級、第二引数にデータ数
+                new Coordinate<>("60", 20), // 第一引数に階級、第二引数にデータ数
+                new Coordinate<>("70", 10)  // 第一引数に階級、第二引数にデータ数
+                );
+
+        // ヒストグラムを作成する
+        // withType(Type.BAR)は棒グラフで表示する指示にあたる
+        // 棒グラフをもとにヒストグラムに見た目を変更する。変更するポイントは下記にコメントで補足
         final ApexCharts chart = ApexChartsBuilder.get().withChart(
                 ChartBuilder.get()
-                        .withType(Type.LINE)
-                        .withAnimations(AnimationsBuilder.get()
-                                .withEnabled(false)
-                                .withEasing(Easing.LINEAR)
-                                .build())
+                        .withType(Type.BAR) // Typeにヒストグラムがない。公式サイトのissueによるBARでやるように指示がある
                         .build())
                 .withDataLabels(DataLabelsBuilder.get()
                         .withEnabled(false)
                         .build())
-                .withSeries(new Series<>(0))
-                .withXaxis(XAxisBuilder.get()
-                        .withCategories()
-                        .withMax(10.0)
+                .withPlotOptions(PlotOptionsBuilder.get()
+                        .withBar(BarBuilder.get().withColumnWidth("100%").build()) // BARの間隔を０に近づける（見た目を調整してヒストグラムにみえるようにする）
                         .build())
+                .withStroke(StrokeBuilder.get().withWidth(0.1).withColors("#000").build()) // 柱（棒）の外枠を黒色に設定してヒストグラムに見た目を近づける
+                .withYaxis(YAxisBuilder.get().withMax(80).build()) // Y軸の最大値；ここでは80に設定
+                .withSeries(series)
                 .build();
-
 
         chart.setHeight("400px");
         chart.setWidth("400px");
-        final SecureRandom random = new SecureRandom();
-        final Series<Double> series = new Series<>("2021", 25.2, 30.2, 25.77, 45.66, 60.00, 55.5);
-        final Series<Double> serie1 = new Series<>("2022", 30.3, 34.10, 20.11, 12.15, 55.66, 82.5, 64.35, 100.4, 77.66, 14.32, 25.77);
-        final Series<Double> serie2 = new Series<>("2023", 25.5, 55.3, 44.5, 99.6, 10.3, 44.6, 36.6);
-        final Series[] randomSeries = new Series[]{series, serie1, serie2, series};
-        //chart.updateSeries(radomSeries[SECURE_RANDOM.nextInt(randomSeries .length)]);
-
-        chart.updateSeries(randomSeries);
         return chart;
     }
+
+    private ApexCharts 箱ひげ図() {
+        // 箱ひげ図で表示するデータを用意する
+        // データはSeriesクラスを使う
+        // Seriesクラスのコンストラクタには、名前、データの中身、を設定する。
+        // データの中身は、Coordinateクラスを設定する。Coordinateクラスが一つで箱が一つできる
+        // 箱には、最小値、第一四分位数、中央値、第三四分位数、最大値、があるので、Coordinateクラスのコンストラクタの第２引数に順番に設定する
+        final Series<Coordinate<String, Double>> series = new Series<>("box",
+                new Coordinate<>("2021", 43.2, 65.0, 69.1, 76.8, 81.6), // １つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
+                new Coordinate<>("2022", 30.8, 39.2, 45.0, 51.0, 59.3)  // ２つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
+                );
+        final Series[] randomSeries = new Series[]{series};
+
+        // 箱ひげ図を作成する
+        // withType(Type.BOXPLOT)が箱ひげ図で表示する指示にあたる
+        final ApexCharts chart = ApexChartsBuilder.get().withChart(
+                        ChartBuilder.get()
+                                .withType(Type.BOXPLOT)
+                                .withAnimations(AnimationsBuilder.get()
+                                        .withEnabled(false)
+                                        .withEasing(Easing.LINEAR)
+                                        .build())
+                                .build())
+                .withSeries(randomSeries)
+                .build();
+
+        chart.setHeight("600px");
+        chart.setWidth("600px");
+
+        return chart;
+    }
+
 }
