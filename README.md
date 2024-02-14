@@ -43,3 +43,8 @@ Once the JAR file is built, you can run it using
 - Find add-ons at [vaadin.com/directory](https://vaadin.com/directory).
 - Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/vaadin) or join our [Discord channel](https://discord.gg/MYFq5RTbBn).
 - Report issues, create pull requests in [GitHub](https://github.com/vaadin).
+
+## 作業の進め方
+
+所属するチームの名前のブランチの下に作業者の苗字のブランチを切り、作業を進める。
+変更が大きくなりすぎないところでmainブランチにマージすること。
