@@ -11,6 +11,7 @@ import com.github.appreciated.apexcharts.config.chart.builder.AnimationsBuilder;
 import com.github.appreciated.apexcharts.config.plotoptions.Bar;
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
 import com.github.appreciated.apexcharts.config.series.SeriesType;
+import com.github.appreciated.apexcharts.helper.ColorCoordinate;
 import com.github.appreciated.apexcharts.helper.Coordinate;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.button.Button;
@@ -29,8 +30,10 @@ import jp.ac.chitose.ir.service.sample.SampleService;
 import jp.ac.chitose.ir.views.MainLayout;
 import jp.ac.chitose.ir.views.component.GoogleChart;
 
+import java.awt.*;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.List;
 
 @PageTitle("Hello World")
 @Route(value = "hello", layout = MainLayout.class)
