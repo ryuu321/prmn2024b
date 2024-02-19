@@ -28,6 +28,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import jp.ac.chitose.ir.service.*;
 import jp.ac.chitose.ir.service.sample.SampleService;
 import jp.ac.chitose.ir.views.MainLayout;
+import jp.ac.chitose.ir.views.component.ApexChart;
 import jp.ac.chitose.ir.views.component.GoogleChart;
 
 import java.awt.*;
@@ -46,6 +47,8 @@ public class  HelloWorldView extends VerticalLayout {
     private HelloService helloService;
 
     private SampleService sampleService;
+
+    private ApexChart apexChart = new ApexChart();
 
     public HelloWorldView(HelloService helloService, SampleService sampleService) {
         this.helloService = helloService;
@@ -231,7 +234,7 @@ public class  HelloWorldView extends VerticalLayout {
         Series<Double> series = new Series<>("2023");
         series.setData(学習量);
 
-        ApexCharts chart = ApexChartsBuilder.get().withChart(
+        /*ApexCharts chart = ApexChartsBuilder.get().withChart(
                         ChartBuilder.get()
                                 .withType(Type.SCATTER)
                                 .withAnimations(AnimationsBuilder.get()
@@ -245,6 +248,8 @@ public class  HelloWorldView extends VerticalLayout {
                 .withYaxis(YAxisBuilder.get().withForceNiceScale(true).build())
                 .build();
         return chart;
+         */
+        return apexChart.scatter(series);
     }
 
     private ApexCharts ヒストグラム() {
