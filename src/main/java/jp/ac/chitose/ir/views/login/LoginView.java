@@ -2,40 +2,59 @@ package jp.ac.chitose.ir.views.login;
 
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import jp.ac.chitose.ir.views.MainLayout;
 
 @PageTitle("login")
-@Route(value = "login", layout = MainLayout.class)
+@Route(value = "login")
 @AnonymousAllowed
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
-    private LoginForm login = new LoginForm();
+    private LoginForm login;
+    private LoginI18n i18n = LoginI18n.createDefault();
 
     public LoginView() {
-            addClassName("login-view");
-            setSizeFull();
+        addClassName("login-view");
+        setSizeFull();
 
-            setJustifyContentMode(JustifyContentMode.CENTER);
-            setAlignItems(Alignment.CENTER);
+        setJustifyContentMode(JustifyContentMode.CENTER);
+        setAlignItems(Alignment.CENTER);
 
-            login.setAction("login");
+        LoginI18n.Form i18nForm = i18n.getForm();
 
-            add(new H1("Test Application"), login);
+        i18nForm.setTitle("ログイン");
+        i18nForm.setUsername("ログインID");
+        i18nForm.setPassword("パスワード");
+        i18nForm.setSubmit("ログイン");
+        i18nForm.setForgotPassword("パスワードを忘れた方はこちら");
+        i18n.setForm(i18nForm);
+
+        LoginI18n.ErrorMessage i18nErrorMessage = i18n.getErrorMessage();
+
+        i18nErrorMessage.setTitle("ログインIDまたはパスワードが不正です");
+        i18nErrorMessage.setUsername("ログインIDを入力してください");
+        i18nErrorMessage.setPassword("パスワードを入力してください");
+        i18nErrorMessage.setMessage("ユーザー名とパスワードが正しいことを確認して、再試行してください");
+
+        login = new LoginForm(i18n);
+        login.setAction("login");
+
+        add(new H1("IRポータル(仮)"), login);
+        add(login);
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        if(beforeEnterEvent.getLocation()
+                .getQueryParameters()
+                .getParameters()
+                .containsKey("error")) {
+            login.setError(true);
         }
-
-        @Override
-        public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-            if(beforeEnterEvent.getLocation()
-                    .getQueryParameters()
-                    .getParameters()
-                    .containsKey("error")) {
-                login.setError(true);
-            }
 
     }
 }
