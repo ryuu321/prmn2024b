@@ -30,6 +30,7 @@ import jp.ac.chitose.ir.service.sample.SampleService;
 import jp.ac.chitose.ir.views.MainLayout;
 import jp.ac.chitose.ir.views.component.ApexChart;
 import jp.ac.chitose.ir.views.component.GoogleChart;
+import jp.ac.chitose.ir.views.component.Graph;
 
 import java.awt.*;
 import java.security.SecureRandom;
@@ -53,6 +54,8 @@ public class  HelloWorldView extends VerticalLayout {
     public HelloWorldView(HelloService helloService, SampleService sampleService) {
         this.helloService = helloService;
         this.sampleService = sampleService;
+
+        add(new Graph.GraphBuilder().build().getChart());
 
         // タイトル表示　（最も簡単なコンポーネントの使用例）
         H1 title = new H1("IR System & Data Project にようこそ");
@@ -175,14 +178,13 @@ public class  HelloWorldView extends VerticalLayout {
                 )
                 .toList();
 
-
         // 3. カラムと行をGoogleChartに設定して表示
         //var options = "{\"isStacked\": \"percent\"}";
         Map<String, Object> options = new HashMap<>();
         options.put("isStacked", "percent");
-        options.put("title", "成績分布");
+        options.put("title", "成績分布");;
         return new GoogleChart(cols, rows, GoogleChart.CHART_TYPE.BAR, options);
-
+        //return apexChart.bar(series);
     }
 
     private List<GoogleChart> アンケート分析の散布図() {
@@ -249,7 +251,7 @@ public class  HelloWorldView extends VerticalLayout {
                 .build();
         return chart;
          */
-        return apexChart.scatter(series);
+        return new Graph.GraphBuilder().series(series).chartType(Type.SCATTER).build().getGraph();
     }
 
     private ApexCharts ヒストグラム() {
@@ -273,7 +275,7 @@ public class  HelloWorldView extends VerticalLayout {
         // ヒストグラムを作成する
         // withType(Type.BAR)は棒グラフで表示する指示にあたる
         // 棒グラフをもとにヒストグラムに見た目を変更する。変更するポイントは下記にコメントで補足
-        final ApexCharts chart = ApexChartsBuilder.get().withChart(
+        /* final ApexCharts chart = ApexChartsBuilder.get().withChart(
                 ChartBuilder.get()
                         .withType(Type.BAR) // Typeにヒストグラムがない。公式サイトのissueによるBARでやるように指示がある
                         .build())
@@ -287,7 +289,8 @@ public class  HelloWorldView extends VerticalLayout {
                 .withYaxis(YAxisBuilder.get().withMax(80).build()) // Y軸の最大値；ここでは80に設定
                 .withSeries(series)
                 .build();
-
+         */
+        ApexCharts chart = apexChart.histogram(series);
         chart.setHeight("400px");
         chart.setWidth("400px");
         return chart;

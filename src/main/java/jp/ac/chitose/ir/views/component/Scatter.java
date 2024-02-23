@@ -8,9 +8,15 @@ import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.builder.AnimationsBuilder;
 import com.github.appreciated.apexcharts.helper.Series;
 
+import java.util.List;
+
 public class Scatter {
     public ApexCharts scatter(Series... series) {
-        final ApexCharts chart = ApexChartsBuilder.get()
+        return makeScatterChart(series);
+    }
+
+    private ApexCharts makeScatterChart(Series... series) {
+        return ApexChartsBuilder.get()
                 .withChart(ChartBuilder.get()
                         .withType(Type.SCATTER)
                         .withAnimations(AnimationsBuilder.get()
@@ -22,6 +28,5 @@ public class Scatter {
                         .withForceNiceScale(true)
                         .build())
                 .build();
-        return chart;
     }
 }

@@ -9,12 +9,7 @@ import com.github.appreciated.apexcharts.config.annotations.builder.LabelBuilder
 import com.github.appreciated.apexcharts.config.annotations.builder.XAxisAnnotationsBuilder;
 import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
-import com.github.appreciated.apexcharts.config.datalables.builder.StyleBuilder;
-import com.github.appreciated.apexcharts.config.legend.builder.ContainerMarginBuilder;
-import com.github.appreciated.apexcharts.config.legend.builder.ItemMarginBuilder;
-import com.github.appreciated.apexcharts.config.legend.builder.LabelsBuilder;
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
-import com.github.appreciated.apexcharts.config.states.Normal;
 import com.github.appreciated.apexcharts.helper.*;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -77,25 +72,38 @@ public class StudentView extends VerticalLayout {
             Annotations annotations = new Annotations();
             ArrayList<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
             xAxisAnnotations.add(XAxisAnnotationsBuilder.get()
-                            .withX(grade.get(0).成績評価())
+                            .withX(grade.get(0).成績評価() + "(あなたの成績位置)")
                             .withLabel(LabelBuilder.get()
                                     .withStyle(AnnotationStyleBuilder.get()
                                             .withFontSize("20px")
                                             .build())
-                                    .withPosition("top")
+                                    .withOrientation("horizontal")
                                     .withTextAnchor("middle")
                                     .withText("あなたの成績位置")
                                     .build())
                             .build());
+            xAxisAnnotations.add(XAxisAnnotationsBuilder.get()
+                    .withX(grade.get(0).成績評価().equals("可") ? "良" : "可")
+                    .withLabel(LabelBuilder.get()
+                            .withStyle(AnnotationStyleBuilder.get()
+                                    .withFontSize("20px")
+                                    .build())
+                            .withOrientation("horizontal")
+                            .withTextAnchor("middle")
+                            .withText("平均値")
+                            .build())
+                    .build());
             annotations.setXaxis(xAxisAnnotations);
             chart = ApexChartsBuilder.get().withChart(
                             ChartBuilder.get()
                                     .withType(Type.BAR)
                                     .build())
+                    .withXaxis(XAxisBuilder.get()
+                            .build())
+                    .withAnnotations(annotations)
                     .withDataLabels(DataLabelsBuilder.get()
                             .withEnabled(false)
                             .build())
-                    .withAnnotations(annotations)
                     .withPlotOptions(PlotOptionsBuilder.get()
                             .withBar(BarBuilder.get()
                                     .withColumnWidth("100%")
