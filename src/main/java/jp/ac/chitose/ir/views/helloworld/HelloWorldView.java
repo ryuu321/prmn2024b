@@ -55,8 +55,6 @@ public class  HelloWorldView extends VerticalLayout {
         this.helloService = helloService;
         this.sampleService = sampleService;
 
-        add(new Graph.GraphBuilder().build().getChart());
-
         // タイトル表示　（最も簡単なコンポーネントの使用例）
         H1 title = new H1("IR System & Data Project にようこそ");
         add(title);
@@ -236,6 +234,9 @@ public class  HelloWorldView extends VerticalLayout {
         Series<Double> series = new Series<>("2023");
         series.setData(学習量);
 
+        List<Series> seriesList = new ArrayList<>();
+        seriesList.add(series);
+
         /*ApexCharts chart = ApexChartsBuilder.get().withChart(
                         ChartBuilder.get()
                                 .withType(Type.SCATTER)
@@ -250,8 +251,8 @@ public class  HelloWorldView extends VerticalLayout {
                 .withYaxis(YAxisBuilder.get().withForceNiceScale(true).build())
                 .build();
         return chart;
-         */
-        return new Graph.GraphBuilder().series(series).chartType(Type.SCATTER).build().getGraph();
+*/
+        return new Graph.Builder().series(seriesList).graphType(Graph.GRAPH_TYPE.SCATTER).build().getGraph();
     }
 
     private ApexCharts ヒストグラム() {
@@ -290,10 +291,8 @@ public class  HelloWorldView extends VerticalLayout {
                 .withSeries(series)
                 .build();
          */
-        ApexCharts chart = apexChart.histogram(series);
-        chart.setHeight("400px");
-        chart.setWidth("400px");
-        return chart;
+        return new Graph.Builder().graphType(Graph.GRAPH_TYPE.BAR).histogram(true)
+                .height("400px").width("400px").series(series).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
 
     private ApexCharts 箱ひげ図() {
