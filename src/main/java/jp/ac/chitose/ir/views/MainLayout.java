@@ -27,6 +27,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
 import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
 import com.vaadin.flow.theme.lumo.LumoUtility.Width;
 import jp.ac.chitose.ir.views.about.AboutView;
+import jp.ac.chitose.ir.views.commission.CommissionView;
 import jp.ac.chitose.ir.views.feed.FeedView;
 import jp.ac.chitose.ir.views.helloworld.HelloTableView;
 import jp.ac.chitose.ir.views.helloworld.HelloWorldView;
@@ -108,6 +109,7 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("テーブル使用例", LineAwesomeIcon.TABLE_SOLID.create(), HelloTableView.class),
                 new MenuItemInfo("About", LineAwesomeIcon.FILE.create(), AboutView.class), //
                 new MenuItemInfo("Feed", LineAwesomeIcon.LIST_SOLID.create(), FeedView.class), //
+                new MenuItemInfo("Commission",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class)
         };
     }
 
