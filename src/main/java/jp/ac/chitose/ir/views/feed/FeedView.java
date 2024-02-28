@@ -13,12 +13,15 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
+import jp.ac.chitose.ir.views.MainLayout;
+
 import java.util.Arrays;
 import java.util.List;
-import jp.ac.chitose.ir.views.MainLayout;
 
 @PageTitle("Feed")
 @Route(value = "feed", layout = MainLayout.class)
+@PermitAll
 public class FeedView extends Div implements AfterNavigationObserver {
 
     Grid<Person> grid = new Grid<>();
