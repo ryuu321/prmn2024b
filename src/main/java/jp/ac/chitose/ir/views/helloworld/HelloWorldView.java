@@ -8,10 +8,6 @@ import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.animations.Easing;
 import com.github.appreciated.apexcharts.config.chart.builder.AnimationsBuilder;
-import com.github.appreciated.apexcharts.config.plotoptions.Bar;
-import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
-import com.github.appreciated.apexcharts.config.series.SeriesType;
-import com.github.appreciated.apexcharts.helper.ColorCoordinate;
 import com.github.appreciated.apexcharts.helper.Coordinate;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.button.Button;
@@ -32,8 +28,6 @@ import jp.ac.chitose.ir.views.component.ApexChart;
 import jp.ac.chitose.ir.views.component.GoogleChart;
 import jp.ac.chitose.ir.views.component.Graph;
 
-import java.awt.*;
-import java.security.SecureRandom;
 import java.util.*;
 import java.util.List;
 
@@ -48,8 +42,6 @@ public class  HelloWorldView extends VerticalLayout {
     private HelloService helloService;
 
     private SampleService sampleService;
-
-    private ApexChart apexChart = new ApexChart();
 
     public HelloWorldView(HelloService helloService, SampleService sampleService) {
         this.helloService = helloService;
@@ -90,6 +82,19 @@ public class  HelloWorldView extends VerticalLayout {
 
         add(new H1("addon 箱ひげ図"), 箱ひげ図());
         //add(new H1("chart js"),new ChartJS());
+
+        Series[] series = new Series[]{new Series("2021", new Coordinate<>("a",10), new Coordinate<>("b", 50),new Coordinate<>("c", 20)), new Series("2022", new Coordinate<>("a",20), new Coordinate<>("b", 30),new Coordinate<>("c", 40))};
+        add(new Graph.Builder().band(true).series(series).build().getGraph());
+
+        series = new Series[]{new Series(new Coordinate<>("a", 10), new Coordinate<>("b", 10))};
+        List<String> targets = new ArrayList<>();
+        targets.add("a");
+        targets.add("b");
+        List<String> texts = new ArrayList<>();
+        texts.add("25.0%");
+        texts.add("25.0%");
+        add(new Graph.Builder().graphType(Graph.GRAPH_TYPE.BAR).series(series).YAxisAnnotations(Arrays.asList(0d, 1d), texts, "left").horizontal(true).build().getGraph());
+
     }
 
     private GoogleChart googleChartの使用例() {
@@ -291,7 +296,7 @@ public class  HelloWorldView extends VerticalLayout {
                 .withSeries(series)
                 .build();
          */
-        return new Graph.Builder().graphType(Graph.GRAPH_TYPE.BAR).histogram(true)
+        return new Graph.Builder().histogram(true)
                 .height("400px").width("400px").series(series).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
 
@@ -325,5 +330,4 @@ public class  HelloWorldView extends VerticalLayout {
 
         return chart;
     }
-
 }
