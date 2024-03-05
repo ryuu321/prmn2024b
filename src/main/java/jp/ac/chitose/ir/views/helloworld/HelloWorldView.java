@@ -4,13 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.builder.*;
+import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.animations.Easing;
 import com.github.appreciated.apexcharts.config.chart.builder.AnimationsBuilder;
-import com.github.appreciated.apexcharts.config.plotoptions.Bar;
-import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
-import com.github.appreciated.apexcharts.config.series.SeriesType;
 import com.github.appreciated.apexcharts.helper.Coordinate;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.button.Button;
@@ -24,12 +21,12 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import jp.ac.chitose.ir.service.*;
+import jp.ac.chitose.ir.service.HelloService;
 import jp.ac.chitose.ir.service.sample.SampleService;
 import jp.ac.chitose.ir.views.MainLayout;
 import jp.ac.chitose.ir.views.component.GoogleChart;
+import jp.ac.chitose.ir.views.component.Graph;
 
-import java.security.SecureRandom;
 import java.util.*;
 
 @PageTitle("Hello World")
@@ -83,6 +80,19 @@ public class  HelloWorldView extends VerticalLayout {
 
         add(new H1("addon 箱ひげ図"), 箱ひげ図());
         //add(new H1("chart js"),new ChartJS());
+
+        Series[] series = new Series[]{new Series("2021", new Coordinate<>("a",10), new Coordinate<>("b", 50),new Coordinate<>("c", 20)), new Series("2022", new Coordinate<>("a",20), new Coordinate<>("b", 30),new Coordinate<>("c", 40))};
+        add(new Graph.Builder().band(true).series(series).build().getGraph());
+
+        series = new Series[]{new Series(new Coordinate<>("a", 10), new Coordinate<>("b", 10))};
+        List<String> targets = new ArrayList<>();
+        targets.add("a");
+        targets.add("b");
+        List<String> texts = new ArrayList<>();
+        texts.add("25.0%");
+        texts.add("25.0%");
+        add(new Graph.Builder().graphType(Graph.GRAPH_TYPE.BAR).series(series).YAxisAnnotations(Arrays.asList(0d, 1d), texts, "left").horizontal(true).build().getGraph());
+
     }
 
     private GoogleChart googleChartの使用例() {
@@ -169,14 +179,13 @@ public class  HelloWorldView extends VerticalLayout {
                 )
                 .toList();
 
-
         // 3. カラムと行をGoogleChartに設定して表示
         //var options = "{\"isStacked\": \"percent\"}";
         Map<String, Object> options = new HashMap<>();
         options.put("isStacked", "percent");
-        options.put("title", "成績分布");
+        options.put("title", "成績分布");;
         return new GoogleChart(cols, rows, GoogleChart.CHART_TYPE.BAR, options);
-
+        //return apexChart.bar(series);
     }
 
     private List<GoogleChart> アンケート分析の散布図() {
@@ -228,7 +237,10 @@ public class  HelloWorldView extends VerticalLayout {
         Series<Double> series = new Series<>("2023");
         series.setData(学習量);
 
-        ApexCharts chart = ApexChartsBuilder.get().withChart(
+        List<Series> seriesList = new ArrayList<>();
+        seriesList.add(series);
+
+        /*ApexCharts chart = ApexChartsBuilder.get().withChart(
                         ChartBuilder.get()
                                 .withType(Type.SCATTER)
                                 .withAnimations(AnimationsBuilder.get()
@@ -242,6 +254,8 @@ public class  HelloWorldView extends VerticalLayout {
                 .withYaxis(YAxisBuilder.get().withForceNiceScale(true).build())
                 .build();
         return chart;
+*/
+        return new Graph.Builder().series(seriesList).graphType(Graph.GRAPH_TYPE.SCATTER).build().getGraph();
     }
 
     private ApexCharts ヒストグラム() {
@@ -260,12 +274,12 @@ public class  HelloWorldView extends VerticalLayout {
                 new Coordinate<>("50", 40), // 第一引数に階級、第二引数にデータ数
                 new Coordinate<>("60", 20), // 第一引数に階級、第二引数にデータ数
                 new Coordinate<>("70", 10)  // 第一引数に階級、第二引数にデータ数
-                );
+        );
 
         // ヒストグラムを作成する
         // withType(Type.BAR)は棒グラフで表示する指示にあたる
         // 棒グラフをもとにヒストグラムに見た目を変更する。変更するポイントは下記にコメントで補足
-        final ApexCharts chart = ApexChartsBuilder.get().withChart(
+        /* final ApexCharts chart = ApexChartsBuilder.get().withChart(
                 ChartBuilder.get()
                         .withType(Type.BAR) // Typeにヒストグラムがない。公式サイトのissueによるBARでやるように指示がある
                         .build())
@@ -279,10 +293,9 @@ public class  HelloWorldView extends VerticalLayout {
                 .withYaxis(YAxisBuilder.get().withMax(80).build()) // Y軸の最大値；ここでは80に設定
                 .withSeries(series)
                 .build();
-
-        chart.setHeight("400px");
-        chart.setWidth("400px");
-        return chart;
+         */
+        return new Graph.Builder().histogram(true)
+                .height("400px").width("400px").series(series).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
 
     private ApexCharts 箱ひげ図() {
@@ -294,7 +307,7 @@ public class  HelloWorldView extends VerticalLayout {
         final Series<Coordinate<String, Double>> series = new Series<>("box",
                 new Coordinate<>("2021", 43.2, 65.0, 69.1, 76.8, 81.6), // １つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
                 new Coordinate<>("2022", 30.8, 39.2, 45.0, 51.0, 59.3)  // ２つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
-                );
+        );
         final Series[] randomSeries = new Series[]{series};
 
         // 箱ひげ図を作成する
@@ -315,5 +328,4 @@ public class  HelloWorldView extends VerticalLayout {
 
         return chart;
     }
-
 }
