@@ -53,6 +53,38 @@ public class SeisekiView implements View{
         radioGroup2.setVisible(false);
         radioGroup.addValueChangeListener(e -> radioGroup2.setVisible(e.getValue().equals("全体")));
 
+        RadioButtonGroup<String> radioGroup3 = new RadioButtonGroup<>();
+        radioGroup3.setLabel("クラスを選択");
+        radioGroup3.setItems("学年全体","Aクラス", "Bクラス", "Cクラス","Dクラス","全て");
+        main.add(radioGroup3);
+
+        radioGroup3.setVisible(false);
+        radioGroup.addValueChangeListener(e -> radioGroup3.setVisible(e.getValue().equals("1年")));
+
+        RadioButtonGroup<String> radioGroup4 = new RadioButtonGroup<>();
+        radioGroup4.setLabel("学科を選択");
+        radioGroup4.setItems("学年全体","応用科学生物学科", "電子光工学科", "情報システム工学科","全て");
+        main.add(radioGroup4);
+
+        radioGroup4.setVisible(false);
+        radioGroup.addValueChangeListener(e -> radioGroup4.setVisible(e.getValue().equals("2年")));
+
+        RadioButtonGroup<String> radioGroup5 = new RadioButtonGroup<>();
+        radioGroup5.setLabel("学科を選択");
+        radioGroup5.setItems("学年全体","応用科学生物学科", "電子光工学科", "情報システム工学科","全て");
+        main.add(radioGroup5);
+
+        radioGroup5.setVisible(false);
+        radioGroup.addValueChangeListener(e -> radioGroup5.setVisible(e.getValue().equals("3年")));
+
+        RadioButtonGroup<String> radioGroup6 = new RadioButtonGroup<>();
+        radioGroup6.setLabel("学科を選択");
+        radioGroup6.setItems("学年全体","応用科学生物学科", "電子光工学科", "情報システム工学科","全て");
+        main.add(radioGroup6);
+
+        radioGroup6.setVisible(false);
+        radioGroup.addValueChangeListener(e -> radioGroup6.setVisible(e.getValue().equals("4年")));
+
         HorizontalLayout layout1 = new HorizontalLayout();
         HorizontalLayout layout2 = new HorizontalLayout();
         VerticalLayout layout3 = new VerticalLayout();
