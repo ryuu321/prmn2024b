@@ -12,28 +12,36 @@ import com.github.appreciated.apexcharts.config.chart.PointAnnotations;
 import com.github.appreciated.apexcharts.config.chart.StackType;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.animations.DynamicAnimation;
+import com.github.appreciated.apexcharts.config.chart.animations.Easing;
 import com.github.appreciated.apexcharts.config.chart.animations.builder.AnimateGraduallyBuilder;
 import com.github.appreciated.apexcharts.config.chart.builder.*;
 import com.github.appreciated.apexcharts.config.datalables.TextAnchor;
+import com.github.appreciated.apexcharts.config.legend.Position;
 import com.github.appreciated.apexcharts.config.plotoptions.Bar;
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
-import com.github.appreciated.apexcharts.config.yaxis.Labels;
+import com.github.appreciated.apexcharts.config.plotoptions.builder.PieBuilder;
+import com.github.appreciated.apexcharts.config.plotoptions.pie.Name;
+import com.github.appreciated.apexcharts.config.plotoptions.pie.Value;
+import com.github.appreciated.apexcharts.config.plotoptions.pie.builder.TotalBuilder;
 import com.github.appreciated.apexcharts.config.yaxis.builder.*;
 import com.github.appreciated.apexcharts.config.yaxis.title.builder.StyleBuilder;
 import com.github.appreciated.apexcharts.helper.Formatter;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.github.appreciated.apexcharts.helper.StringFormatter;
 import com.github.appreciated.apexcharts.helper.SuffixFormatter;
+import com.vaadin.flow.component.charts.model.Labels;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Graph {
     final private ApexCharts graph = new ApexCharts();
     private Graph(Builder builder) {
         setChart(builder.chart);
-        setSeries(builder.series);
-        graph.setXaxis(XAxisBuilder.get().withCategories(new String[]{"a", "b"}).build());
+        if(builder.chart.getType() == Type.PIE || builder.chart.getType() == Type.DONUT) setDoubles(builder.doubles);
+        else setSeries(builder.series);
+        setLabels(builder.labels);
+        setLegend(builder.legend);
+        setResponsive(builder.responsive);
         setAnnotations(builder.annotations);
         setPlotOptions(builder.options);
         setStroke(builder.stroke);
@@ -49,6 +57,14 @@ public class Graph {
     public void setSeries(Series... series) {
         graph.setSeries(series);
     }
+
+    public void setDoubles(Double... doubles) { graph.setSeries(doubles); }
+
+    public void setLabels(String... labels) { graph.setLabels(labels); }
+
+    public void setLegend(Legend legend) { graph.setLegend(legend); }
+
+    public void setResponsive(Responsive responsive) { graph.setResponsive(responsive); }
 
     public void setPlotOptions(PlotOptions options) {
         graph.setPlotOptions(options);
@@ -76,19 +92,36 @@ public class Graph {
         return graph;
     }
 
+    private static Series[] graphSeriesToSeries(GraphSeries... graphSeries) {
+        return Arrays.stream(graphSeries).map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
+    }
+
+    private static Series[] graphSeriesToSeries(Collection<GraphSeries> graphSeries) {
+        return graphSeries.stream().map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
+    }
+
     public static class Builder {
-        final private Chart chart = new Chart();
+        private final Chart chart = new Chart();
         private Series[] series = new Series[]{new Series(0)};
-        final private PlotOptions options = new PlotOptions();
-        final private Stroke stroke = new Stroke();
-        final private DataLabels dataLabels = new DataLabels();
-        final private Annotations annotations = new Annotations();
-        final private YAxis yAxis = new YAxis();
+        private Double[] doubles = new Double[]{0.0};
+        private final PlotOptions options = new PlotOptions();
+        private final Stroke stroke = new Stroke();
+        private final DataLabels dataLabels = new DataLabels();
+        private final Annotations annotations = new Annotations();
+        private final Legend legend = new Legend();
+        private final Responsive responsive = new Responsive();
+        private String[] labels = new String[]{};
         private String width = "400px";
         private String height = "400px";
 
+        private Builder() {}
+
+        public static Builder get() {
+            return new Builder();
+        }
+
         public Builder graphType(GRAPH_TYPE graphType) {
-            this.chart.setType(graphType.type);
+            chart.setType(graphType.type);
             return this;
         }
 
@@ -103,6 +136,11 @@ public class Graph {
                 colors.add("#000");
                 stroke.setColors(colors);
             }
+            return this;
+        }
+
+        public Builder labels(String[] labels) {
+            this.labels = labels;
             return this;
         }
 
@@ -130,28 +168,13 @@ public class Graph {
             return this;
         }
 
+        public Builder doubles(Double... doubles) {
+            this.doubles = doubles;
+            return this;
+        }
+
         public Builder stacked(boolean stacked) {
             chart.setStacked(stacked);
-            return this;
-        }
-
-        public Builder XAxisAnnotations(List targets, List<String> texts) {
-            XAxis xAxis = XAxisBuilder.get().build();
-            List<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
-            for(int i = 0; i < targets.size(); i++) {
-                xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(targets.get(i)).withLabel(LabelBuilder.get().withText(texts.get(i)).withOrientation("horizontal").withPosition("top").build()).build());
-            }
-            System.out.println(xAxisAnnotations);
-            annotations.setXaxis(xAxisAnnotations);
-            return this;
-        }
-
-        public Builder YAxisAnnotations(List<Double> targets, List<String> texts, String position) {
-            List<YAxisAnnotations> yAxisAnnotations = new ArrayList<>();
-            for(int i = 0; i < targets.size(); i++) {
-                yAxisAnnotations.add(YAxisAnnotationsBuilder.get().withLabel(AnnotationLabelBuilder.get().withText(texts.get(i)).withPosition(position).build()).withYAxisIndex(targets.get(i)).build());
-            }
-            annotations.setYaxis(yAxisAnnotations);
             return this;
         }
 
@@ -182,6 +205,21 @@ public class Graph {
             return this;
         }
 
+        public Builder series(GraphSeries... series) {
+            this.series = graphSeriesToSeries(series);
+            return this;
+        }
+
+        public Builder series(Collection<GraphSeries> series) {
+            this.series = graphSeriesToSeries(series);
+            return this;
+        }
+
+        public Builder easing(Easing easing) {
+            chart.setAnimations(AnimationsBuilder.get().withEasing(easing).build());
+            return this;
+        }
+
         public Graph build() {
             return new Graph(this);
         }
@@ -190,7 +228,9 @@ public class Graph {
     public enum GRAPH_TYPE {
         SCATTER(Type.SCATTER),
         BAR(Type.BAR),
-        PIE(Type.PIE);
+        PIE(Type.PIE),
+        DONUT(Type.DONUT),
+        BOXPLOT(Type.BOXPLOT);
 
         Type type;
         GRAPH_TYPE(Type type) {this.type = type;}

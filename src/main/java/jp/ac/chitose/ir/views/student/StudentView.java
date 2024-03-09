@@ -11,17 +11,25 @@ import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
 import com.github.appreciated.apexcharts.helper.*;
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.DataCommunicator;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jp.ac.chitose.ir.service.student.StudentGrade;
 import jp.ac.chitose.ir.service.student.StudentService;
 import jp.ac.chitose.ir.views.MainLayout;
 
-import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 @PageTitle("Student")
 @Route(value = "student", layout = MainLayout.class)
@@ -35,16 +43,42 @@ public class StudentView extends VerticalLayout {
 
     public StudentView(StudentService studentService) {
         this.studentService = studentService;
-        comboBoxInitialyze();
         add(createTextField());
+        init();
+        comboBoxInitialyze();
         add(comboBox);
+    }
+
+    private void init() {
+        add(new H1("Student"));
+        add(new Paragraph("説明"));
+        add(new H3("学年"));
+        RadioButtonGroup<String> gradesRadioButton = new RadioButtonGroup<>("", "全体", "1年生", "2年生", "3年生", "4年生", "修士1年生", "修士2年生");
+        gradesRadioButton.addValueChangeListener(event -> {
+            if(event.getValue().equals(event.getOldValue())) return;
+            else {
+                String value = event.getValue();
+            }
+        });
+        add(gradesRadioButton);
+        add(new H3("学科"));
+        RadioButtonGroup<String> departmentsRadioButton = new RadioButtonGroup<>("", "全体", "応用科学生物学科", "電子光工学科", "情報システム工学科", "理工学研究科");
+        departmentsRadioButton.addValueChangeListener(event -> {
+            if(event.getValue().equals(event.getOldValue())) return;
+            else {
+                String value = event.getValue();
+            }
+        });
+        add(departmentsRadioButton);
     }
 
     private TextField createTextField() {
         TextField textField = new TextField();
         textField.addValueChangeListener(e1 -> {
+            ComboBox.ItemFilter<StudentGrade> filter = (grade, filterString) ->
+                    grade.科目名().toLowerCase().startsWith(filterString.toLowerCase());
             if(e1.getValue() == null) return;
-            comboBox.setItems(studentService.getStudentNumberGrades(e1.getValue()).data());
+            comboBox.setItems(filter, studentService.getStudentNumberGrades(e1.getValue()).data().stream().sorted(Comparator.comparing(StudentGrade::科目名)).toList());
             comboBox.setItemLabelGenerator(StudentGrade::科目名);
         });
         return textField;
@@ -52,6 +86,7 @@ public class StudentView extends VerticalLayout {
 
     private void comboBoxInitialyze() {
         comboBox = new ComboBox<>("科目名");
+        comboBox.setPlaceholder("科目名を検索");
         comboBox.addValueChangeListener(e1 -> {
             if(e1.getValue() == null) return;
             if(chart != null) remove(chart);
