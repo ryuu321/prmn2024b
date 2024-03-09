@@ -1,6 +1,7 @@
 package jp.ac.chitose.ir.views.class_select;
 
 import com.github.appreciated.apexcharts.ApexCharts;
+import com.github.appreciated.apexcharts.helper.Coordinate;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -17,7 +18,7 @@ import jp.ac.chitose.ir.views.component.Graph;
 public class ClassTestView extends VerticalLayout {
 
     private ClassSelect classSelect;
-    public ClassTestView() {
+    public ClassTestView(ClassSelect classSelect) {
         this.classSelect = classSelect;
 
         H1 title = new H1("Teacherの予定画面");
@@ -27,7 +28,7 @@ public class ClassTestView extends VerticalLayout {
         add(tex);
 
 
-        add(new H1("適当なグラフ"), ヒストグラム());
+        add(new H1("適当なグラフ"), band());
 
         H2 rank = new H2("満足度順位 n位　　全科目順位 n位　　同カテゴリ順位 n位");
         add(rank);
@@ -39,19 +40,23 @@ public class ClassTestView extends VerticalLayout {
         add(graphButton);
     }
 
-    private ApexCharts ヒストグラム() {
-        var ClassTest = (classSelect.getClassTest().割合()).data();
+    private ApexCharts band() {
+        var ClassTest = classSelect.getClassTest().data();
+
+        Series Classtest = new Series<>();
+        Coordinate<String, Float>[] data = new Coordinate[5];
+        ClassTest.forEach(e2 -> {
+            if(e2.項目().equals("やや難しかった")) data[4] = new Coordinate<>(e2.項目(), e2.割合());
+            else if(e2.項目().equals("丁度良かった")) data[3] = new Coordinate<>(e2.項目(), e2.割合());
+            else if(e2.項目().equals("少し易しかった")) data[2] = new Coordinate<>(e2.項目(), e2.割合());
+            else if(e2.項目().equals("易しかった")) data[1] = new Coordinate<>(e2.項目(), e2.割合());
+            else data[0] = new Coordinate<>(e2.項目(), e2.割合());
+        });
+
+        Classtest.setData(data);
 
 
-        // ヒストグラムで表示するデータを用意する
-        // データはSeriesクラスを使う
-        // Seriesクラスのコンストラクタには、名前、データの中身、を設定する。
-        // データの中身は、Coordinateクラスを設定する。Coordinateクラスが一つで柱（棒）；階級が一つできる
-        // 柱（棒）；階級には、データ数、があるので、Coordinateクラスのコンストラクタの第２引数にデータ数を設定する
-        // 階級の幅の数に応じてCoordinateクラスをnewして設定する（階級数が7なら7個Cooridnateクラスを設定する）
-
-
-        return new Graph.Builder().histogram(true)
-                .height("400px").width("400px").series((Series) ClassTest).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
+        return new Graph.Builder().band(true)
+                .height("400px").width("400px").series(Classtest).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
 }
