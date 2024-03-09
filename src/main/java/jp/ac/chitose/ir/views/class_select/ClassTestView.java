@@ -43,20 +43,9 @@ public class ClassTestView extends VerticalLayout {
     private ApexCharts band() {
         var ClassTest = classSelect.getClassTest().data();
 
-        Series Classtest = new Series<>();
-        Coordinate<String, Float>[] data = new Coordinate[5];
-        ClassTest.forEach(e2 -> {
-            if(e2.項目().equals("やや難しかった")) data[4] = new Coordinate<>(e2.項目(), e2.割合());
-            else if(e2.項目().equals("丁度良かった")) data[3] = new Coordinate<>(e2.項目(), e2.割合());
-            else if(e2.項目().equals("少し易しかった")) data[2] = new Coordinate<>(e2.項目(), e2.割合());
-            else if(e2.項目().equals("易しかった")) data[1] = new Coordinate<>(e2.項目(), e2.割合());
-            else data[0] = new Coordinate<>(e2.項目(), e2.割合());
-        });
-
-        Classtest.setData(data);
-
-
         return new Graph.Builder().band(true)
-                .height("400px").width("400px").series(Classtest).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
+                .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
+                        new Series(e3.項目(),new Coordinate<>("Q1",e3.割合()))).toArray(Series[]::new))
+                            .animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
 }
