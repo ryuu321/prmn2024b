@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.views.commission;
+package jp.ac.chitose.ir.views.commission.seiseki;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.ApexChartsBuilder;
@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class SeisekiView implements View{
+public class SeisekiView implements View {
     private SampleService sampleService;
 
     public SeisekiView(SampleService sampleService){
