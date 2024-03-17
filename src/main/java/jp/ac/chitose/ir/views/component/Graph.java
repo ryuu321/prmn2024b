@@ -87,11 +87,11 @@ public class Graph {
         return graph;
     }
 
-    private static Series[] graphSeriesToSeries(GraphSeries... graphSeries) {
+    private static Series[] toSeries(GraphSeries... graphSeries) {
         return Arrays.stream(graphSeries).map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
     }
 
-    private static Series[] graphSeriesToSeries(Collection<GraphSeries> graphSeries) {
+    private static Series[] toSeries(Collection<GraphSeries> graphSeries) {
         return graphSeries.stream().map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
     }
 
@@ -267,7 +267,7 @@ public class Graph {
          * @return Builder
          */
         public Builder series(GraphSeries... series) {
-            this.series = graphSeriesToSeries(series);
+            this.series = toSeries(series);
             return this;
         }
 
@@ -278,7 +278,7 @@ public class Graph {
          * @return Builder
          */
         public Builder series(Collection<GraphSeries> series) {
-            this.series = graphSeriesToSeries(series);
+            this.series = toSeries(series);
             return this;
         }
 
