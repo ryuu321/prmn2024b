@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.views.commission;
+package jp.ac.chitose.ir.views.commission.seiseki;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 

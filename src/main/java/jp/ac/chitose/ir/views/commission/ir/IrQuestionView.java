@@ -1,33 +1,34 @@
-package jp.ac.chitose.ir.views.commission;
+package jp.ac.chitose.ir.views.commission.ir;
 
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 import jp.ac.chitose.ir.service.sample.SampleService;
+import jp.ac.chitose.ir.views.MainLayout;
 
 import java.util.ArrayList;
 
-public class IrView implements View{
+@PageTitle("IRアンケート")
+@Route(value = "IRアンケート", layout = MainLayout.class)
+
+public class IrQuestionView extends VerticalLayout {
     private SampleService sampleService;
 
-    public IrView(SampleService sampleService){
-        this.sampleService = sampleService;
-    }
-    public VerticalLayout view(){
-        VerticalLayout main = new VerticalLayout();
+    public IrQuestionView(SampleService sampleService){
+        add(new H2("IRアンケート分析結果"));
 
-        main.add(new H2("IRアンケート分析結果"));
-
-        main.add(new Paragraph("IRアンケート画面に関する説明文"));
+        add(new Paragraph("IRアンケート画面に関する説明文"));
 
         Select<String> select = new Select<>();
         select.setLabel("質問内容を検索");
         select.setItems("進路希望", "希望職種","学びについての満足度","共通教育での学び（カリキュラム）についての満足度",
-        "所属学科での学び（カリキュラム）についての満足度","ためになった科目（共通教育）","ためにならなかった科目（共通教育）","ためになった科目（学科科目）",
-        "ためにならなかった科目（学科科目）","授業外学習時間","学科配属の時期"," 学生生活（サークル・学生活動）の満足度","友人関係",
-        "設備・環境の満足度","窓口対応","力を入れたいこと","社会で活かしたい力");
-        main.add(select);
+                "所属学科での学び（カリキュラム）についての満足度","ためになった科目（共通教育）","ためにならなかった科目（共通教育）","ためになった科目（学科科目）",
+                "ためにならなかった科目（学科科目）","授業外学習時間","学科配属の時期"," 学生生活（サークル・学生活動）の満足度","友人関係",
+                "設備・環境の満足度","窓口対応","力を入れたいこと","社会で活かしたい力");
+        add(select);
 
         ArrayList<VerticalLayout> selectAll = new ArrayList<>();
 
@@ -67,7 +68,9 @@ public class IrView implements View{
         selectAll.add(powerOfWant);
         selectAll.add(powerOfSociety);
 
-        selectAll.forEach(main::add);
+        for(VerticalLayout layout : selectAll){
+            add(layout);
+        }
 
 //        selectAll.forEach(layout -> layout.setVisible(false));
 
@@ -150,12 +153,6 @@ public class IrView implements View{
 
         powerOfSociety.add(new H2("社会で生かしたい力"));
         powerOfSociety.add(new Paragraph("質問内容 : 将来、社会で活かしたい力はどれでしょうか（複数回答可）"));
-
-
-
-
-
-
-        return main;
     }
 }
+

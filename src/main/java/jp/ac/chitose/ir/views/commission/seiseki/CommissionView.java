@@ -1,8 +1,7 @@
-package jp.ac.chitose.ir.views.commission;
+package jp.ac.chitose.ir.views.commission.seiseki;
 
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.PageTitle;
@@ -19,34 +18,34 @@ public class CommissionView extends VerticalLayout {
         this.sampleService = sampleService;
 
         H1 title = new H1("Commission");
-        add(title);
+//        add(title);
 
-        add(new Paragraph("Commission全体の説明文"));
+//        add(new Paragraph("Commission全体の説明文"));
 
         Select<String> select = new Select<>();
         select.setLabel("分析内容を検索");
         select.setItems("成績情報", "IRアンケート");
-        add(select);
+//        add(select);
 
         VerticalLayout layout = new VerticalLayout();
         Paragraph bar = new Paragraph("ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー");
-        layout.setAlignItems(FlexComponent.Alignment.STRETCH);
+        layout.setAlignItems(Alignment.STRETCH);
         layout.add(bar);
-        add(layout);
+//        add(layout);
 
 
 
         SeisekiView seisekiView = new SeisekiView(sampleService);
         VerticalLayout seiseki = seisekiView.view();
         add(seiseki);
-        seiseki.setVisible(false);
+//        seiseki.setVisible(false);
 
         IrView irView = new IrView(sampleService);
         VerticalLayout ir = irView.view();
-        add(ir);
-        ir.setVisible(false);
+//        add(ir);
+//        ir.setVisible(false);
 
-        select.addValueChangeListener(e -> seiseki.setVisible(e.getValue().equals("成績情報")));
-        select.addValueChangeListener(e -> ir.setVisible(e.getValue().equals("IRアンケート")));
+//        select.addValueChangeListener(e -> seiseki.setVisible(e.getValue().equals("成績情報")));
+//        select.addValueChangeListener(e -> ir.setVisible(e.getValue().equals("IRアンケート")));
     }
 }
