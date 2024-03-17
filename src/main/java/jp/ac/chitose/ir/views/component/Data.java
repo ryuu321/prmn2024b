@@ -1,5 +1,11 @@
 package jp.ac.chitose.ir.views.component;
 
+/**
+ * ApexChartsのCoordinateの代わりにこのクラスを使ってください。
+ * 使い方はCoordinateと全く同じ使い方ができます。
+ * @param <S> カラム名
+ * @param <T> 列のデータの型
+ */
 public class Data<S, T> {
     private S x;
     private T[] y;

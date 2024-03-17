@@ -3,7 +3,17 @@ package jp.ac.chitose.ir.views.helloworld;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.appreciated.apexcharts.ApexCharts;
+import com.github.appreciated.apexcharts.ApexChartsBuilder;
+import com.github.appreciated.apexcharts.config.Annotations;
+import com.github.appreciated.apexcharts.config.annotations.Label;
+import com.github.appreciated.apexcharts.config.annotations.XAxisAnnotations;
+import com.github.appreciated.apexcharts.config.annotations.builder.LabelBuilder;
+import com.github.appreciated.apexcharts.config.annotations.builder.XAxisAnnotationsBuilder;
+import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
+import com.github.appreciated.apexcharts.config.builder.PlotOptionsBuilder;
+import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.animations.Easing;
+import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
 import com.github.appreciated.apexcharts.helper.Coordinate;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.button.Button;
@@ -20,10 +30,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import jp.ac.chitose.ir.service.*;
 import jp.ac.chitose.ir.service.sample.SampleService;
 import jp.ac.chitose.ir.views.MainLayout;
-import jp.ac.chitose.ir.views.component.Data;
-import jp.ac.chitose.ir.views.component.GoogleChart;
-import jp.ac.chitose.ir.views.component.Graph;
-import jp.ac.chitose.ir.views.component.GraphSeries;
+import jp.ac.chitose.ir.views.component.*;
 
 import java.util.*;
 import java.util.List;
@@ -84,12 +91,11 @@ public class  HelloWorldView extends VerticalLayout {
     }
 
     private void test() {
-        Series[] series = new Series[]{new Series("2021", new Coordinate<>("a",10), new Coordinate<>("b", 50), new Coordinate<>("c", 20)),
-                                       new Series("2022", new Coordinate<>("a",20), new Coordinate<>("b", 30), new Coordinate<>("c", 40))};
-        add(Graph.Builder.get().band(true).series(series).build().getGraph());
-
-        series = new Series[]{new Series(new Coordinate<>("a", 10), new Coordinate<>("b", 10))};
-        add(Graph.Builder.get().graphType(Graph.GRAPH_TYPE.BAR).series(series).horizontal(true).build().getGraph());
+        GraphSeries[] series = new GraphSeries[]{new GraphSeries("2021", new Data<>("a",10), new Data<>("b", 50), new Data<>("c", 20)),
+                                       new GraphSeries("2022", new Data<>("a",20), new Data<>("b", 30), new Data<>("c", 40))};
+        add(Graph.Builder.get().band().series(series).build().getGraph());
+        series = new GraphSeries[]{new GraphSeries("2021", new Data<>("a", 10), new Data<>("b", 20)), new GraphSeries("2022", new Data<>("a", 30), new Data<>("b", 40))};
+        add(Graph.Builder.get().series(series).graphType(GRAPH_TYPE.BAR).horizontal(true).stacked(true).build().getGraph());
     }
 
     private GoogleChart googleChartの使用例() {
@@ -231,10 +237,10 @@ public class  HelloWorldView extends VerticalLayout {
     private ApexCharts 散布図ApechCharts版() {
         var sampleThrees = sampleService.getSampleThrees();
         var 学習量 = sampleThrees.data().stream().map(row -> row.学習量()).toList().toArray(new Double[0]);
-        Series<Double> series = new Series<>("2023");
+        GraphSeries<Double> series = new GraphSeries<>("2023");
         series.setData(学習量);
 
-        List<Series> seriesList = new ArrayList<>();
+        List<GraphSeries> seriesList = new ArrayList<>();
         seriesList.add(series);
 
         /*ApexCharts chart = ApexChartsBuilder.get().withChart(
@@ -252,7 +258,7 @@ public class  HelloWorldView extends VerticalLayout {
                 .build();
         return chart;
 */
-        return Graph.Builder.get().series(seriesList).graphType(Graph.GRAPH_TYPE.SCATTER).build().getGraph();
+        return Graph.Builder.get().series(seriesList).graphType(GRAPH_TYPE.SCATTER).build().getGraph();
     }
 
     private ApexCharts ヒストグラム() {
@@ -263,14 +269,14 @@ public class  HelloWorldView extends VerticalLayout {
         // データの中身は、Coordinateクラスを設定する。Coordinateクラスが一つで柱（棒）；階級が一つできる
         // 柱（棒）；階級には、データ数、があるので、Coordinateクラスのコンストラクタの第２引数にデータ数を設定する
         // 階級の幅の数に応じてCoordinateクラスをnewして設定する（階級数が7なら7個Cooridnateクラスを設定する）
-        final Series<Coordinate<String, Integer>> series = new Series<>("2021",
-                new Coordinate<>("10", 25), // 第一引数に階級、第二引数にデータ数
-                new Coordinate<>("20", 30), // 第一引数に階級、第二引数にデータ数
-                new Coordinate<>("30", 40), // 第一引数に階級、第二引数にデータ数
-                new Coordinate<>("40", 60), // 第一引数に階級、第二引数にデータ数
-                new Coordinate<>("50", 40), // 第一引数に階級、第二引数にデータ数
-                new Coordinate<>("60", 20), // 第一引数に階級、第二引数にデータ数
-                new Coordinate<>("70", 10)  // 第一引数に階級、第二引数にデータ数
+        final GraphSeries<Data<String, Integer>> series = new GraphSeries<>("2021",
+                new Data<>("10", 25), // 第一引数に階級、第二引数にデータ数
+                new Data<>("20", 30), // 第一引数に階級、第二引数にデータ数
+                new Data<>("30", 40), // 第一引数に階級、第二引数にデータ数
+                new Data<>("40", 60), // 第一引数に階級、第二引数にデータ数
+                new Data<>("50", 40), // 第一引数に階級、第二引数にデータ数
+                new Data<>("60", 20), // 第一引数に階級、第二引数にデータ数
+                new Data<>("70", 10)  // 第一引数に階級、第二引数にデータ数
                 );
 
         // ヒストグラムを作成する
@@ -291,7 +297,7 @@ public class  HelloWorldView extends VerticalLayout {
                 .withSeries(series)
                 .build();
          */
-        return Graph.Builder.get().histogram(true)
+        return Graph.Builder.get().histogram()
                 .height("400px").width("400px").series(series).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
 
@@ -299,7 +305,7 @@ public class  HelloWorldView extends VerticalLayout {
         Double[] doubles = new Double[]{22.0, 22.0, 33.0, 11.0, 32.3};
         String[] labels = new String[]{"Team A", "Team B", "Team C", "Team D", "Team E"};
         return Graph.Builder.get()
-                .graphType(Graph.GRAPH_TYPE.DONUT)
+                .graphType(GRAPH_TYPE.DONUT)
                 .doubles(doubles)
                 .labels(labels)
                 .build()
@@ -339,7 +345,7 @@ public class  HelloWorldView extends VerticalLayout {
         chart.setHeight("600px");
         chart.setWidth("600px");*/
 
-        return Graph.Builder.get().graphType(Graph.GRAPH_TYPE.BOXPLOT).animationsEnabled(false)
+        return Graph.Builder.get().graphType(GRAPH_TYPE.BOXPLOT).animationsEnabled(false)
                 .easing(Easing.LINEAR).width("600px").height("600px").series(series1).build().getGraph();
     }
 }

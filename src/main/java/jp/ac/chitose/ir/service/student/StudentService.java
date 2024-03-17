@@ -16,6 +16,6 @@ public interface StudentService {
     @GetExchange("/grade/{studentNumber}/{subject}")
     TableData<StudentGrade> getStudentNumberGrade(@PathVariable String studentNumber, @PathVariable String subject);
 
-    @GetExchange("/subject/{subject}")
+    @GetExchange("/subject_calc/{subject}")
     TableData<StudentHist> getStudentHist(@PathVariable String subject);
 }

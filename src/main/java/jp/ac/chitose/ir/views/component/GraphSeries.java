@@ -1,5 +1,10 @@
 package jp.ac.chitose.ir.views.component;
 
+/**
+ * ApexChartsのSeriesの代わりにこのクラスを使ってください。
+ * 使い方はSeriesと全く同じ使い方ができます。
+ * @param <T> 行のデータの型
+ */
 public class GraphSeries<T> {
     private String name;
     private T[] data;
