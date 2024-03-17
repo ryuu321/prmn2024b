@@ -2,19 +2,21 @@ package jp.ac.chitose.ir.security;
 
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import jp.ac.chitose.ir.views.login.LoginView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends VaadinWebSecurity {
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
@@ -27,15 +29,9 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         super.configure(web);
     }
     @Bean
-    public UserDetailsManager userDetailsService() {
-        // データベースからユーザーの情報を取ってくるメソッド
-        // Login画面から遷移するため仮のアカウントを登録
-        UserDetails user =
-                User.withUsername("testuser")
-                        .password("{noop}IR_prmn")
-                        .roles("USER")
-                        .build();
-        return new InMemoryUserDetailsManager(user);
+    public AuthenticationProvider getAuthenticationProvider() {
+        // 認証状態とユーザーの情報を取得
+        return new UserDetailsAuthenticationProvider(authenticationService);
     }
 
 }
