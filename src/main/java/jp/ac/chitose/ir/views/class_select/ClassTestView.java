@@ -2,7 +2,6 @@ package jp.ac.chitose.ir.views.class_select;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.helper.Coordinate;
-import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
@@ -12,6 +11,7 @@ import com.vaadin.flow.router.Route;
 import jp.ac.chitose.ir.service.class_select.ClassSelect;
 import jp.ac.chitose.ir.views.MainLayout;
 import jp.ac.chitose.ir.views.component.Graph;
+import jp.ac.chitose.ir.views.component.GraphSeries;
 
 @PageTitle("class_test")
 @Route(value = "class_select/test", layout = MainLayout.class)
@@ -43,9 +43,9 @@ public class ClassTestView extends VerticalLayout {
     private ApexCharts band() {
         var ClassTest = classSelect.getClassTest().data();
 
-        return new Graph.Builder().band(true)
+        return Graph.Builder.get().band()
                 .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
-                        new Series(e3.項目(),new Coordinate<>("Q1",e3.割合()))).toArray(Series[]::new))
+                        new GraphSeries(e3.項目(),new Coordinate<>("Q1",e3.割合()))).toArray(GraphSeries[]::new))
                             .animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
 }
