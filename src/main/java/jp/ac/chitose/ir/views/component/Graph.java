@@ -80,6 +80,7 @@ public class Graph {
     /**
      * 生成したApexChartsを返します。
      * <br>add(Graph.getGraph())といった感じで使ってください。
+     * <br>add()以外のところで使ってしまうと、ApexChartsのインスタンスをこのクラス外でいじることができてしまうので、コンポーネント化した意味がなくなってしまいます。
      * @return ApexCharts
      */
     public ApexCharts getGraph() {
