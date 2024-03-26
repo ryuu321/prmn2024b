@@ -297,8 +297,8 @@ public class  HelloWorldView extends VerticalLayout {
                 .withSeries(series)
                 .build();
          */
-        return Graph.Builder.get().histogram()
-                .height("400px").width("400px").series(series).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
+        return Graph.Builder.get().histogram().height("400px").width("400px")
+                .series(series).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
 
     private ApexCharts pie() {
@@ -318,17 +318,15 @@ public class  HelloWorldView extends VerticalLayout {
         // Seriesクラスのコンストラクタには、名前、データの中身、を設定する。
         // データの中身は、Coordinateクラスを設定する。Coordinateクラスが一つで箱が一つできる
         // 箱には、最小値、第一四分位数、中央値、第三四分位数、最大値、があるので、Coordinateクラスのコンストラクタの第２引数に順番に設定する
-        final Series<Coordinate<String, Double>> series = new Series<>("box",
-                new Coordinate<>("2021", 43.2, 65.0, 69.1, 76.8, 81.6), // １つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
-                new Coordinate<>("2022", 30.8, 39.2, 45.0, 51.0, 59.3)  // ２つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
+        final GraphSeries<Data<String, Double>> series = new GraphSeries<>("box",
+                new Data<>("2021", 43.2, 65.0, 69.1, 76.8, 81.6), // １つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
+                new Data<>("2022", 30.8, 39.2, 45.0, 51.0, 59.3)  // ２つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
                 );
 
         final GraphSeries<Data<String, Double>> series1 = new GraphSeries<>("box",
                 new Data<>("2021", 43.2, 65.0, 69.1, 76.8, 81.6),
                 new Data<>("2022", 30.8, 39.2, 45.0, 51.0, 59.3)
         );
-
-
         // 箱ひげ図を作成する
         // withType(Type.BOXPLOT)が箱ひげ図で表示する指示にあたる
         /*final ApexCharts chart = ApexChartsBuilder.get().withChart(
@@ -345,7 +343,7 @@ public class  HelloWorldView extends VerticalLayout {
         chart.setHeight("600px");
         chart.setWidth("600px");*/
 
-        return Graph.Builder.get().graphType(GRAPH_TYPE.BOXPLOT).animationsEnabled(false)
-                .easing(Easing.LINEAR).width("100%").height("600px").series(series1).build().getGraph();
+        return Graph.Builder.get().graphType(GRAPH_TYPE.BOXPLOT).animationsEnabled(false).height("600px")
+                .width("600px").easing(Easing.LINEAR).width("100%").height("600px").series(series1).build().getGraph();
     }
 }

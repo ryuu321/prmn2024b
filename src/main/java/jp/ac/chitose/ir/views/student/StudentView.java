@@ -31,17 +31,19 @@ import jp.ac.chitose.ir.views.MainLayout;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-@PageTitle("Student")
-@Route(value = "student", layout = MainLayout.class)
+@PageTitle("GradeStudent")
+@Route(value = "grade/student", layout = MainLayout.class)
 public class StudentView extends VerticalLayout {
 
+    //private SecurityService securityService;
     private StudentService studentService;
     private ComboBox<StudentGrade> comboBox;
     private ApexCharts chart;
     final private String blue = "#0000FF";
     final private String red = "#FF0000";
 
-    public StudentView(StudentService studentService) {
+    public StudentView(StudentService studentService/*, @Autowired SecurityService securityService */) {
+        //this.securityService = securityService;
         this.studentService = studentService;
         add(createTextField());
         init();
@@ -87,6 +89,10 @@ public class StudentView extends VerticalLayout {
     private void comboBoxInitialyze() {
         comboBox = new ComboBox<>("科目名");
         comboBox.setPlaceholder("科目名を検索");
+        ComboBox.ItemFilter<StudentGrade> filter = (grade, filterString) ->
+                grade.科目名().toLowerCase().startsWith(filterString.toLowerCase());
+        // comboBox.setItems(filter, studentService.getStudentNumberGrades(securityService.getAuthenticatedUser().getUsername()).data().stream().sorted(Comparator.comparing(StudentGrade::科目名)).toList());
+        // comboBox.setItemLabelGenerator(StudentGrade::科目名);
         comboBox.addValueChangeListener(e1 -> {
             if(e1.getValue() == null) return;
             if(chart != null) remove(chart);
