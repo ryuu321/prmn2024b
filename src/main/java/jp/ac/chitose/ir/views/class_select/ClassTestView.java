@@ -5,7 +5,9 @@ import com.github.appreciated.apexcharts.helper.Coordinate;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jp.ac.chitose.ir.service.class_select.ClassSelect;
@@ -18,6 +20,7 @@ import jp.ac.chitose.ir.views.component.GraphSeries;
 public class ClassTestView extends VerticalLayout {
 
     private ClassSelect classSelect;
+
     public ClassTestView(ClassSelect classSelect) {
         this.classSelect = classSelect;
 
@@ -26,6 +29,18 @@ public class ClassTestView extends VerticalLayout {
 
         H2 tex = new H2("回答率n%");
         add(tex);
+
+        H3 t = new H3("担当科目");
+        add(t);
+
+
+        Select<String> select = new Select<>();
+        select.setLabel("担当科目を検索");
+        select.setItems("科目A", "科目B");
+        add(select);
+
+        VerticalLayout layout = new VerticalLayout();
+
 
 
         add(new H1("適当なグラフ"), band());
@@ -46,6 +61,6 @@ public class ClassTestView extends VerticalLayout {
         return Graph.Builder.get().band()
                 .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
                         new GraphSeries(e3.項目(),new Coordinate<>("Q1",e3.割合()))).toArray(GraphSeries[]::new))
-                            .animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
+                .animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
 }
