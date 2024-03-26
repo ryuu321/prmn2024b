@@ -16,9 +16,11 @@ public class UserDetailsAuthenticationProvider extends AbstractUserDetailsAuthen
     public UserDetailsAuthenticationProvider(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
+
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails,
-                                                  UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {}
+                                                  UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+    }
 
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
@@ -27,18 +29,15 @@ public class UserDetailsAuthenticationProvider extends AbstractUserDetailsAuthen
         String password = (String) authentication.getCredentials(); // authenticationからpasswordを取得
 
         Optional<User> optionalLoginUser = authenticationService.authenticate(username, password);
-        System.out.println("認証結果=" + optionalLoginUser.isPresent());
-//
-        if ( optionalLoginUser.isEmpty() ) {
+        System.out.print("認証結果: ");
+        if (optionalLoginUser.isEmpty()) {
             System.out.println("認証に失敗しました. username=" + username);
+            // 上手くいかなかったらかえる
             throw new BadCredentialsException("認証に失敗しました。");
         }
+        System.out.println("認証に成功しました.username=" + username);
 
-
-        // roleを取得する処理
-
-        //LoginUser loginUser = new LoginUser(account, role);
-        //return loginUser;
-        return null;
+        LoginUser loginUser = new LoginUser(optionalLoginUser.get());
+        return loginUser;
     }
 }
