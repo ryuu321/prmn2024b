@@ -15,6 +15,8 @@ import jp.ac.chitose.ir.views.MainLayout;
 import jp.ac.chitose.ir.views.component.Graph;
 import jp.ac.chitose.ir.views.component.GraphSeries;
 
+import java.lang.reflect.InvocationTargetException;
+
 @PageTitle("class_PfYo")
 @Route(value = "class_select/PfYo", layout = MainLayout.class)
 
@@ -30,7 +32,8 @@ public class PfYoView  extends VerticalLayout {
         teacher_name();//担当者の名前*/
 
         index();//目次
-        add(band(4));//質問文とグラフ表示をセットで行うクラスの導入を検討
+        //add(band(4));//グラフ表示
+        insertResult();//質問文とグラフをセットで表示
 
         init2();//目的と違うので仮
 
@@ -102,13 +105,60 @@ public class PfYoView  extends VerticalLayout {
 
     private ApexCharts band(int Question_num) {
         var ClassTest = classSelect.getClassqPfYo().data();
-        //試験的にQ4だけだが'Q+"Question_num"'の形で一般化させる予定
 
 
         return Graph.Builder.get().band()
                 .height("400px").width("400px").series(ClassTest.stream().map(e1 ->
-                        new GraphSeries(e1.q4()/*元 e1.項目() */,new Coordinate<>("Q4",e1.q4()/*元 e3.割合()*/))).toArray(GraphSeries[]::new))
+                {
+                    try {
+                        return new GraphSeries(e1.getClass().getMethod("q"+Question_num).invoke(e1),new Coordinate<>("Q"+Question_num,e1.getClass().getMethod("q"+Question_num).invoke(e1)));
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toArray(GraphSeries[]::new))
                 .animationsEnabled(false).dataLabelsEnabled(false).build().getGraph(); //データの形式が不正で動かない可能性大
 
+    }
+
+    private void insertResult(){//質問文をdatabaseから持ってくる必要あり
+        add(new H3("Q4:実験・実習テーマの全般的な難易度について、どのように感じましたか。"));
+        add(band(4));
+        add(new H3("Q5:実験・実習で実施する作業量について、どのように感じましたか。"));
+        add(band(5));
+        add(new H3("Q6:実験・実習の進行速度について、どのように感じましたか。"));
+        add(band(6));
+        add(new H3("Q7:あなたはどのテーマ（実習においてはどの部分）に興味・関心が持てましたか。"));
+        add(band(7));
+        add(new H3("Q8:実験・実習するにあたって、事前学習をしてきましたか。"));
+        add(band(8));
+        add(new H3("Q9:あなたは実験・実習に積極的に取り組みましたか。"));
+        add(band(9));
+        add(new H3("Q10:あなたはシラバスに記載されている到達目標のうち、どの程度達成できましたか。"));
+        add(band(10));
+        add(new H3("Q11:教員、TA・SAの実験・実習内容の説明は理解し易かったですか。"));
+        add(band(11));
+        add(new H3("Q12:教材（テキスト・配布資料・スライド・ビデオ・E-learning・板書・オンライン授業においてはコンテンツ等）は理解しやすかったですか。"));
+        add(band(12));
+        add(new H3("Q13:実験・実習を実施するにあたっての器材・教材・設備・環境などは整っていましたか。"));
+        add(band(13));
+        add(new H3("Q14:実験・実習に際しての教員、TA・SAからのアドバイスは適切でしたか。"));
+        add(band(14));
+        add(new H3("Q15:レポートや課題提出に関しての教員、TA・SAからのアドバイスは適切でしたか。"));
+        add(band(15));
+        add(new H3("Q16:総合的に判断してこの授業は満足でしたか。"));
+        add(band(16));
+        /*
+        add(new H3("Q17:この授業で良かった点があれば記述してください。"));
+        add(band(17));
+        add(new H3("Q18:この授業で改善点があれば記述してください。"));
+        add(band(18));
+        add(new H3("Q19:その他、気づいた点があれば記述してください。"));
+        add(band(19));
+        自由記述なのでグラフではありませんでした
+         */
     }
 }
