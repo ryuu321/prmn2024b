@@ -344,6 +344,6 @@ public class  HelloWorldView extends VerticalLayout {
         chart.setWidth("600px");*/
 
         return Graph.Builder.get().graphType(GRAPH_TYPE.BOXPLOT).animationsEnabled(false).height("600px")
-                .width("600px").easing(Easing.LINEAR).width("100%").height("600px").series(series1).build().getGraph();
+                .width("600px").easing(GraphEasing.LINEAR).width("100%").height("600px").series(series1).build().getGraph();
     }
 }

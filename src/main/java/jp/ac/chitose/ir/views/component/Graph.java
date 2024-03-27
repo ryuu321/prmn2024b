@@ -2,6 +2,9 @@ package jp.ac.chitose.ir.views.component;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.config.*;
+import com.github.appreciated.apexcharts.config.annotations.XAxisAnnotations;
+import com.github.appreciated.apexcharts.config.annotations.builder.LabelBuilder;
+import com.github.appreciated.apexcharts.config.annotations.builder.XAxisAnnotationsBuilder;
 import com.github.appreciated.apexcharts.config.chart.Animations;
 import com.github.appreciated.apexcharts.config.chart.StackType;
 import com.github.appreciated.apexcharts.config.chart.Type;
@@ -14,6 +17,7 @@ import com.github.appreciated.apexcharts.helper.Series;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -37,6 +41,8 @@ public class Graph {
         setHeight(builder.height);
         setWidth(builder.width);
         setDataLabels(builder.dataLabels);
+        setYAxis(builder.yAxis);
+        setColors(builder.colors);
     }
 
     public void setChart(Chart chart) {
@@ -75,7 +81,11 @@ public class Graph {
         graph.setDataLabels(dataLabels);
     }
 
-    public void setAnnotations(Annotations annotations) {graph.setAnnotations(annotations); }
+    public void setAnnotations(Annotations annotations) { graph.setAnnotations(annotations); }
+
+    public void setYAxis(YAxis yAxis) { graph.setYaxis(new YAxis[]{yAxis}); }
+
+    public void setColors(String[] colors) { graph.setColors(colors); }
 
     /**
      * 生成したApexChartsを返します。
@@ -108,7 +118,9 @@ public class Graph {
         private final Annotations annotations = new Annotations();
         private final Legend legend = new Legend();
         private final Responsive responsive = new Responsive();
+        private final YAxis yAxis = new YAxis();
         private String[] labels = new String[]{};
+        private String[] colors = new String[]{};
         private String width = "400px";
         private String height = "400px";
 
@@ -152,6 +164,13 @@ public class Graph {
             var colors = new ArrayList<String>();
             colors.add("#000");
             stroke.setColors(colors);
+            return this;
+        }
+
+        public Builder distributed(boolean distributed) {
+            Bar bar = (options.getBar() == null ? new Bar() : options.getBar());
+            bar.setDistributed(distributed);
+            options.setBar(bar);
             return this;
         }
 
@@ -283,11 +302,40 @@ public class Graph {
 
         /**
          * アニメーションのeasingを指定することができます。
-         * @param easing easingの種類
+         * 専用の列挙型GraphEasingを引数として渡してください。
+         * @param easing GraphEasingで指定したい種類
          * @return Builder
          */
-        public Builder easing(Easing easing) {
-            chart.setAnimations(AnimationsBuilder.get().withEasing(easing).build());
+        public Builder easing(GraphEasing easing) {
+            chart.setAnimations(AnimationsBuilder.get().withEasing(easing.easing).build());
+            return this;
+        }
+
+        public Builder xAxisAnnotation(List<String> target, List<String> text) {
+            ArrayList<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
+            for(int i = 0; i < Math.min(target.size(), text.size()); i++) {
+                xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(target.get(i)).withLabel(LabelBuilder.get().withText(text.get(i)).build()).build());
+            }
+            annotations.setXaxis(xAxisAnnotations);
+            return this;
+        }
+
+        public Builder xAxisAnnotation(String[] target, String[] text) {
+            ArrayList<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
+            for(int i = 0; i < Math.min(target.length, text.length); i++) {
+                xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(target[i]).withLabel(LabelBuilder.get().withText(text[i]).build()).build());
+            }
+            annotations.setXaxis(xAxisAnnotations);
+            return this;
+        }
+
+        public Builder yAxisNiceScale(boolean niceScale) {
+            yAxis.setForceNiceScale(niceScale);
+            return this;
+        }
+
+        public Builder colors(String[] colors) {
+            this.colors = colors;
             return this;
         }
 
