@@ -80,6 +80,8 @@ public class PfYoView  extends VerticalLayout {
 
     private void index(){
         add(new H3("質問項目一覧(未実装)"));
+        //質問項目一覧の表示
+        //クリックすると該当科目まで遷移
     }
 
     private void subject_name(){
