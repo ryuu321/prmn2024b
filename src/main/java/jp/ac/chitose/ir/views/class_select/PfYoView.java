@@ -30,7 +30,7 @@ public class PfYoView  extends VerticalLayout {
         teacher_name();//担当者の名前*/
 
         index();//目次
-        add(band(4));//Q4~Q19までのグラフを表示
+        add(band(4));//質問文とグラフ表示をセットで行うクラスの導入を検討
 
         init2();//目的と違うので仮
 
