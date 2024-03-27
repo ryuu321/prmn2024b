@@ -24,26 +24,40 @@ public class PfYoView  extends VerticalLayout {
     public  PfYoView(ClassSelect classSelect){
         this.classSelect = classSelect;
 
-        init();//統一UI画面の上部分
+        init1();//統一UI画面の上部分
 
-        subject_name();//科目名の表示
-        teacher_name();//担当者の名前
+        /*subject_name();//科目名の表示
+        teacher_name();//担当者の名前*/
 
+        index();//目次
         add(band(4));//Q4~Q19までのグラフを表示
 
+        init2();//目標と違うので仮
+
     }
-    private void init() {
+    private void init1() {
         add(new H1("Teacher"));
-        add(new Paragraph("説明"));
+        add(new Paragraph("説明文:画面内に表示される内容の説明"));
+        add(new H3("種別"));
+        RadioButtonGroup<String> categoryRadioButton = new RadioButtonGroup<>("", "IRアンケート", "授業評価アンケート");
+        categoryRadioButton.addValueChangeListener(event -> {
+            if (event.getValue().equals(event.getOldValue())) return;
+            else {
+                String value = event.getValue();
+            }
+        });
         add(new H3("学年"));
         RadioButtonGroup<String> gradesRadioButton = new RadioButtonGroup<>("", "全体", "1年生", "2年生", "3年生", "4年生", "修士1年生", "修士2年生");
         gradesRadioButton.addValueChangeListener(event -> {
-            if(event.getValue().equals(event.getOldValue())) return;
+            if (event.getValue().equals(event.getOldValue())) return;
             else {
                 String value = event.getValue();
             }
         });
         add(gradesRadioButton);
+    }
+
+        private void init2(){
         add(new H3("学科"));
         RadioButtonGroup<String> departmentsRadioButton = new RadioButtonGroup<>("", "全体", "応用科学生物学科", "電子光工学科", "情報システム工学科", "理工学研究科");
         departmentsRadioButton.addValueChangeListener(event -> {
@@ -53,7 +67,6 @@ public class PfYoView  extends VerticalLayout {
             }
         });
         add(departmentsRadioButton);
-    //ここまでstudentチームのコードを参考にしました
 
         Select<String> select = new Select<>();
         var ClassTest = classSelect.getClassqPfYo().data();
@@ -63,6 +76,10 @@ public class PfYoView  extends VerticalLayout {
         select.setItems(String.valueOf(subject_name)); //データの形式が不正で動かない可能性
 
         add(select);
+    }
+
+    private void index(){
+        add(new H3("質問項目一覧(未実装)"));
     }
 
     private void subject_name(){
