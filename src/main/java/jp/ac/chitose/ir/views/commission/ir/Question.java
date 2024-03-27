@@ -24,6 +24,7 @@ public class Question {
         radioGroup.setLabel("学科");
         radioGroup.setItems("全体", "応用科学生物学科","電子光工学科","情報システム工学科");
         main.add(radioGroup);
+        main.add(new H2("表やグラフを用いて回答を表示する予定"));
 
         main.setVisible(false);
 
