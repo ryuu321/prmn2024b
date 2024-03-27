@@ -32,7 +32,7 @@ public class PfYoView  extends VerticalLayout {
         index();//目次
         add(band(4));//Q4~Q19までのグラフを表示
 
-        init2();//目標と違うので仮
+        init2();//目的と違うので仮
 
     }
     private void init1() {
