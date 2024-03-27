@@ -127,6 +127,9 @@ public class StudentView extends VerticalLayout {
             }
             if(target[0].equals(grade.get(0).成績評価())) target[0] += "(あなたの成績位置)";
             String[] text = new String[]{"平均値"};
+            String[] orientation = new String[]{"horizontal"};
+            String[] position = new String[]{"top"};
+            String[] size = new String[]{"20px"};
             String[] colors = new String[5];
             String[] labels = new String[5];
             for(int i = 0; i < 5; i++) {
@@ -139,7 +142,8 @@ public class StudentView extends VerticalLayout {
                     labels[i] = strs[i];
                 }
             }
-            chart = Graph.Builder.get().histogram().distributed(true).xAxisAnnotation(target, text).dataLabelsEnabled(false).width("100%").height("400px").colors(colors).labels(labels).series(series).build().getGraph();
+            chart = Graph.Builder.get().histogram().distributed(true).xAxisAnnotation(target, text, orientation, position, size).legendShow(false)
+                    .dataLabelsEnabled(false).width("100%").height("400px").colors(colors).labels(labels).series(series).build().getGraph();
             add(chart);
         });
     }

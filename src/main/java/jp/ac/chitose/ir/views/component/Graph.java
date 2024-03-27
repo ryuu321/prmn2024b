@@ -3,6 +3,7 @@ package jp.ac.chitose.ir.views.component;
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.config.*;
 import com.github.appreciated.apexcharts.config.annotations.XAxisAnnotations;
+import com.github.appreciated.apexcharts.config.annotations.builder.AnnotationStyleBuilder;
 import com.github.appreciated.apexcharts.config.annotations.builder.LabelBuilder;
 import com.github.appreciated.apexcharts.config.annotations.builder.XAxisAnnotationsBuilder;
 import com.github.appreciated.apexcharts.config.chart.Animations;
@@ -312,7 +313,7 @@ public class Graph {
         }
 
         public Builder xAxisAnnotation(List<String> target, List<String> text) {
-            ArrayList<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
+            List<XAxisAnnotations> xAxisAnnotations = (annotations.getXaxis() == null ? new ArrayList<>() : annotations.getXaxis());
             for(int i = 0; i < Math.min(target.size(), text.size()); i++) {
                 xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(target.get(i)).withLabel(LabelBuilder.get().withText(text.get(i)).build()).build());
             }
@@ -320,10 +321,10 @@ public class Graph {
             return this;
         }
 
-        public Builder xAxisAnnotation(String[] target, String[] text) {
-            ArrayList<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
+        public Builder xAxisAnnotation(String[] target, String[] text, String[] orientation, String[] position, String[] size) {
+            List<XAxisAnnotations> xAxisAnnotations = (annotations.getXaxis() == null ? new ArrayList<>() : annotations.getXaxis());
             for(int i = 0; i < Math.min(target.length, text.length); i++) {
-                xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(target[i]).withLabel(LabelBuilder.get().withText(text[i]).build()).build());
+                xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(target[i]).withLabel(LabelBuilder.get().withStyle(AnnotationStyleBuilder.get().withFontSize(size[i]).build()).withPosition(position[i]).withOrientation(orientation[i]).withText(text[i]).build()).build());
             }
             annotations.setXaxis(xAxisAnnotations);
             return this;
@@ -336,6 +337,11 @@ public class Graph {
 
         public Builder colors(String[] colors) {
             this.colors = colors;
+            return this;
+        }
+
+        public Builder legendShow(boolean show) {
+            legend.setShow(show);
             return this;
         }
 
