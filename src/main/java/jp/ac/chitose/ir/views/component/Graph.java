@@ -323,7 +323,7 @@ public class Graph {
 
         public Builder xAxisAnnotation(String[] target, String[] text, String[] orientation, String[] position, String[] size) {
             List<XAxisAnnotations> xAxisAnnotations = (annotations.getXaxis() == null ? new ArrayList<>() : annotations.getXaxis());
-            for(int i = 0; i < Math.min(target.length, text.length); i++) {
+            for(int i = 0; i < Math.min(target.length, Math.min(text.length, Math.min(orientation.length, Math.min(position.length, size.length)))); i++) {
                 xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(target[i]).withLabel(LabelBuilder.get().withStyle(AnnotationStyleBuilder.get().withFontSize(size[i]).build()).withPosition(position[i]).withOrientation(orientation[i]).withText(text[i]).build()).build());
             }
             annotations.setXaxis(xAxisAnnotations);
