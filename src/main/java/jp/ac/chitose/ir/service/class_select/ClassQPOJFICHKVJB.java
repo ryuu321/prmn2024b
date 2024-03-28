@@ -11,8 +11,6 @@ public record ClassQPOJFICHKVJB(
         float q8_割合,
         String q9_項目,
         float q9_割合,
-        String q10_項目,
-        float q10_割合,
         String q11_項目,
         float q11_割合,
         String q12_項目,
@@ -22,9 +20,8 @@ public record ClassQPOJFICHKVJB(
         String q14_項目,
         float q14_割合,
         String q15_項目,
-        float q15_割合,
-        String q16_項目,
-        float q16_割合
+        float q15_割合
+
 
 ) {
 }

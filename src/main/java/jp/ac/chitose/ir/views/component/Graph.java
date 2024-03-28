@@ -2,6 +2,10 @@ package jp.ac.chitose.ir.views.component;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.config.*;
+import com.github.appreciated.apexcharts.config.annotations.XAxisAnnotations;
+import com.github.appreciated.apexcharts.config.annotations.builder.AnnotationStyleBuilder;
+import com.github.appreciated.apexcharts.config.annotations.builder.LabelBuilder;
+import com.github.appreciated.apexcharts.config.annotations.builder.XAxisAnnotationsBuilder;
 import com.github.appreciated.apexcharts.config.chart.Animations;
 import com.github.appreciated.apexcharts.config.chart.StackType;
 import com.github.appreciated.apexcharts.config.chart.Type;
@@ -14,6 +18,7 @@ import com.github.appreciated.apexcharts.helper.Series;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -75,23 +80,26 @@ public class Graph {
         graph.setDataLabels(dataLabels);
     }
 
-    public void setAnnotations(Annotations annotations) {graph.setAnnotations(annotations); }
+    public void setAnnotations(Annotations annotations) { graph.setAnnotations(annotations); }
+
+    public void setYAxis(YAxis yAxis) { graph.setYaxis(new YAxis[]{yAxis}); }
+
+    public void setColors(String[] colors) { graph.setColors(colors); }
 
     /**
      * 生成したApexChartsを返します。
      * <br>add(Graph.getGraph())といった感じで使ってください。
-     * <br>add()以外のところで使ってしまうと、ApexChartsのインスタンスをこのクラス外でいじることができてしまうので、コンポーネント化した意味がなくなってしまいます。
      * @return ApexCharts
      */
     public ApexCharts getGraph() {
         return graph;
     }
 
-    private static Series[] toSeries(GraphSeries... graphSeries) {
+    private static Series[] graphSeriesToSeries(GraphSeries... graphSeries) {
         return Arrays.stream(graphSeries).map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
     }
 
-    private static Series[] toSeries(Collection<GraphSeries> graphSeries) {
+    private static Series[] graphSeriesToSeries(Collection<GraphSeries> graphSeries) {
         return graphSeries.stream().map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
     }
 
@@ -109,7 +117,9 @@ public class Graph {
         private final Annotations annotations = new Annotations();
         private final Legend legend = new Legend();
         private final Responsive responsive = new Responsive();
+        private final YAxis yAxis = new YAxis();
         private String[] labels = new String[]{};
+        private String[] colors = new String[]{};
         private String width = "400px";
         private String height = "400px";
 
@@ -153,6 +163,13 @@ public class Graph {
             var colors = new ArrayList<String>();
             colors.add("#000");
             stroke.setColors(colors);
+            return this;
+        }
+
+        public Builder distributed(boolean distributed) {
+            Bar bar = (options.getBar() == null ? new Bar() : options.getBar());
+            bar.setDistributed(distributed);
+            options.setBar(bar);
             return this;
         }
 
@@ -267,7 +284,7 @@ public class Graph {
          * @return Builder
          */
         public Builder series(GraphSeries... series) {
-            this.series = toSeries(series);
+            this.series = graphSeriesToSeries(series);
             return this;
         }
 
@@ -278,17 +295,18 @@ public class Graph {
          * @return Builder
          */
         public Builder series(Collection<GraphSeries> series) {
-            this.series = toSeries(series);
+            this.series = graphSeriesToSeries(series);
             return this;
         }
 
         /**
          * アニメーションのeasingを指定することができます。
-         * @param easing easingの種類
+         * 専用の列挙型GraphEasingを引数として渡してください。
+         * @param easing GraphEasingで指定したい種類
          * @return Builder
          */
-        public Builder easing(Easing easing) {
-            chart.setAnimations(AnimationsBuilder.get().withEasing(easing).build());
+        public Builder easing(GraphEasing easing) {
+            chart.setAnimations(AnimationsBuilder.get().withEasing(easing.easing).build());
             return this;
         }
 
