@@ -112,7 +112,7 @@ public class QPOJFICHKVJBView extends VerticalLayout {
                 .height("400px").width("400px").series(ClassTest.stream().map(e1 ->
                 {
                     try {
-                        return new GraphSeries(e1.getClass().getMethod("q"+Question_num).invoke(e1),new Coordinate<>("Q"+Question_num,e1.getClass().getMethod("q"+Question_num).invoke(e1)));
+                        return new GraphSeries(e1.getClass().getMethod("q"+Question_num+"_項目").invoke(e1),new Coordinate<>("Q"+Question_num+"_割合",e1.getClass().getMethod("q"+Question_num).invoke(e1)));
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     } catch (InvocationTargetException e) {
