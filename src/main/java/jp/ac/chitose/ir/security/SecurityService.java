@@ -28,4 +28,7 @@ public class SecurityService {
                 VaadinServletRequest.getCurrent().getHttpServletRequest(), null, null
         );
     }
+    public LoginUser getLoginUser() {
+        return (LoginUser) getAuthenticatedUser();
+    }
 }
