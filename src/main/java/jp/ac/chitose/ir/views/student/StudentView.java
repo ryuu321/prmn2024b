@@ -102,8 +102,19 @@ public class StudentView extends VerticalLayout {
             var grade = studentService.getStudentNumberGrade(e1.getValue().学籍番号(), e1.getValue().科目名()).data();
             Annotations annotations = new Annotations();
             ArrayList<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
+            String[] target = new String[]{""};
+            for(int i = 0; i < histData.size(); i++) {
+                var e = histData.get(i);
+                if(e.成績評価().equals("平均")) {
+                    if(e.度数() < 1d) target[0] = "不可";
+                    else if(e.度数() < 2d) target[0] = "可";
+                    else if(e.度数() < 3d) target[0] = "良";
+                    else if(e.度数() < 4d) target[0] = "優";
+                    else target[0] = "秀";
+                }
+            }
             xAxisAnnotations.add(XAxisAnnotationsBuilder.get()
-                    .withX(grade.get(0).成績評価().equals("可") ? "良" : "可")
+                    .withX(target[0])
                     .withLabel(LabelBuilder.get()
                             .withStyle(AnnotationStyleBuilder.get()
                                     .withFontSize("20px")
