@@ -42,8 +42,6 @@ public class Graph {
         setHeight(builder.height);
         setWidth(builder.width);
         setDataLabels(builder.dataLabels);
-        setYAxis(builder.yAxis);
-        setColors(builder.colors);
     }
 
     public void setChart(Chart chart) {
@@ -309,39 +307,6 @@ public class Graph {
          */
         public Builder easing(GraphEasing easing) {
             chart.setAnimations(AnimationsBuilder.get().withEasing(easing.easing).build());
-            return this;
-        }
-
-        public Builder xAxisAnnotation(List<String> target, List<String> text) {
-            List<XAxisAnnotations> xAxisAnnotations = (annotations.getXaxis() == null ? new ArrayList<>() : annotations.getXaxis());
-            for(int i = 0; i < Math.min(target.size(), text.size()); i++) {
-                xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(target.get(i)).withLabel(LabelBuilder.get().withText(text.get(i)).build()).build());
-            }
-            annotations.setXaxis(xAxisAnnotations);
-            return this;
-        }
-
-        public Builder xAxisAnnotation(String[] target, String[] text, String[] orientation, String[] position, String[] size) {
-            List<XAxisAnnotations> xAxisAnnotations = (annotations.getXaxis() == null ? new ArrayList<>() : annotations.getXaxis());
-            for(int i = 0; i < Math.min(target.length, Math.min(text.length, Math.min(orientation.length, Math.min(position.length, size.length)))); i++) {
-                xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(target[i]).withLabel(LabelBuilder.get().withStyle(AnnotationStyleBuilder.get().withFontSize(size[i]).build()).withPosition(position[i]).withOrientation(orientation[i]).withText(text[i]).build()).build());
-            }
-            annotations.setXaxis(xAxisAnnotations);
-            return this;
-        }
-
-        public Builder yAxisNiceScale(boolean niceScale) {
-            yAxis.setForceNiceScale(niceScale);
-            return this;
-        }
-
-        public Builder colors(String[] colors) {
-            this.colors = colors;
-            return this;
-        }
-
-        public Builder legendShow(boolean show) {
-            legend.setShow(show);
             return this;
         }
 
