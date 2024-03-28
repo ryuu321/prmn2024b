@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.service.class_select.ClassSelect;
 import jp.ac.chitose.ir.views.MainLayout;
 import jp.ac.chitose.ir.views.component.Graph;
@@ -16,7 +17,7 @@ import jp.ac.chitose.ir.views.component.GraphSeries;
 
 @PageTitle("class_QPOJFICHKVJB")
 @Route(value = "class_select/QPOJFICHKVJB", layout = MainLayout.class)
-
+@PermitAll
 public class QPOJFICHKVJBView extends VerticalLayout {
     private ClassSelect classSelect;
 
