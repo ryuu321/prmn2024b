@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import jp.ac.chitose.ir.views.about.AboutView;
+import jp.ac.chitose.ir.views.class_select.QPOJFICHKVJBView;
 import jp.ac.chitose.ir.views.commission.ir.IrQuestionView;
 import jp.ac.chitose.ir.views.commission.seiseki.CommissionView;
 import jp.ac.chitose.ir.views.feed.FeedView;
@@ -93,7 +94,8 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("Feed", LineAwesomeIcon.LIST_SOLID.create(), FeedView.class), //
                 new MenuItemInfo("Student", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class),//
                 new MenuItemInfo("成績情報(GPA)",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class),//
-                new MenuItemInfo("IRアンケート",LineAwesomeIcon.ALGOLIA.create(), IrQuestionView.class)//
+                new MenuItemInfo("IRアンケート",LineAwesomeIcon.ALGOLIA.create(), IrQuestionView.class),//
+                new MenuItemInfo("Teacher", LineAwesomeIcon.CHART_AREA_SOLID.create(), QPOJFICHKVJBView.class)//
         };
     }
 
