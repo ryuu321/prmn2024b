@@ -42,8 +42,6 @@ public class Graph {
         setHeight(builder.height);
         setWidth(builder.width);
         setDataLabels(builder.dataLabels);
-        setYAxis(builder.yAxis);
-        setColors(builder.colors);
     }
 
     public void setChart(Chart chart) {
@@ -97,11 +95,11 @@ public class Graph {
         return graph;
     }
 
-    private static Series[] toSeries(GraphSeries... graphSeries) {
+    private static Series[] graphSeriesToSeries(GraphSeries... graphSeries) {
         return Arrays.stream(graphSeries).map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
     }
 
-    private static Series[] toSeries(Collection<GraphSeries> graphSeries) {
+    private static Series[] graphSeriesToSeries(Collection<GraphSeries> graphSeries) {
         return graphSeries.stream().map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
     }
 
@@ -286,7 +284,7 @@ public class Graph {
          * @return Builder
          */
         public Builder series(GraphSeries... series) {
-            this.series = toSeries(series);
+            this.series = graphSeriesToSeries(series);
             return this;
         }
 
@@ -297,7 +295,7 @@ public class Graph {
          * @return Builder
          */
         public Builder series(Collection<GraphSeries> series) {
-            this.series = toSeries(series);
+            this.series = graphSeriesToSeries(series);
             return this;
         }
 
@@ -309,39 +307,6 @@ public class Graph {
          */
         public Builder easing(GraphEasing easing) {
             chart.setAnimations(AnimationsBuilder.get().withEasing(easing.easing).build());
-            return this;
-        }
-
-        public Builder xAxisAnnotation(List<String> target, List<String> text) {
-            List<XAxisAnnotations> xAxisAnnotations = (annotations.getXaxis() == null ? new ArrayList<>() : annotations.getXaxis());
-            for(int i = 0; i < Math.min(target.size(), text.size()); i++) {
-                xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(target.get(i)).withLabel(LabelBuilder.get().withText(text.get(i)).build()).build());
-            }
-            annotations.setXaxis(xAxisAnnotations);
-            return this;
-        }
-
-        public Builder xAxisAnnotation(String[] target, String[] text, String[] orientation, String[] position, String[] size) {
-            List<XAxisAnnotations> xAxisAnnotations = (annotations.getXaxis() == null ? new ArrayList<>() : annotations.getXaxis());
-            for(int i = 0; i < Math.min(target.length, Math.min(text.length, Math.min(orientation.length, Math.min(position.length, size.length)))); i++) {
-                xAxisAnnotations.add(XAxisAnnotationsBuilder.get().withX(target[i]).withLabel(LabelBuilder.get().withStyle(AnnotationStyleBuilder.get().withFontSize(size[i]).build()).withPosition(position[i]).withOrientation(orientation[i]).withText(text[i]).build()).build());
-            }
-            annotations.setXaxis(xAxisAnnotations);
-            return this;
-        }
-
-        public Builder yAxisNiceScale(boolean niceScale) {
-            yAxis.setForceNiceScale(niceScale);
-            return this;
-        }
-
-        public Builder colors(String[] colors) {
-            this.colors = colors;
-            return this;
-        }
-
-        public Builder legendShow(boolean show) {
-            legend.setShow(show);
             return this;
         }
 
