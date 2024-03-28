@@ -1,8 +1,8 @@
 package jp.ac.chitose.ir.config;
 
 import jp.ac.chitose.ir.service.HelloService;
+import jp.ac.chitose.ir.service.class_select.ClassSelect;
 import jp.ac.chitose.ir.service.sample.SampleService;
-import jp.ac.chitose.ir.service.student.StudentService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +33,8 @@ public class HttpClientConfiguration {
     }
 
     @Bean
-    public StudentService studentService(HttpServiceProxyFactory factory) {
-        return factory.createClient(StudentService.class);
+    public ClassSelect classSelect(HttpServiceProxyFactory factory) {
+        return factory.createClient(ClassSelect.class);
     }
+
 }
