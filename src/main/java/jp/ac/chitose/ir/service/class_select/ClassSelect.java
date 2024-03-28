@@ -8,4 +8,16 @@ import org.springframework.web.service.annotation.HttpExchange;
 public interface ClassSelect {
     @GetExchange("/test")
     TableData<ClassTest> getClassTest();
+
+    @GetExchange("/nvPWq")
+    TableData<ClassnvPWq> gerClassnvPWq();
+
+    @GetExchange("/ec3Tr")
+    TableData<Classec3Tr> getClassec3Tr();
+
+    @GetExchange("/7hXWV")
+    TableData<Class7hXWV> getClass7hXWV();
+
+    @GetExchange("/qPfYo")
+    TableData<ClassqPfYo> getClassqPfYo();
 }
