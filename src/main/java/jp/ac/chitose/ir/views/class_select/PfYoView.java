@@ -2,6 +2,7 @@ package jp.ac.chitose.ir.views.class_select;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.helper.Coordinate;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
@@ -151,14 +152,14 @@ public class PfYoView  extends VerticalLayout {
         add(band(15));
         add(new H3("Q16:総合的に判断してこの授業は満足でしたか。"));
         add(band(16));
-        /*
+
+        Button graphButton = new Button("回答を表示する");
+
         add(new H3("Q17:この授業で良かった点があれば記述してください。"));
-        add(band(17));
+        add(graphButton);
         add(new H3("Q18:この授業で改善点があれば記述してください。"));
-        add(band(18));
+        add(graphButton);
         add(new H3("Q19:その他、気づいた点があれば記述してください。"));
-        add(band(19));
-        自由記述なのでグラフではありませんでした
-         */
+        add(graphButton);
     }
 }
