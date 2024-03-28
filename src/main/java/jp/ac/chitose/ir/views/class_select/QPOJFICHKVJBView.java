@@ -39,7 +39,7 @@ public class QPOJFICHKVJBView extends VerticalLayout {
     }
 
     private void init1() {
-        add(new H1("科目名:QPOJFICHKVJB"));
+        add(new H1("科目名:ソフトウェア工学とアジャイル開発"));
         add(new Paragraph("説明文:画面内に表示される内容の説明"));
         add(new H3("種別"));
         RadioButtonGroup<String> categoryRadioButton = new RadioButtonGroup<>("", "IRアンケート", "授業評価アンケート");
@@ -49,6 +49,7 @@ public class QPOJFICHKVJBView extends VerticalLayout {
                 String value = event.getValue();
             }
         });
+        add(categoryRadioButton);
         add(new H3("学年"));
         RadioButtonGroup<String> gradesRadioButton = new RadioButtonGroup<>("", "全体", "1年生", "2年生", "3年生", "4年生", "修士1年生", "修士2年生");
         gradesRadioButton.addValueChangeListener(event -> {
