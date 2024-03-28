@@ -17,13 +17,13 @@ import jp.ac.chitose.ir.views.component.GraphSeries;
 
 import java.lang.reflect.InvocationTargetException;
 
-@PageTitle("class_PfYo")
-@Route(value = "class_select/PfYo", layout = MainLayout.class)
+@PageTitle("class_QPOJFICHKVJB")
+@Route(value = "class_select/QPOJFICHKVJB", layout = MainLayout.class)
 
-public class PfYoView  extends VerticalLayout {
+public class QPOJFICHKVJBView extends VerticalLayout {
     private ClassSelect classSelect;
 
-    public  PfYoView(ClassSelect classSelect){
+    public QPOJFICHKVJBView(ClassSelect classSelect){
         this.classSelect = classSelect;
 
         init1();//統一UI画面の上部分
@@ -72,7 +72,7 @@ public class PfYoView  extends VerticalLayout {
         add(departmentsRadioButton);
 
         Select<String> select = new Select<>();
-        var ClassTest = classSelect.getClassqPfYo().data();
+        var ClassTest = classSelect.getClassQPOJFICHKVJB().data();
         var subject_name =  ClassTest.get(0);
         select.setLabel("担当科目を検索");
 
@@ -88,7 +88,7 @@ public class PfYoView  extends VerticalLayout {
     }
 
     private void subject_name(){
-        var ClassTest = classSelect.getClassqPfYo().data();
+        var ClassTest = classSelect.getClassQPOJFICHKVJB().data();
         var subject_name =  ClassTest.get(0);
         add(new H3("表示中の科目:"));
                 add(new H3(String.valueOf(subject_name))); //データの形式が不正で動かない可能性
@@ -96,7 +96,7 @@ public class PfYoView  extends VerticalLayout {
     }
 
     private void teacher_name(){
-        var ClassTest = classSelect.getClassqPfYo().data();
+        var ClassTest = classSelect.getClassQPOJFICHKVJB().data();
         var teacher_name =  ClassTest.get(0);
         add(new H3("担当者:"));
         add(new H3(String.valueOf(teacher_name))); //データの形式が不正で動かない可能性
@@ -104,7 +104,7 @@ public class PfYoView  extends VerticalLayout {
     }
 
     private ApexCharts band(int Question_num) {
-        var ClassTest = classSelect.getClassqPfYo().data();
+        var ClassTest = classSelect.getClassQPOJFICHKVJB().data();
 
 
         return Graph.Builder.get().band()
