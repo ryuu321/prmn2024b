@@ -1,6 +1,7 @@
 package jp.ac.chitose.ir.config;
 
 import jp.ac.chitose.ir.service.HelloService;
+import jp.ac.chitose.ir.service.class_select.ClassSelect;
 import jp.ac.chitose.ir.service.sample.SampleService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,11 @@ public class HttpClientConfiguration {
     @Bean
     public SampleService sampleService(HttpServiceProxyFactory factory) {
         return factory.createClient(SampleService.class);
+    }
+
+    @Bean
+    public ClassSelect classSelect(HttpServiceProxyFactory factory) {
+        return factory.createClient(ClassSelect.class);
     }
 
 }

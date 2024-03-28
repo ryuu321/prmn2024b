@@ -30,6 +30,7 @@ import jp.ac.chitose.ir.views.about.AboutView;
 import jp.ac.chitose.ir.views.feed.FeedView;
 import jp.ac.chitose.ir.views.helloworld.HelloTableView;
 import jp.ac.chitose.ir.views.helloworld.HelloWorldView;
+import jp.ac.chitose.ir.views.student.StudentView;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
 /**
@@ -108,6 +109,7 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("テーブル使用例", LineAwesomeIcon.TABLE_SOLID.create(), HelloTableView.class),
                 new MenuItemInfo("About", LineAwesomeIcon.FILE.create(), AboutView.class), //
                 new MenuItemInfo("Feed", LineAwesomeIcon.LIST_SOLID.create(), FeedView.class), //
+                new MenuItemInfo("Student", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class)
         };
     }
 

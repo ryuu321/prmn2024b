@@ -4,7 +4,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
+import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.service.TableData;
 import jp.ac.chitose.ir.service.sample.SampleService;
 import jp.ac.chitose.ir.service.sample.SampleTwo;
@@ -12,6 +12,7 @@ import jp.ac.chitose.ir.views.MainLayout;
 
 @PageTitle("Hello Table")
 @Route(value = "table", layout = MainLayout.class)
+@PermitAll
 public class HelloTableView extends VerticalLayout {
 
     private SampleService sampleService;
