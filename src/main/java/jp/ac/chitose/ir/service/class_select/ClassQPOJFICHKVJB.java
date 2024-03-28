@@ -1,6 +1,6 @@
 package jp.ac.chitose.ir.service.class_select;
 
-public record ClassqPfYo(
+public record ClassQPOJFICHKVJB(
         String 科目名,
         String 担当者,
         String q4,

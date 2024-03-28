@@ -18,6 +18,6 @@ public interface ClassSelect {
     @GetExchange("/7hXWV")
     TableData<Class7hXWV> getClass7hXWV();
 
-    @GetExchange("/qPfYo")
-    TableData<ClassqPfYo> getClassqPfYo();
+    @GetExchange("/QPOJFICHKVJB")
+    TableData<ClassQPOJFICHKVJB> getClassQPOJFICHKVJB();
 }
