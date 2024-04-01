@@ -3,16 +3,8 @@ package jp.ac.chitose.ir.views.helloworld;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.appreciated.apexcharts.ApexCharts;
-import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.Annotations;
-import com.github.appreciated.apexcharts.config.annotations.Label;
-import com.github.appreciated.apexcharts.config.annotations.XAxisAnnotations;
-import com.github.appreciated.apexcharts.config.annotations.builder.LabelBuilder;
-import com.github.appreciated.apexcharts.config.annotations.builder.XAxisAnnotationsBuilder;
-import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
-import com.github.appreciated.apexcharts.config.builder.PlotOptionsBuilder;
-import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.animations.Easing;
+import com.github.appreciated.apexcharts.config.chart.builder.AnimationsBuilder;
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
 import com.github.appreciated.apexcharts.helper.Coordinate;
 import com.github.appreciated.apexcharts.helper.Series;
@@ -27,17 +19,21 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import jp.ac.chitose.ir.service.*;
+import jakarta.annotation.security.PermitAll;
+import jp.ac.chitose.ir.service.HelloService;
 import jp.ac.chitose.ir.service.sample.SampleService;
 import jp.ac.chitose.ir.views.MainLayout;
 import jp.ac.chitose.ir.views.component.*;
-
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.*;
 import java.util.List;
-
 @PageTitle("Hello World")
 @Route(value = "hello", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
+@PermitAll
 public class  HelloWorldView extends VerticalLayout {
 
     private TextField name;
@@ -297,8 +293,8 @@ public class  HelloWorldView extends VerticalLayout {
                 .withSeries(series)
                 .build();
          */
-        return Graph.Builder.get().histogram()
-                .height("400px").width("400px").series(series).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
+        return Graph.Builder.get().histogram().height("400px").width("400px")
+                .series(series).animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
 
     private ApexCharts pie() {
@@ -318,17 +314,15 @@ public class  HelloWorldView extends VerticalLayout {
         // Seriesクラスのコンストラクタには、名前、データの中身、を設定する。
         // データの中身は、Coordinateクラスを設定する。Coordinateクラスが一つで箱が一つできる
         // 箱には、最小値、第一四分位数、中央値、第三四分位数、最大値、があるので、Coordinateクラスのコンストラクタの第２引数に順番に設定する
-        final Series<Coordinate<String, Double>> series = new Series<>("box",
-                new Coordinate<>("2021", 43.2, 65.0, 69.1, 76.8, 81.6), // １つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
-                new Coordinate<>("2022", 30.8, 39.2, 45.0, 51.0, 59.3)  // ２つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
+        final GraphSeries<Data<String, Double>> series = new GraphSeries<>("box",
+                new Data<>("2021", 43.2, 65.0, 69.1, 76.8, 81.6), // １つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
+                new Data<>("2022", 30.8, 39.2, 45.0, 51.0, 59.3)  // ２つ目の箱{ x: category/date, y: [min, q1, median, q3, max] }
                 );
 
         final GraphSeries<Data<String, Double>> series1 = new GraphSeries<>("box",
                 new Data<>("2021", 43.2, 65.0, 69.1, 76.8, 81.6),
                 new Data<>("2022", 30.8, 39.2, 45.0, 51.0, 59.3)
         );
-
-
         // 箱ひげ図を作成する
         // withType(Type.BOXPLOT)が箱ひげ図で表示する指示にあたる
         /*final ApexCharts chart = ApexChartsBuilder.get().withChart(
@@ -345,7 +339,7 @@ public class  HelloWorldView extends VerticalLayout {
         chart.setHeight("600px");
         chart.setWidth("600px");*/
 
-        return Graph.Builder.get().graphType(GRAPH_TYPE.BOXPLOT).animationsEnabled(false)
-                .easing(Easing.LINEAR).width("100%").height("600px").series(series1).build().getGraph();
+        return Graph.Builder.get().graphType(GRAPH_TYPE.BOXPLOT).animationsEnabled(false).height("600px")
+                .width("600px").easing(GraphEasing.LINEAR).width("100%").height("600px").series(series1).build().getGraph();
     }
 }
