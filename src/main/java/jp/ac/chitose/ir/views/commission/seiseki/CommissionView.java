@@ -7,17 +7,17 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
-import jp.ac.chitose.ir.service.sample.SampleService;
+import jp.ac.chitose.ir.service.commission.CommissionService;
 import jp.ac.chitose.ir.views.MainLayout;
 
 @PageTitle("Commission")
 @Route(value = "commission", layout = MainLayout.class)
 @PermitAll
 public class CommissionView extends VerticalLayout {
-    private SampleService sampleService;
+    private CommissionService commissionService;
 
-    public CommissionView(SampleService sampleService){
-        this.sampleService = sampleService;
+    public CommissionView(CommissionService commissionService){
+        this.commissionService = commissionService;
 
         H1 title = new H1("Commission");
 //        add(title);
@@ -37,13 +37,13 @@ public class CommissionView extends VerticalLayout {
 
 
 
-        SeisekiView seisekiView = new SeisekiView(sampleService);
+        SeisekiView seisekiView = new SeisekiView(commissionService);
         VerticalLayout seiseki = seisekiView.view();
         add(seiseki);
 //        seiseki.setVisible(false);
 
-        IrView irView = new IrView(sampleService);
-        VerticalLayout ir = irView.view();
+//        IrView irView = new IrView(commissionService);
+//        VerticalLayout ir = irView.view();
 //        add(ir);
 //        ir.setVisible(false);
 

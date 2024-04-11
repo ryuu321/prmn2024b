@@ -13,9 +13,9 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import jp.ac.chitose.ir.service.sample.SampleGpa2;
-import jp.ac.chitose.ir.service.sample.SampleService;
-import jp.ac.chitose.ir.service.sample.SapmleGpa;
+import jp.ac.chitose.ir.service.commission.CommissionGpa;
+import jp.ac.chitose.ir.service.commission.CommissionGpa2;
+import jp.ac.chitose.ir.service.commission.CommissionService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,10 +23,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class SeisekiView implements View {
-    private SampleService sampleService;
+    private CommissionService commissionService;
 
-    public SeisekiView(SampleService sampleService){
-        this.sampleService = sampleService;
+    public SeisekiView(CommissionService commissionService){
+        this.commissionService = commissionService;
     }
     public VerticalLayout view(){
         VerticalLayout main = new VerticalLayout();
@@ -89,11 +89,11 @@ public class SeisekiView implements View {
         HorizontalLayout layout2 = new HorizontalLayout();
         VerticalLayout layout3 = new VerticalLayout();
 
-        VerticalLayout chartOfZentai = bar(sampleService.getSampleGpa().data().get(0).getData(),sampleService.getSampleGpa().data().get(0));
-        VerticalLayout chartOfOuyou = bar(sampleService.getSampleGpa().data().get(1).getData(),sampleService.getSampleGpa().data().get(1));
-        VerticalLayout chartOfDensi = bar(sampleService.getSampleGpa().data().get(2).getData(),sampleService.getSampleGpa().data().get(2));
-        VerticalLayout chartOfZyouhou = bar(sampleService.getSampleGpa().data().get(3).getData(),sampleService.getSampleGpa().data().get(3));
-        VerticalLayout chartOfItinen = bar(sampleService.getSampleGpa().data().get(4).getData(),sampleService.getSampleGpa().data().get(4));
+        VerticalLayout chartOfZentai = bar(commissionService.getCommissionGpa().data().get(0).getData(),commissionService.getCommissionGpa().data().get(0));
+        VerticalLayout chartOfOuyou = bar(commissionService.getCommissionGpa().data().get(1).getData(),commissionService.getCommissionGpa().data().get(1));
+        VerticalLayout chartOfDensi = bar(commissionService.getCommissionGpa().data().get(2).getData(),commissionService.getCommissionGpa().data().get(2));
+        VerticalLayout chartOfZyouhou = bar(commissionService.getCommissionGpa().data().get(3).getData(),commissionService.getCommissionGpa().data().get(3));
+        VerticalLayout chartOfItinen = bar(commissionService.getCommissionGpa().data().get(4).getData(),commissionService.getCommissionGpa().data().get(4));
 
         ArrayList<VerticalLayout> chartList = new ArrayList<>(Arrays.asList(chartOfZentai,chartOfOuyou,chartOfDensi,chartOfZyouhou,chartOfItinen));
 
@@ -103,7 +103,7 @@ public class SeisekiView implements View {
         main.add(layout3);
         layout3.setVisible(false);
 
-        Grid<SampleGpa2> grid = hyou(sampleService.getSampleGpa2().data());
+        Grid<CommissionGpa2> grid = hyou(commissionService.getCommissionGpa2().data());
         grid.setWidth("1050px");
         grid.setHeight("300px");
         H2 text = new H2("統計データ詳細");
@@ -131,18 +131,18 @@ public class SeisekiView implements View {
         //成績画面終わり
         return main;
     }
-    private Grid<SampleGpa2> hyou(List<SampleGpa2> sample){
-        Grid<SampleGpa2> grid = new Grid<>();
-        grid.addColumn(SampleGpa2::subject).setHeader("学科");
-        grid.addColumn(SampleGpa2::human).setHeader("人数");
-        grid.addColumn(SampleGpa2::average).setHeader("平均値");
-        grid.addColumn(SampleGpa2::min).setHeader("最小値");
-        grid.addColumn(SampleGpa2::max).setHeader("最大値");
-        grid.addColumn(SampleGpa2::std).setHeader("標準偏差");
+    private Grid<CommissionGpa2> hyou(List<CommissionGpa2> sample){
+        Grid<CommissionGpa2> grid = new Grid<>();
+        grid.addColumn(CommissionGpa2::subject).setHeader("学科");
+        grid.addColumn(CommissionGpa2::human).setHeader("人数");
+        grid.addColumn(CommissionGpa2::average).setHeader("平均値");
+        grid.addColumn(CommissionGpa2::min).setHeader("最小値");
+        grid.addColumn(CommissionGpa2::max).setHeader("最大値");
+        grid.addColumn(CommissionGpa2::std).setHeader("標準偏差");
         grid.setItems(sample);
         return grid;
     }
-    private VerticalLayout bar(ArrayList<Integer> a, SapmleGpa b) {
+    private VerticalLayout bar(ArrayList<Integer> a, CommissionGpa b) {
         ArrayList<Coordinate<String,Integer>> data = new ArrayList<>();
         char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
