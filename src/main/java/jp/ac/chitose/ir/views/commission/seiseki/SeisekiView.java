@@ -1,12 +1,6 @@
 package jp.ac.chitose.ir.views.commission.seiseki;
 
 import com.github.appreciated.apexcharts.ApexCharts;
-import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.builder.*;
-import com.github.appreciated.apexcharts.config.chart.Type;
-import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
-import com.github.appreciated.apexcharts.helper.Coordinate;
-import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
@@ -16,10 +10,12 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import jp.ac.chitose.ir.service.commission.CommissionGpa;
 import jp.ac.chitose.ir.service.commission.CommissionGpa2;
 import jp.ac.chitose.ir.service.commission.CommissionService;
+import jp.ac.chitose.ir.views.component.Data;
+import jp.ac.chitose.ir.views.component.Graph;
+import jp.ac.chitose.ir.views.component.GraphSeries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class SeisekiView implements View {
@@ -89,11 +85,11 @@ public class SeisekiView implements View {
         HorizontalLayout layout2 = new HorizontalLayout();
         VerticalLayout layout3 = new VerticalLayout();
 
-        VerticalLayout chartOfZentai = bar(commissionService.getCommissionGpa().data().get(0).getData(),commissionService.getCommissionGpa().data().get(0));
-        VerticalLayout chartOfOuyou = bar(commissionService.getCommissionGpa().data().get(1).getData(),commissionService.getCommissionGpa().data().get(1));
-        VerticalLayout chartOfDensi = bar(commissionService.getCommissionGpa().data().get(2).getData(),commissionService.getCommissionGpa().data().get(2));
-        VerticalLayout chartOfZyouhou = bar(commissionService.getCommissionGpa().data().get(3).getData(),commissionService.getCommissionGpa().data().get(3));
-        VerticalLayout chartOfItinen = bar(commissionService.getCommissionGpa().data().get(4).getData(),commissionService.getCommissionGpa().data().get(4));
+        VerticalLayout chartOfZentai = graph(commissionService.getCommissionGpa().data().get(0).getData(),commissionService.getCommissionGpa().data().get(0));
+        VerticalLayout chartOfOuyou = graph(commissionService.getCommissionGpa().data().get(1).getData(),commissionService.getCommissionGpa().data().get(1));
+        VerticalLayout chartOfDensi = graph(commissionService.getCommissionGpa().data().get(2).getData(),commissionService.getCommissionGpa().data().get(2));
+        VerticalLayout chartOfZyouhou = graph(commissionService.getCommissionGpa().data().get(3).getData(),commissionService.getCommissionGpa().data().get(3));
+        VerticalLayout chartOfItinen = graph(commissionService.getCommissionGpa().data().get(4).getData(),commissionService.getCommissionGpa().data().get(4));
 
         ArrayList<VerticalLayout> chartList = new ArrayList<>(Arrays.asList(chartOfZentai,chartOfOuyou,chartOfDensi,chartOfZyouhou,chartOfItinen));
 
@@ -142,41 +138,42 @@ public class SeisekiView implements View {
         grid.setItems(sample);
         return grid;
     }
-    private VerticalLayout bar(ArrayList<Integer> a, CommissionGpa b) {
-        ArrayList<Coordinate<String,Integer>> data = new ArrayList<>();
-        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
-        int max = Collections.max(a);
 
-        for(int i = 0;i < a.size();i++){
-            data.add(new Coordinate<>(String.valueOf(alphabet[i]),a.get(i)));
-        }
-        Series<Coordinate<String, Integer>> series = new Series<>(b.getName(),
-                data.get(0),data.get(1),data.get(2),data.get(3),data.get(4),data.get(5),data.get(6),data.get(7),
-                data.get(8),data.get(9),data.get(10),data.get(11),data.get(12),data.get(13),data.get(14),data.get(15)
-
-        );
-
-        final ApexCharts chart = ApexChartsBuilder.get().withChart(
-                        ChartBuilder.get()
-                                .withType(Type.BAR) // Typeにヒストグラムがない。公式サイトのissueによるBARでやるように指示がある
-                                .build())
-                .withDataLabels(DataLabelsBuilder.get()
-                        .withEnabled(false)
-                        .build())
-                .withPlotOptions(PlotOptionsBuilder.get()
-                        .withBar(BarBuilder.get().withColumnWidth("100%").build()) // BARの間隔を０に近づける（見た目を調整してヒストグラムにみえるようにする）
-                        .build())
-                .withStroke(StrokeBuilder.get().withWidth(0.1).withColors("#000").build()) // 柱（棒）の外枠を黒色に設定してヒストグラムに見た目を近づける
-                .withYaxis(YAxisBuilder.get().withMax(max).build()) // Y軸の最大値；ここでは80に設定
-                .withSeries(series)
-                .build();
-
-        chart.setHeight("300px");
-        chart.setWidth("400px");
+    private VerticalLayout graph(ArrayList<Integer> a, CommissionGpa b){
         VerticalLayout layout = new VerticalLayout();
         layout.add(new H2(b.getName()));
-        layout.add(chart);
+        HorizontalLayout graphLayout = new HorizontalLayout();
+        graphLayout.add(histgram(a,b));
+        layout.add(graphLayout);
         return layout;
     }
+
+    private ApexCharts histgram(ArrayList<Integer> a, CommissionGpa b){
+        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
+        for(int i = 0;i < a.size();i++){
+            dataList.add(new Data<>(String.valueOf(alphabet[i]),a.get(i)));
+        }
+        GraphSeries<Data<String, Integer>> series = new GraphSeries<>(b.getName(),
+                dataList.get(0),
+                dataList.get(1),
+                dataList.get(2),
+                dataList.get(3),
+                dataList.get(4),
+                dataList.get(5),
+                dataList.get(6),
+                dataList.get(7),
+                dataList.get(8),
+                dataList.get(9),
+                dataList.get(10),
+                dataList.get(11),
+                dataList.get(12),
+                dataList.get(13),
+                dataList.get(14),
+                dataList.get(15));
+        return Graph.Builder.get().histogram()
+                .height("300px").width("400px").series(series).dataLabelsEnabled(false).build().getGraph();
+    }
+
 }
