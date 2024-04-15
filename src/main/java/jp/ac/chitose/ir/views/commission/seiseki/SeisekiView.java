@@ -150,10 +150,10 @@ public class SeisekiView implements View {
     }
 
     private ApexCharts histgram(ArrayList<Integer> a, CommissionGpa b){
-        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
         ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
         for(int i = 0;i < a.size();i++){
-            dataList.add(new Data<>(String.valueOf(alphabet[i]),a.get(i)));
+            dataList.add(new Data<>((name[i]),a.get(i)));
         }
         GraphSeries<Data<String, Integer>> series = new GraphSeries<>(b.getName(),
                 dataList.get(0),
@@ -163,15 +163,8 @@ public class SeisekiView implements View {
                 dataList.get(4),
                 dataList.get(5),
                 dataList.get(6),
-                dataList.get(7),
-                dataList.get(8),
-                dataList.get(9),
-                dataList.get(10),
-                dataList.get(11),
-                dataList.get(12),
-                dataList.get(13),
-                dataList.get(14),
-                dataList.get(15));
+                dataList.get(7));
+
         return Graph.Builder.get().histogram()
                 .height("300px").width("400px").series(series).dataLabelsEnabled(false).build().getGraph();
     }

@@ -10,15 +10,8 @@ public record CommissionGpa(String name,
                             int e,
                             int f,
                             int g,
-                            int h,
-                            int i,
-                            int j,
-                            int k,
-                            int l,
-                            int m,
-                            int n,
-                            int o,
-                            int p
+                            int h
+
 ){
     public ArrayList<Integer> getData(){
         ArrayList<Integer> aa = new ArrayList<>();
@@ -30,14 +23,6 @@ public record CommissionGpa(String name,
         aa.add(f);
         aa.add(g);
         aa.add(h);
-        aa.add(i);
-        aa.add(j);
-        aa.add(k);
-        aa.add(l);
-        aa.add(m);
-        aa.add(n);
-        aa.add(o);
-        aa.add(p);
         return aa;
     }
 
