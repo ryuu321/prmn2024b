@@ -1,32 +1,28 @@
 package jp.ac.chitose.ir.views.commission.seiseki;
 
 import com.github.appreciated.apexcharts.ApexCharts;
-import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.builder.*;
-import com.github.appreciated.apexcharts.config.chart.Type;
-import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
-import com.github.appreciated.apexcharts.helper.Coordinate;
-import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import jp.ac.chitose.ir.service.sample.SampleGpa2;
-import jp.ac.chitose.ir.service.sample.SampleService;
-import jp.ac.chitose.ir.service.sample.SapmleGpa;
+import jp.ac.chitose.ir.service.commission.CommissionGpa;
+import jp.ac.chitose.ir.service.commission.CommissionGpa2;
+import jp.ac.chitose.ir.service.commission.CommissionService;
+import jp.ac.chitose.ir.views.component.Data;
+import jp.ac.chitose.ir.views.component.Graph;
+import jp.ac.chitose.ir.views.component.GraphSeries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class SeisekiView implements View {
-    private SampleService sampleService;
+    private CommissionService commissionService;
 
-    public SeisekiView(SampleService sampleService){
-        this.sampleService = sampleService;
+    public SeisekiView(CommissionService commissionService){
+        this.commissionService = commissionService;
     }
     public VerticalLayout view(){
         VerticalLayout main = new VerticalLayout();
@@ -89,11 +85,11 @@ public class SeisekiView implements View {
         HorizontalLayout layout2 = new HorizontalLayout();
         VerticalLayout layout3 = new VerticalLayout();
 
-        VerticalLayout chartOfZentai = bar(sampleService.getSampleGpa().data().get(0).getData(),sampleService.getSampleGpa().data().get(0));
-        VerticalLayout chartOfOuyou = bar(sampleService.getSampleGpa().data().get(1).getData(),sampleService.getSampleGpa().data().get(1));
-        VerticalLayout chartOfDensi = bar(sampleService.getSampleGpa().data().get(2).getData(),sampleService.getSampleGpa().data().get(2));
-        VerticalLayout chartOfZyouhou = bar(sampleService.getSampleGpa().data().get(3).getData(),sampleService.getSampleGpa().data().get(3));
-        VerticalLayout chartOfItinen = bar(sampleService.getSampleGpa().data().get(4).getData(),sampleService.getSampleGpa().data().get(4));
+        VerticalLayout chartOfZentai = graph(commissionService.getCommissionGpa().data().get(0).getData(),commissionService.getCommissionGpa().data().get(0));
+        VerticalLayout chartOfOuyou = graph(commissionService.getCommissionGpa().data().get(1).getData(),commissionService.getCommissionGpa().data().get(1));
+        VerticalLayout chartOfDensi = graph(commissionService.getCommissionGpa().data().get(2).getData(),commissionService.getCommissionGpa().data().get(2));
+        VerticalLayout chartOfZyouhou = graph(commissionService.getCommissionGpa().data().get(3).getData(),commissionService.getCommissionGpa().data().get(3));
+        VerticalLayout chartOfItinen = graph(commissionService.getCommissionGpa().data().get(4).getData(),commissionService.getCommissionGpa().data().get(4));
 
         ArrayList<VerticalLayout> chartList = new ArrayList<>(Arrays.asList(chartOfZentai,chartOfOuyou,chartOfDensi,chartOfZyouhou,chartOfItinen));
 
@@ -103,7 +99,7 @@ public class SeisekiView implements View {
         main.add(layout3);
         layout3.setVisible(false);
 
-        Grid<SampleGpa2> grid = hyou(sampleService.getSampleGpa2().data());
+        Grid<CommissionGpa2> grid = hyou(commissionService.getCommissionGpa2().data());
         grid.setWidth("1050px");
         grid.setHeight("300px");
         H2 text = new H2("統計データ詳細");
@@ -131,52 +127,46 @@ public class SeisekiView implements View {
         //成績画面終わり
         return main;
     }
-    private Grid<SampleGpa2> hyou(List<SampleGpa2> sample){
-        Grid<SampleGpa2> grid = new Grid<>();
-        grid.addColumn(SampleGpa2::subject).setHeader("学科");
-        grid.addColumn(SampleGpa2::human).setHeader("人数");
-        grid.addColumn(SampleGpa2::average).setHeader("平均値");
-        grid.addColumn(SampleGpa2::min).setHeader("最小値");
-        grid.addColumn(SampleGpa2::max).setHeader("最大値");
-        grid.addColumn(SampleGpa2::std).setHeader("標準偏差");
+    private Grid<CommissionGpa2> hyou(List<CommissionGpa2> sample){
+        Grid<CommissionGpa2> grid = new Grid<>();
+        grid.addColumn(CommissionGpa2::subject).setHeader("学科");
+        grid.addColumn(CommissionGpa2::human).setHeader("人数");
+        grid.addColumn(CommissionGpa2::average).setHeader("平均値");
+        grid.addColumn(CommissionGpa2::min).setHeader("最小値");
+        grid.addColumn(CommissionGpa2::max).setHeader("最大値");
+        grid.addColumn(CommissionGpa2::std).setHeader("標準偏差");
         grid.setItems(sample);
         return grid;
     }
-    private VerticalLayout bar(ArrayList<Integer> a, SapmleGpa b) {
-        ArrayList<Coordinate<String,Integer>> data = new ArrayList<>();
-        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
-        int max = Collections.max(a);
 
-        for(int i = 0;i < a.size();i++){
-            data.add(new Coordinate<>(String.valueOf(alphabet[i]),a.get(i)));
-        }
-        Series<Coordinate<String, Integer>> series = new Series<>(b.getName(),
-                data.get(0),data.get(1),data.get(2),data.get(3),data.get(4),data.get(5),data.get(6),data.get(7),
-                data.get(8),data.get(9),data.get(10),data.get(11),data.get(12),data.get(13),data.get(14),data.get(15)
-
-        );
-
-        final ApexCharts chart = ApexChartsBuilder.get().withChart(
-                        ChartBuilder.get()
-                                .withType(Type.BAR) // Typeにヒストグラムがない。公式サイトのissueによるBARでやるように指示がある
-                                .build())
-                .withDataLabels(DataLabelsBuilder.get()
-                        .withEnabled(false)
-                        .build())
-                .withPlotOptions(PlotOptionsBuilder.get()
-                        .withBar(BarBuilder.get().withColumnWidth("100%").build()) // BARの間隔を０に近づける（見た目を調整してヒストグラムにみえるようにする）
-                        .build())
-                .withStroke(StrokeBuilder.get().withWidth(0.1).withColors("#000").build()) // 柱（棒）の外枠を黒色に設定してヒストグラムに見た目を近づける
-                .withYaxis(YAxisBuilder.get().withMax(max).build()) // Y軸の最大値；ここでは80に設定
-                .withSeries(series)
-                .build();
-
-        chart.setHeight("300px");
-        chart.setWidth("400px");
+    private VerticalLayout graph(ArrayList<Integer> a, CommissionGpa b){
         VerticalLayout layout = new VerticalLayout();
         layout.add(new H2(b.getName()));
-        layout.add(chart);
+        HorizontalLayout graphLayout = new HorizontalLayout();
+        graphLayout.add(histgram(a,b));
+        layout.add(graphLayout);
         return layout;
     }
+
+    private ApexCharts histgram(ArrayList<Integer> a, CommissionGpa b){
+        String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
+        ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
+        for(int i = 0;i < a.size();i++){
+            dataList.add(new Data<>((name[i]),a.get(i)));
+        }
+        GraphSeries<Data<String, Integer>> series = new GraphSeries<>(b.getName(),
+                dataList.get(0),
+                dataList.get(1),
+                dataList.get(2),
+                dataList.get(3),
+                dataList.get(4),
+                dataList.get(5),
+                dataList.get(6),
+                dataList.get(7));
+
+        return Graph.Builder.get().histogram()
+                .height("300px").width("400px").series(series).dataLabelsEnabled(false).build().getGraph();
+    }
+
 }
