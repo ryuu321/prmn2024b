@@ -29,7 +29,7 @@ public class SeisekiGraphView {
         }
         main.add(layout,layout2);
         main.setVisible(false);
-        //seiseki.getR1().addValueChangeListener(e->main.setVisible(e.getValue().equals("全体")));
+        seiseki.getR1().addValueChangeListener(e->main.setVisible(e.getValue().equals("全体")));
         seiseki.getR2().addValueChangeListener(e -> chartList.get(0).setVisible(e.getValue().equals("全体")));
         seiseki.getR2().addValueChangeListener(e -> chartList.get(1).setVisible(e.getValue().equals("応用化学生物学科")));
         seiseki.getR2().addValueChangeListener(e -> chartList.get(2).setVisible(e.getValue().equals("電子光工学科")));
