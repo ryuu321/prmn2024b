@@ -6,7 +6,6 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import jp.ac.chitose.ir.service.commission.CommissionGpa;
 import jp.ac.chitose.ir.service.commission.CommissionGpa2;
 import jp.ac.chitose.ir.service.commission.CommissionService;
 import jp.ac.chitose.ir.views.component.Data;
@@ -40,40 +39,43 @@ public class SeisekiGraph {
         HorizontalLayout layout=new HorizontalLayout();
 
         for(int i=0;i<5;i++){
-            this.chartList.add(graph(commissionService.getCommissionGpa().data().get(i).getData(),commissionService.getCommissionGpa().data().get(i)));
+            String b=commissionService.getCommissionGpa().data().get(i).getName();
+            this.chartList.add(graph(commissionService.getCommissionGpa().data().get(i).getData(),b));
         }
       return chartList;
     }
 
-    public void makeFirst(){
+    public ArrayList<VerticalLayout> makeFirst(){
         VerticalLayout chart1= new VerticalLayout();
         for(int i=0;i<5;i++){
-            chart1=graph(commissionService.getCommissionGpa().data().get(i).getData(),commissionService.getCommissionGpa().data().get(i));
-            this.chartList1.add(chart1);
+            String b=commissionService.getCommissionGpaFirst().data().get(i).getName();
+            this.chartList1.add(chart1=graph(commissionService.getCommissionGpaFirst().data().get(i).getData(),b));
         }
+        return chartList1;
     }
 
-    public void makeSecond(){
+    public ArrayList<VerticalLayout> makeSecond(){
         VerticalLayout chart2= new VerticalLayout();
         for(int i=0;i<5;i++){
-            chart2=graph(commissionService.getCommissionGpa().data().get(i).getData(),commissionService.getCommissionGpa().data().get(i));
-            this.chartList2.add(chart2);
+            String b=commissionService.getCommissionGpaSecond().data().get(i).getName();
+            this.chartList2.add(graph(commissionService.getCommissionGpaSecond().data().get(i).getData(),b));
         }
+        return chartList2;
     }
 
     public void makeThird(){
         VerticalLayout chart3= new VerticalLayout();
         for(int i=0;i<5;i++){
-            chart3=graph(commissionService.getCommissionGpa().data().get(i).getData(),commissionService.getCommissionGpa().data().get(i));
-            this.chartList3.add(chart3);
+            String b=commissionService.getCommissionGpa().data().get(i).getName();
+            this.chartList.add(graph(commissionService.getCommissionGpa().data().get(i).getData(),b));
         }
     }
 
     public void makeFour(){
         VerticalLayout chart4= new VerticalLayout();
         for(int i=0;i<5;i++){
-            chart4=graph(commissionService.getCommissionGpa().data().get(i).getData(),commissionService.getCommissionGpa().data().get(i));
-            this.chartList4.add(chart4);
+            String b=commissionService.getCommissionGpa().data().get(i).getName();
+            this.chartList.add(graph(commissionService.getCommissionGpa().data().get(i).getData(),b));
         }
     }
     private Grid<CommissionGpa2> hyou(List<CommissionGpa2> sample){
@@ -89,22 +91,22 @@ public class SeisekiGraph {
     }
 
 
-    private VerticalLayout graph(ArrayList<Integer> a, CommissionGpa b){
+    private VerticalLayout graph(ArrayList<Integer> a, String b){
         VerticalLayout layout = new VerticalLayout();
-        layout.add(new H2(b.getName()));
+        layout.add(new H2(b));
         HorizontalLayout graphLayout = new HorizontalLayout();
         graphLayout.add(histgram(a,b));
         layout.add(graphLayout);
         return layout;
     }
 
-    private ApexCharts histgram(ArrayList<Integer> a, CommissionGpa b){
+    private ApexCharts histgram(ArrayList<Integer> a, String b){
         String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
         ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
         for(int i = 0;i < a.size();i++){
             dataList.add(new Data<>((name[i]),a.get(i)));
         }
-        GraphSeries<Data<String, Integer>> series = new GraphSeries<>(b.getName(),
+        GraphSeries<Data<String, Integer>> series = new GraphSeries<>(b,
                 dataList.get(0),
                 dataList.get(1),
                 dataList.get(2),
