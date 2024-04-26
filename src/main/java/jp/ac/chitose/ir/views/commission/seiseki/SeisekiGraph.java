@@ -140,7 +140,7 @@ public class SeisekiGraph {
                 dataList.get(7));
 
         return Graph.Builder.get().histogram()
-                .height("250px").width("300px").series(series).dataLabelsEnabled(false).build().getGraph();
+                .height("250px").width("300px").series(series).build().getGraph();
     }
     private ApexCharts bigHistgram(ArrayList<Integer> a,String b){
         String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
@@ -159,7 +159,7 @@ public class SeisekiGraph {
                 dataList.get(7));
 
         return Graph.Builder.get().histogram()
-                .height("250px").width("700px").series(series).dataLabelsEnabled(false).build().getGraph();
+                .height("250px").width("700px").series(series).build().getGraph();
     }
     private ApexCharts band(ArrayList<Integer> a, String b){
         String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
