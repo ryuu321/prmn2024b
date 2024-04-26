@@ -9,6 +9,7 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import jp.ac.chitose.ir.service.commission.CommissionGpa2;
 import jp.ac.chitose.ir.service.commission.CommissionService;
 import jp.ac.chitose.ir.views.component.Data;
+import jp.ac.chitose.ir.views.component.GRAPH_TYPE;
 import jp.ac.chitose.ir.views.component.Graph;
 import jp.ac.chitose.ir.views.component.GraphSeries;
 
@@ -43,6 +44,14 @@ public class SeisekiGraph {
             this.chartList.add(graph(commissionService.getCommissionGpa().data().get(i).getData(),b));
         }
       return chartList;
+    }
+    public ArrayList<VerticalLayout> makeBigAll(){
+        ArrayList<VerticalLayout> chartListAll = new ArrayList<>();
+        for(int i=0;i<5;i++){
+            String b=commissionService.getCommissionGpa().data().get(i).getName();
+            chartListAll.add(bigGraph(commissionService.getCommissionGpa().data().get(i).getData(),b));
+        }
+        return chartListAll;
     }
 
     public ArrayList<VerticalLayout> makeFirst(){
@@ -99,6 +108,15 @@ public class SeisekiGraph {
         layout.add(graphLayout);
         return layout;
     }
+    private VerticalLayout bigGraph(ArrayList<Integer> a, String b){
+        VerticalLayout layout = new VerticalLayout();
+        layout.add(new H2(b));
+        HorizontalLayout graphLayout = new HorizontalLayout();
+        graphLayout.add(bigHistgram(a,b));
+        graphLayout.add(band(a,b));
+        layout.add(graphLayout);
+        return layout;
+    }
 
     private ApexCharts histgram(ArrayList<Integer> a, String b){
         String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
@@ -117,7 +135,47 @@ public class SeisekiGraph {
                 dataList.get(7));
 
         return Graph.Builder.get().histogram()
-                .height("300px").width("300px").series(series).dataLabelsEnabled(false).build().getGraph();
+                .height("250px").width("300px").series(series).dataLabelsEnabled(false).build().getGraph();
+    }
+    private ApexCharts bigHistgram(ArrayList<Integer> a,String b){
+        String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
+        ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
+        for(int i = 0;i < a.size();i++){
+            dataList.add(new Data<>((name[i]),a.get(i)));
+        }
+        GraphSeries<Data<String, Integer>> series = new GraphSeries<>(b,
+                dataList.get(0),
+                dataList.get(1),
+                dataList.get(2),
+                dataList.get(3),
+                dataList.get(4),
+                dataList.get(5),
+                dataList.get(6),
+                dataList.get(7));
+
+        return Graph.Builder.get().histogram()
+                .height("250px").width("700px").series(series).dataLabelsEnabled(false).build().getGraph();
+    }
+    private ApexCharts band(ArrayList<Integer> a, String b){
+        String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
+
+        ArrayList<Double> dataList = new ArrayList<>();
+        for(int data : a){
+            dataList.add((double)data);
+        }
+        Double[] datalist = new Double[8];
+        for(int i = 0; i < datalist.length;i++){
+            datalist[i] = dataList.get(i);
+        }
+
+        return Graph.Builder.get()
+                .graphType(GRAPH_TYPE.PIE)
+                .doubles(datalist)
+                .labels(name)
+                .build()
+                .getGraph();
+
+
     }
 
 

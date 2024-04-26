@@ -159,11 +159,11 @@ public class SeisekiView implements View {
         return layout;
     }
 
-    private ApexCharts histgram(ArrayList<Integer> a, CommissionGpa b){
-        String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
-        ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
-        for(int i = 0;i < a.size();i++){
-            dataList.add(new Data<>((name[i]),a.get(i)));
+    private ApexCharts histgram(ArrayList<Integer> a, CommissionGpa b) {
+        String[] name = {"0.25", "0.75", "1.25", "1.75", "2.25", "2.75", "3.25", "3.75"};
+        ArrayList<Data<String, Integer>> dataList = new ArrayList<>();
+        for (int i = 0; i < a.size(); i++) {
+            dataList.add(new Data<>((name[i]), a.get(i)));
         }
         GraphSeries<Data<String, Integer>> series = new GraphSeries<>(b.getName(),
                 dataList.get(0),
