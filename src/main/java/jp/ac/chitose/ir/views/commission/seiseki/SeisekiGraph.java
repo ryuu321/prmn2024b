@@ -6,8 +6,8 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import jp.ac.chitose.ir.service.commission.CommissionGpa2;
-import jp.ac.chitose.ir.service.commission.CommissionService;
+import jp.ac.chitose.ir.service.TableData;
+import jp.ac.chitose.ir.service.commission.*;
 import jp.ac.chitose.ir.views.component.Data;
 import jp.ac.chitose.ir.views.component.GRAPH_TYPE;
 import jp.ac.chitose.ir.views.component.Graph;
@@ -38,53 +38,58 @@ public class SeisekiGraph {
 
     public ArrayList<VerticalLayout> makeAll(){
         HorizontalLayout layout=new HorizontalLayout();
-
+        TableData<CommissionGpa> table = commissionService.getCommissionGpa();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
-            String b=commissionService.getCommissionGpa().data().get(i).getName();
-            this.chartList.add(graph(commissionService.getCommissionGpa().data().get(i).getData(),b));
+            String b=table.data().get(i).getName();
+            this.chartList.add(graph(table.data().get(i).getData(),b));
         }
       return chartList;
     }
     public ArrayList<VerticalLayout> makeBigAll(){
         ArrayList<VerticalLayout> chartListAll = new ArrayList<>();
+        TableData<CommissionGpa> table = commissionService.getCommissionGpa();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
-            String b=commissionService.getCommissionGpa().data().get(i).getName();
-            chartListAll.add(bigGraph(commissionService.getCommissionGpa().data().get(i).getData(),b));
+            String b=table.data().get(i).getName();
+            chartListAll.add(bigGraph(table.data().get(i).getData(),b));
         }
         return chartListAll;
     }
 
     public ArrayList<VerticalLayout> makeFirst(){
         VerticalLayout chart1= new VerticalLayout();
+        TableData<CommissionGpaFirst> table = commissionService.getCommissionGpaFirst();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
-            String b=commissionService.getCommissionGpaFirst().data().get(i).getName();
-            this.chartList1.add(chart1=graph(commissionService.getCommissionGpaFirst().data().get(i).getData(),b));
+            String b=table.data().get(i).getName();
+            this.chartList1.add(chart1=graph(table.data().get(i).getData(),b));
         }
         return chartList1;
     }
 
     public ArrayList<VerticalLayout> makeSecond(){
         VerticalLayout chart2= new VerticalLayout();
+        TableData<CommissionGpaSecond> table = commissionService.getCommissionGpaSecond();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
-            String b=commissionService.getCommissionGpaSecond().data().get(i).getName();
-            this.chartList2.add(graph(commissionService.getCommissionGpaSecond().data().get(i).getData(),b));
+            String b=table.data().get(i).getName();
+            this.chartList2.add(graph(table.data().get(i).getData(),b));
         }
         return chartList2;
     }
 
     public void makeThird(){
         VerticalLayout chart3= new VerticalLayout();
+        TableData<CommissionGpaThird> table = commissionService.getCommissionGpaThird();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
-            String b=commissionService.getCommissionGpa().data().get(i).getName();
-            this.chartList.add(graph(commissionService.getCommissionGpa().data().get(i).getData(),b));
+            String b=table.data().get(i).getName();
+            this.chartList.add(graph(table.data().get(i).getData(),b));
         }
     }
 
     public void makeFour(){
         VerticalLayout chart4= new VerticalLayout();
+        TableData<CommissionGpaFourth> table = commissionService.getCommissionGpaFourth();//こうしたらロード時間短くなった。
         for(int i=0;i<5;i++){
-            String b=commissionService.getCommissionGpa().data().get(i).getName();
-            this.chartList.add(graph(commissionService.getCommissionGpa().data().get(i).getData(),b));
+            String b=table.data().get(i).getName();
+            this.chartList.add(graph(table.data().get(i).getData(),b));
         }
     }
     private Grid<CommissionGpa2> hyou(List<CommissionGpa2> sample){
