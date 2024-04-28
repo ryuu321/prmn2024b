@@ -1,8 +1,9 @@
 package jp.ac.chitose.ir.views.commission.seiseki;
 
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import jp.ac.chitose.ir.service.commission.CommissionService;
+import jp.ac.chitose.ir.service.commission.*;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,27 @@ public class SeisekiGraphView {
     }
 
     public VerticalLayout view(){
-        VerticalLayout main=new VerticalLayout();
+        VerticalLayout main=new VerticalLayout();//グラフ全体のレイアウトを返す
+        VerticalLayout all = new VerticalLayout();//全体を表示
+        VerticalLayout first = new VerticalLayout();//1年生
+        VerticalLayout second = new VerticalLayout();//2年生
+        VerticalLayout third = new VerticalLayout();//３年生
+        VerticalLayout fourth = new VerticalLayout();//４年生
+
+        all.setVisible(false);
+        first.setVisible(false);
+        second.setVisible(false);
+        third.setVisible(false);
+        fourth.setVisible(false);
+
+        seiseki.getR1().addValueChangeListener(e->all.setVisible(e.getValue().equals("全体")));
+        seiseki.getR1().addValueChangeListener(e->first.setVisible(e.getValue().equals("1年")));
+        seiseki.getR1().addValueChangeListener(e->second.setVisible(e.getValue().equals("2年")));
+        seiseki.getR1().addValueChangeListener(e->third.setVisible(e.getValue().equals("3年")));
+        seiseki.getR1().addValueChangeListener(e->fourth.setVisible(e.getValue().equals("4年")));
+
+        main.add(all,first,second,third,fourth);
+        //ここからall
         HorizontalLayout layout=new HorizontalLayout();
         HorizontalLayout layout2=new HorizontalLayout();
         ArrayList<VerticalLayout> chartList=seisekiGraph.makeAll();
@@ -36,11 +57,10 @@ public class SeisekiGraphView {
         }
 
 
-        main.add(layout2);
-        main.add(layout);
-        main.setVisible(false);
+        all.add(layout2);
+        all.add(layout);
 
-        seiseki.getR1().addValueChangeListener(e->main.setVisible(e.getValue().equals("全体")));
+//        seiseki.getR1().addValueChangeListener(e->all.setVisible(e.getValue().equals("全体")));
         seiseki.getR2().addValueChangeListener(e -> {
             chartList.get(0).setVisible(!(e.getValue().equals("全体")));
             chartList1.get(0).setVisible(e.getValue().equals("全体"));
@@ -71,7 +91,37 @@ public class SeisekiGraphView {
                 }
             }
         });
+        //ここまでall
 
+        //ここからfirst
+
+        //ここまでfirst
+
+        //ここからsecond
+
+        //ここまでsecond
+
+        //ここからthird
+
+        //ここまでthird
+
+        //ここからfourth
+
+        //ここまでfourth
+
+        //ここから基本統計量
+        Grid<CommissionGpa2> gridAll = SeisekiTable.getTable(commissionService.getCommissionGpa2().data());
+        Grid<CommissionGpa2First> gridFirst = SeisekiTable.getTableFirst(commissionService.getCommissionGpa2First().data());
+        Grid<CommissionGpa2Second> gridSecond = SeisekiTable.getTableSecond(commissionService.getCommissionGpa2Second().data());
+        Grid<CommissionGpa2Third> gridThird = SeisekiTable.getTableThird(commissionService.getCommissionGpa2Third().data());
+        Grid<CommissionGpa2Fourth> gridFourth = SeisekiTable.getTableFourth(commissionService.getCommissionGpa2Fourth().data());
+
+        all.add(gridAll);
+        first.add(gridFirst);
+        second.add(gridSecond);
+        third.add(gridThird);
+        fourth.add(gridFourth);
+        //ここまで基本統計量
 
         return main;
     }
