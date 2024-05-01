@@ -13,6 +13,10 @@ import com.github.appreciated.apexcharts.config.chart.animations.Easing;
 import com.github.appreciated.apexcharts.config.chart.builder.*;
 import com.github.appreciated.apexcharts.config.plotoptions.Bar;
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
+import com.github.appreciated.apexcharts.config.yaxis.Labels;
+import com.github.appreciated.apexcharts.config.yaxis.Title;
+import com.github.appreciated.apexcharts.config.yaxis.builder.LabelsBuilder;
+import com.github.appreciated.apexcharts.config.yaxis.builder.TitleBuilder;
 import com.github.appreciated.apexcharts.helper.Series;
 
 import java.util.ArrayList;
@@ -42,6 +46,8 @@ public class Graph {
         setHeight(builder.height);
         setWidth(builder.width);
         setDataLabels(builder.dataLabels);
+        setXAxis(builder.xAxis);
+        setYAxis(builder.yAxis);
     }
 
     public void setChart(Chart chart) {
@@ -84,6 +90,8 @@ public class Graph {
 
     public void setYAxis(YAxis yAxis) { graph.setYaxis(new YAxis[]{yAxis}); }
 
+    public void setXAxis(XAxis xAxis) { graph.setXaxis(xAxis); }
+
     public void setColors(String[] colors) { graph.setColors(colors); }
 
     /**
@@ -118,6 +126,7 @@ public class Graph {
         private final Legend legend = new Legend();
         private final Responsive responsive = new Responsive();
         private final YAxis yAxis = new YAxis();
+        private final XAxis xAxis = new XAxis();
         private String[] labels = new String[]{};
         private String[] colors = new String[]{};
         private String width = "400px";
@@ -307,6 +316,26 @@ public class Graph {
          */
         public Builder easing(GraphEasing easing) {
             chart.setAnimations(AnimationsBuilder.get().withEasing(easing.easing).build());
+            return this;
+        }
+
+        public Builder YAxisLabel(String label) {
+            Labels labels = yAxis.getLabels() != null ? yAxis.getLabels() : new Labels();
+            labels.setShow(true);
+            yAxis.setLabels(labels);
+            Title title = yAxis.getTitle() != null ? yAxis.getTitle() : new Title();
+            title.setText(label);
+            yAxis.setTitle(title);
+            return this;
+        }
+
+        public Builder XAxisLabel(String label) {
+            com.github.appreciated.apexcharts.config.xaxis.Labels labels = xAxis.getLabels() != null ? xAxis.getLabels() : new com.github.appreciated.apexcharts.config.xaxis.Labels();
+            labels.setShow(true);
+            xAxis.setLabels(labels);
+            com.github.appreciated.apexcharts.config.xaxis.Title title = xAxis.getTitle() != null ? xAxis.getTitle() : new com.github.appreciated.apexcharts.config.xaxis.Title();
+            title.setText(label);
+            xAxis.setTitle(title);
             return this;
         }
 

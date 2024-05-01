@@ -6,5 +6,5 @@ import jp.ac.chitose.ir.service.student.StudentService;
 import jp.ac.chitose.ir.views.component.Graph;
 
 public interface GraphPattern {
-    public abstract ApexCharts create(StudentService studentService);
+    ApexCharts create(StudentService studentService, String schoolYear, String department);
 }

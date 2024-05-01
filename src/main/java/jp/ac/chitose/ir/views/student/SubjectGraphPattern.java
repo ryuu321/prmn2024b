@@ -19,16 +19,14 @@ import jp.ac.chitose.ir.views.component.Graph;
 import java.util.ArrayList;
 
 public class SubjectGraphPattern implements GraphPattern {
-    final private String blue = "#0000FF";
-    final private String red = "#FF0000";
-    private StudentGrade changeValue;
+    private final StudentGrade changeValue;
 
     public SubjectGraphPattern(StudentGrade changeValue) {
         this.changeValue = changeValue;
     }
 
     @Override
-    public ApexCharts create(StudentService studentService) {
+    public ApexCharts create(StudentService studentService, String schoolYear, String department) {
         var histData = studentService.getStudentHist(changeValue.科目名()).data();
         Coordinate<String, Integer>[] data = new Coordinate[5];
         histData.forEach(e2 -> {
@@ -80,14 +78,12 @@ public class SubjectGraphPattern implements GraphPattern {
                         .build())
                 .withPlotOptions(PlotOptionsBuilder.get()
                         .withBar(BarBuilder.get()
-                                .withColumnWidth("100%")
                                 .withDistributed(true)
-                                .build()) // BARの間隔を０に近づける（見た目を調整してヒストグラムにみえるようにする）
+                                .build())
                         .build())
                 .withLegend(LegendBuilder.get()
                         .withShow(false)
                         .build())
-                .withStroke(StrokeBuilder.get().withWidth(0.1).withColors("#000").build()) // 柱（棒）の外枠を黒色に設定してヒストグラムに見た目を近づける
                 .withYaxis(YAxisBuilder.get().withForceNiceScale(true).build())
                 .withSeries(series)
                 .build();
@@ -95,10 +91,12 @@ public class SubjectGraphPattern implements GraphPattern {
         String[] labels = new String[5];
         for(int i = 0; i < 5; i++) {
             if(strs[i].equals(grade.get(0).成績評価())) {
+                String red = "#FF0000";
                 colors[i] = red;
                 labels[i] = grade.get(0).成績評価() + "(あなたの成績位置)";
             }
             else {
+                String blue = "#0000FF";
                 colors[i] = blue;
                 labels[i] = strs[i];
             }

@@ -21,4 +21,7 @@ public interface StudentService {
 
     @GetExchange("/gpa_calc_par_year")
     TableData<StudentGPA> getStudentGPA();
+
+    @GetExchange("/table/{studentNumber}")
+    TableData<StudentTable> getStudentTable(@PathVariable String studentNumber);
 }

@@ -11,23 +11,20 @@ import jp.ac.chitose.ir.service.student.StudentGPA;
 import jp.ac.chitose.ir.service.student.StudentService;
 
 public class GPAGraphPattern implements GraphPattern {
-    final private String blue = "#0000FF";
-    final private String red = "#FF0000";
-
     @Override
-    public ApexCharts create(StudentService studentService) {
-        String grade = "B1";
-        var GPAData = studentService.getStudentGPA().data();
+    public ApexCharts create(StudentService studentService, String schoolYear, String department) {
+        schoolYear = schoolYearChange(schoolYear);
+        final var GPAData = studentService.getStudentGPA().data();
         Coordinate<String, Integer>[] coordinates = new Coordinate[5];
         int i = 0;
         for(StudentGPA GPA : GPAData) {
-            if(GPA.学年().equals(grade)) {
-                coordinates[i] = new Coordinate<>(changeString(i), GPA.度数());
+            if(GPA.学年().equals(schoolYear)) {
+                coordinates[i] = new Coordinate<>(gradeChangeString(i), GPA.度数());
                 i++;
             }
         }
         for(;i < 5; i++) {
-            coordinates[i] = new Coordinate<>(changeString(i), 0);
+            coordinates[i] = new Coordinate<>(gradeChangeString(i), 0);
         }
         final Series<Coordinate<String, Integer>> series = new Series<>();
         series.setData(coordinates);
@@ -44,22 +41,23 @@ public class GPAGraphPattern implements GraphPattern {
                         .withBar(BarBuilder.get()
                                 .withColumnWidth("100%")
                                 .withDistributed(true)
-                                .build()) // BARの間隔を０に近づける（見た目を調整してヒストグラムにみえるようにする）
+                                .build())
                         .build())
                 .withLegend(LegendBuilder.get()
                         .withShow(false)
                         .build())
-                .withStroke(StrokeBuilder.get().withWidth(0.1).withColors("#000").build()) // 柱（棒）の外枠を黒色に設定してヒストグラムに見た目を近づける
+                .withStroke(StrokeBuilder.get().withWidth(0.1).withColors("#000").build())
                 .withYaxis(YAxisBuilder.get().withForceNiceScale(true).build())
                 .withSeries(series)
                 .build();
+        String blue = "#0000FF";
         chart.setColors(blue, blue, blue, blue, blue);
         chart.setHeight("400px");
         chart.setWidthFull();
         return chart;
     }
 
-    private String changeString(int i) {
+    private String gradeChangeString(int i) {
         switch(i) {
             case 0 -> {
                 return "不可";
@@ -75,6 +73,29 @@ public class GPAGraphPattern implements GraphPattern {
             }
             default -> {
                 return "秀";
+            }
+        }
+    }
+
+    private String schoolYearChange(String schoolYear) {
+        switch(schoolYear) {
+            case "1年生" -> {
+                return "B1";
+            }
+            case "2年生" -> {
+                return "B2";
+            }
+            case "3年生" -> {
+                return "B3";
+            }
+            case "4年生" -> {
+                return "B4";
+            }
+            case "修士1年生" -> {
+                return "M1";
+            }
+            default -> {
+                return "M2";
             }
         }
     }
