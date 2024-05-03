@@ -229,6 +229,7 @@ public class SeisekiGraph {
                 .graphType(GRAPH_TYPE.PIE)
                 .doubles(datalist)
                 .labels(name)
+                .height("250px")
                 .build()
                 .getGraph();
 
