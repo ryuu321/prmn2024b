@@ -23,6 +23,12 @@ public class SeisekiGraph {
     private ArrayList<VerticalLayout> chartList2;
     private ArrayList<VerticalLayout> chartList3;
     private ArrayList<VerticalLayout> chartList4;
+    private TableData<CommissionGpa> tableAll;
+    private TableData<CommissionGpaFirst> tableFirst;
+    private TableData<CommissionGpaSecond> tableSecond;
+    private TableData<CommissionGpaThird> tableThird;
+    private TableData<CommissionGpaFourth> tableFourth;
+
 
     private CommissionService commissionService;
     public SeisekiGraph(CommissionService com){
@@ -32,105 +38,109 @@ public class SeisekiGraph {
         this.chartList2=new ArrayList<>();
         this.chartList3=new ArrayList<>();
         this.chartList4=new ArrayList<>();
-
+        tableAll = commissionService.getCommissionGpa();
+        tableFirst = commissionService.getCommissionGpaFirst();
+        tableSecond = commissionService.getCommissionGpaSecond();
+        tableThird = commissionService.getCommissionGpaThird();
+        tableFourth = commissionService.getCommissionGpaFourth();
     }
 
 
     public ArrayList<VerticalLayout> makeAll(){
         ArrayList<VerticalLayout> chartList = new ArrayList<>();
-        TableData<CommissionGpa> table = commissionService.getCommissionGpa();//こうしたらロード時間短くなった
+//        TableData<CommissionGpa> table = commissionService.getCommissionGpa();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
-            String b=table.data().get(i).getName();
-            chartList.add(graph(table.data().get(i).getData(),b));
+            String b=tableAll.data().get(i).getName();
+            chartList.add(graph(tableAll.data().get(i).getData(),b));
         }
       return chartList;
     }
     public ArrayList<VerticalLayout> makeBigAll(){
         ArrayList<VerticalLayout> chartListAll = new ArrayList<>();
-        TableData<CommissionGpa> table = commissionService.getCommissionGpa();//こうしたらロード時間短くなった
+//        TableData<CommissionGpa> table = commissionService.getCommissionGpa();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
-            String b=table.data().get(i).getName();
-            chartListAll.add(bigGraph(table.data().get(i).getData(),b));
+            String b=tableAll.data().get(i).getName();
+            chartListAll.add(bigGraph(tableAll.data().get(i).getData(),b));
         }
         return chartListAll;
     }
 
     public ArrayList<VerticalLayout> makeFirst(){
         ArrayList<VerticalLayout> chartList1 = new ArrayList<>();
-        TableData<CommissionGpaFirst> table = commissionService.getCommissionGpaFirst();//こうしたらロード時間短くなった
+//        TableData<CommissionGpaFirst> table = commissionService.getCommissionGpaFirst();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
-            String b=table.data().get(i).getName();
-            chartList1.add(graph(table.data().get(i).getData(),b));
+            String b=tableFirst.data().get(i).getName();
+            chartList1.add(graph(tableFirst.data().get(i).getData(),b));
         }
         return chartList1;
     }
 
     public ArrayList<VerticalLayout> makeBigFirst(){
         ArrayList<VerticalLayout> chartList1B = new ArrayList<>();
-        TableData<CommissionGpaFirst> table = commissionService.getCommissionGpaFirst();//こうしたらロード時間短くなった
+//        TableData<CommissionGpaFirst> table = commissionService.getCommissionGpaFirst();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
-            String b=table.data().get(i).getName();
-            chartList1B.add(bigGraph(table.data().get(i).getData(),b));
+            String b=tableFirst.data().get(i).getName();
+            chartList1B.add(bigGraph(tableFirst.data().get(i).getData(),b));
         }
         return chartList1B;
     }
 
     public ArrayList<VerticalLayout> makeSecond(){
         ArrayList<VerticalLayout> chartList2 = new ArrayList<>();
-        TableData<CommissionGpaSecond> table = commissionService.getCommissionGpaSecond();//こうしたらロード時間短くなった
+//        TableData<CommissionGpaSecond> table = commissionService.getCommissionGpaSecond();//こうしたらロード時間短くなった
         for(int i=0;i<4;i++){
-            String b=table.data().get(i).getName();
-            chartList2.add(graph(table.data().get(i).getData(),b));
+            String b=tableSecond.data().get(i).getName();
+            chartList2.add(graph(tableSecond.data().get(i).getData(),b));
         }
         return chartList2;
     }
 
     public ArrayList<VerticalLayout> makeBigSecond(){
         ArrayList<VerticalLayout> chartList2B = new ArrayList<>();
-        TableData<CommissionGpaSecond> table = commissionService.getCommissionGpaSecond();//こうしたらロード時間短くなった
+//        TableData<CommissionGpaSecond> table = commissionService.getCommissionGpaSecond();//こうしたらロード時間短くなった
         for(int i=0;i<4;i++){
-            String b=table.data().get(i).getName();
-            chartList2B.add(bigGraph(table.data().get(i).getData(),b));
+            String b=tableSecond.data().get(i).getName();
+            chartList2B.add(bigGraph(tableSecond.data().get(i).getData(),b));
         }
         return chartList2B;
     }
 
     public ArrayList<VerticalLayout> makeThird(){
         ArrayList<VerticalLayout> chartList3 = new ArrayList<>();
-        TableData<CommissionGpaThird> table = commissionService.getCommissionGpaThird();//こうしたらロード時間短くなった
+//        TableData<CommissionGpaThird> table = commissionService.getCommissionGpaThird();//こうしたらロード時間短くなった
         for(int i=0;i<4;i++){
-            String b=table.data().get(i).getName();
-            chartList3.add(graph(table.data().get(i).getData(),b));
+            String b=tableThird.data().get(i).getName();
+            chartList3.add(graph(tableThird.data().get(i).getData(),b));
         }
         return chartList3;
     }
 
     public ArrayList<VerticalLayout> makeBigThird(){
         ArrayList<VerticalLayout> chartList3B = new ArrayList<>();
-        TableData<CommissionGpaThird> table = commissionService.getCommissionGpaThird();//こうしたらロード時間短くなった
+//        TableData<CommissionGpaThird> table = commissionService.getCommissionGpaThird();//こうしたらロード時間短くなった
         for(int i=0;i<4;i++){
-            String b=table.data().get(i).getName();
-            chartList3B.add(bigGraph(table.data().get(i).getData(),b));
+            String b=tableThird.data().get(i).getName();
+            chartList3B.add(bigGraph(tableThird.data().get(i).getData(),b));
         }
         return chartList3B;
     }
 
     public ArrayList<VerticalLayout> makeFourth(){
         ArrayList<VerticalLayout> chartList4 = new ArrayList<>();
-        TableData<CommissionGpaFourth> table = commissionService.getCommissionGpaFourth();//こうしたらロード時間短くなった。
+//        TableData<CommissionGpaFourth> table = commissionService.getCommissionGpaFourth();//こうしたらロード時間短くなった。
         for(int i=0;i<4;i++){
-            String b=table.data().get(i).getName();
-            chartList4.add(graph(table.data().get(i).getData(),b));
+            String b=tableFourth.data().get(i).getName();
+            chartList4.add(graph(tableFourth.data().get(i).getData(),b));
         }
         return chartList4;
     }
 
     public ArrayList<VerticalLayout> makeBigFourth(){
         ArrayList<VerticalLayout> chartList4B = new ArrayList<>();
-        TableData<CommissionGpaFourth> table = commissionService.getCommissionGpaFourth();//こうしたらロード時間短くなった
+//        TableData<CommissionGpaFourth> table = commissionService.getCommissionGpaFourth();//こうしたらロード時間短くなった
         for(int i=0;i<4;i++){
-            String b=table.data().get(i).getName();
-            chartList4B.add(bigGraph(table.data().get(i).getData(),b));
+            String b=tableFourth.data().get(i).getName();
+            chartList4B.add(bigGraph(tableFourth.data().get(i).getData(),b));
         }
         return chartList4B;
     }
