@@ -192,7 +192,7 @@ public class SeisekiGraph {
                 dataList.get(7));
 
         return Graph.Builder.get().histogram()
-                .height("250px").width("300px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").build().getGraph();
+                .height("250px").width("300px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
     }
     private ApexCharts bigHistgram(ArrayList<Integer> a,String b){
         String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
@@ -211,10 +211,10 @@ public class SeisekiGraph {
                 dataList.get(7));
 
         return Graph.Builder.get().histogram()
-                .height("250px").width("700px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").build().getGraph();
+                .height("250px").width("700px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
     }
     private ApexCharts band(ArrayList<Integer> a, String b){
-        String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
+        String[] name = {"0以上0.5未満","0.5以上1.0未満","1.0以上1.5未満","1.5以上2.0未満","2.0以上2.5未満","2.5以上3.0未満","3.0以上3.5未満","3.5以上"};
 
         ArrayList<Double> dataList = new ArrayList<>();
         for(int data : a){
@@ -230,6 +230,7 @@ public class SeisekiGraph {
                 .doubles(datalist)
                 .labels(name)
                 .height("250px")
+                .animationsEnabled(false)
                 .build()
                 .getGraph();
 
