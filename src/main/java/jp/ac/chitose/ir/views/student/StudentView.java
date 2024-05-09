@@ -19,9 +19,9 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.service.student.StudentGrade;
 import jp.ac.chitose.ir.service.student.StudentService;
 import jp.ac.chitose.ir.views.MainLayout;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 
 @PageTitle("GradeStudent")
 @Route(value = "grade/student", layout = MainLayout.class)
+@PermitAll
 public class StudentView extends VerticalLayout {
 
     //private SecurityService securityService;

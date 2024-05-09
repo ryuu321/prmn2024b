@@ -2,6 +2,7 @@ package jp.ac.chitose.ir.views.class_select;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.helper.Coordinate;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
@@ -9,14 +10,18 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.service.class_select.ClassSelect;
+import jp.ac.chitose.ir.service.class_select.ReviewQPOJFICHKVJBDescription;
 import jp.ac.chitose.ir.views.MainLayout;
 import jp.ac.chitose.ir.views.component.Graph;
 import jp.ac.chitose.ir.views.component.GraphSeries;
 
+import java.util.List;
+
 @PageTitle("class_QPOJFICHKVJB")
 @Route(value = "class_select/QPOJFICHKVJB", layout = MainLayout.class)
-
+@PermitAll
 public class QPOJFICHKVJBView extends VerticalLayout {
     private ClassSelect classSelect;
 
@@ -34,6 +39,9 @@ public class QPOJFICHKVJBView extends VerticalLayout {
         add(band2(5));//グラフ表示
         add(new H3("Q6:実験・実習の進行速度について、どのように感じましたか。"));
         add(band3(6));
+        test();
+
+        add();
 
     }
 
@@ -62,7 +70,22 @@ public class QPOJFICHKVJBView extends VerticalLayout {
 
 
     private void index() {
+
         add(new H3("質問項目一覧(未実装)"));
+        //質問項目一覧の表示
+        //クリックすると該当科目まで遷移
+    }
+
+    private void test() {
+
+
+        Grid<ReviewQPOJFICHKVJBDescription> grid = new Grid<>(ReviewQPOJFICHKVJBDescription.class, false);
+        grid.addColumn(ReviewQPOJFICHKVJBDescription::q19).setHeader("First name");
+        List<ReviewQPOJFICHKVJBDescription> people = classSelect.getReviewQPOJFICHKVJBDescription().data();
+        grid.setItems(people);
+
+        add(grid);
+
         //質問項目一覧の表示
         //クリックすると該当科目まで遷移
     }
@@ -162,4 +185,6 @@ public class QPOJFICHKVJBView extends VerticalLayout {
                         new GraphSeries(e3.q6_項目(), new Coordinate<>("Q6", e3.q6_割合()))).toArray(GraphSeries[]::new))
                 .animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
     }
+
+
 }

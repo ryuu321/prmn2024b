@@ -15,4 +15,10 @@ public interface SampleService {
 
     @GetExchange("/three")
     TableData<SampleThree> getSampleThrees();
+
+    @GetExchange("/gpa")
+    TableData<SapmleGpa> getSampleGpa();
+
+    @GetExchange("/gpa2")
+    TableData<SampleGpa2>getSampleGpa2();
 }
