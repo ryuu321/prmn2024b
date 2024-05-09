@@ -13,6 +13,7 @@ import com.github.appreciated.apexcharts.config.chart.animations.Easing;
 import com.github.appreciated.apexcharts.config.chart.builder.*;
 import com.github.appreciated.apexcharts.config.plotoptions.Bar;
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
+import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.config.yaxis.Labels;
 import com.github.appreciated.apexcharts.config.yaxis.Title;
 import com.github.appreciated.apexcharts.config.yaxis.builder.LabelsBuilder;
@@ -48,14 +49,17 @@ public class Graph {
         setDataLabels(builder.dataLabels);
         setXAxis(builder.xAxis);
         setYAxis(builder.yAxis);
+        setTitle(builder.titleSubtitle);
+        if((builder.chart.getType() == Type.PIE || builder.chart.getType() == Type.DONUT) && builder.colors.length == builder.doubles.length) setColors(builder.colors);
+        else if(builder.colors.length == builder.series[0].getData().length) setColors(builder.colors);
     }
 
     public void setChart(Chart chart) {
         graph.setChart(chart);
     }
 
-    public void setSeries(Series... series) {
-        graph.setSeries(series);
+    public void setSeries(GraphSeries... series) {
+        graph.setSeries(graphSeriesToSeries(series));
     }
 
     public void setDoubles(Double... doubles) { graph.setSeries(doubles); }
@@ -94,6 +98,8 @@ public class Graph {
 
     public void setColors(String[] colors) { graph.setColors(colors); }
 
+    public void setTitle(TitleSubtitle titleSubtitle) { graph.setTitle(titleSubtitle); }
+
     /**
      * 生成したApexChartsを返します。
      * <br>add(Graph.getGraph())といった感じで使ってください。
@@ -107,7 +113,7 @@ public class Graph {
         return Arrays.stream(graphSeries).map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
     }
 
-    private static Series[] graphSeriesToSeries(Collection<GraphSeries> graphSeries) {
+    private static Series[] graphSeriesToSeries(List<GraphSeries> graphSeries) {
         return graphSeries.stream().map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
     }
 
@@ -117,7 +123,7 @@ public class Graph {
      */
     public static class Builder {
         private final Chart chart = new Chart();
-        private Series[] series = new Series[]{new Series(0)};
+        private GraphSeries[] series = new GraphSeries[]{};
         private Double[] doubles = new Double[]{0.0};
         private final PlotOptions options = new PlotOptions();
         private final Stroke stroke = new Stroke();
@@ -127,6 +133,8 @@ public class Graph {
         private final Responsive responsive = new Responsive();
         private final YAxis yAxis = new YAxis();
         private final XAxis xAxis = new XAxis();
+        private final TitleSubtitle titleSubtitle = new TitleSubtitle();
+        private final ArrayList<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
         private String[] labels = new String[]{};
         private String[] colors = new String[]{};
         private String width = "400px";
@@ -293,7 +301,7 @@ public class Graph {
          * @return Builder
          */
         public Builder series(GraphSeries... series) {
-            this.series = graphSeriesToSeries(series);
+            this.series = series;
             return this;
         }
 
@@ -303,8 +311,8 @@ public class Graph {
          * @param series データ
          * @return Builder
          */
-        public Builder series(Collection<GraphSeries> series) {
-            this.series = graphSeriesToSeries(series);
+        public Builder series(List<GraphSeries> series) {
+            this.series = series.toArray(new GraphSeries[0]);
             return this;
         }
 
@@ -339,13 +347,70 @@ public class Graph {
             return this;
         }
 
+        public Builder YAxisForceNiceScale(boolean niceScale) {
+            yAxis.setForceNiceScale(niceScale);
+            return this;
+        }
+
+        public Builder YAxisMax(double max) {
+            yAxis.setMax(max);
+            return this;
+        }
+
+        public Builder YAxisMin(double min) {
+            yAxis.setMin(min);
+            return this;
+        }
+
+        public Builder XAxisMax(double max) {
+            xAxis.setMax(max);
+            return this;
+        }
+
+        public Builder XAxisMin(double min) {
+            xAxis.setMin(min);
+            return this;
+        }
+
+        public Builder XAxisAnnotation(String target, String fontSize, String orientation, String textAnchor, String text) {
+            xAxisAnnotations.add(XAxisAnnotationsBuilder.get()
+                    .withX(target)
+                    .withLabel(LabelBuilder.get()
+                            .withStyle(AnnotationStyleBuilder.get()
+                                    .withFontSize(fontSize)
+                                    .build())
+                            .withOrientation(orientation)
+                            .withTextAnchor(textAnchor)
+                            .withText(text)
+                            .build())
+                    .build());
+            annotations.setXaxis(xAxisAnnotations);
+            return this;
+        }
+
+        public Builder colors(String... colors) {
+            this.colors = colors;
+            return this;
+        }
+
+        public Builder title(String title, GraphAlign align) {
+            titleSubtitle.setAlign(align.align);
+            titleSubtitle.setText(title);
+            return this;
+        }
+
+        public Builder legendShow(boolean show) {
+            legend.setShow(show);
+            return this;
+        }
+
         /**
          * 今まで指定してきたものが反映されたGraphクラスが返されます。
          * Graphクラスの指定がすべて終わった後にこのメソッドを呼び出してください。
          * @return Graph
          */
         public Graph build() {
-            return new Graph(this);
+            return new Graph(this.animationsEnabled(false));
         }
     }
 }
