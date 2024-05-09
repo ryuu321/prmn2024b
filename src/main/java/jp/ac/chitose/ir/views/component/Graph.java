@@ -50,8 +50,8 @@ public class Graph {
         setXAxis(builder.xAxis);
         setYAxis(builder.yAxis);
         setTitle(builder.titleSubtitle);
-        if((builder.chart.getType() == Type.PIE || builder.chart.getType() == Type.DONUT) && builder.colors.length == builder.doubles.length) setColors(builder.colors);
-        else if(builder.colors.length == builder.series[0].getData().length) setColors(builder.colors);
+        if((builder.chart.getType() == Type.PIE || builder.chart.getType() == Type.DONUT) && builder.colors.length == builder.doubles.length && builder.colors.length != 0) setColors(builder.colors);
+        else if(builder.series.length != 0 && builder.colors.length == builder.series[0].getData().length) setColors(builder.colors);
     }
 
     public void setChart(Chart chart) {
@@ -111,10 +111,6 @@ public class Graph {
 
     private static Series[] graphSeriesToSeries(GraphSeries... graphSeries) {
         return Arrays.stream(graphSeries).map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
-    }
-
-    private static Series[] graphSeriesToSeries(List<GraphSeries> graphSeries) {
-        return graphSeries.stream().map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
     }
 
     /**
