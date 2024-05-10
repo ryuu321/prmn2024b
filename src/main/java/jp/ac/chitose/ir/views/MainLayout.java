@@ -3,34 +3,26 @@ package jp.ac.chitose.ir.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Header;
-import com.vaadin.flow.component.html.ListItem;
-import com.vaadin.flow.component.html.Nav;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.BoxSizing;
-import com.vaadin.flow.theme.lumo.LumoUtility.Display;
-import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import com.vaadin.flow.theme.lumo.LumoUtility.Height;
-import com.vaadin.flow.theme.lumo.LumoUtility.ListStyleType;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import com.vaadin.flow.theme.lumo.LumoUtility.Overflow;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
-import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
-import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
-import com.vaadin.flow.theme.lumo.LumoUtility.Width;
+import com.vaadin.flow.theme.lumo.LumoUtility.*;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.theme.lumo.LumoUtility.*;
+import jp.ac.chitose.ir.security.SecurityService;
 import jp.ac.chitose.ir.views.about.AboutView;
+import jp.ac.chitose.ir.views.class_select.QPOJFICHKVJBView;
+import jp.ac.chitose.ir.views.commission.ir.IrQuestionView;
+import jp.ac.chitose.ir.views.commission.seiseki.CommissionView;
 import jp.ac.chitose.ir.views.feed.FeedView;
 import jp.ac.chitose.ir.views.helloworld.HelloTableView;
 import jp.ac.chitose.ir.views.helloworld.HelloWorldView;
+import jp.ac.chitose.ir.views.student.StudentView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.lineawesome.LineAwesomeIcon;
+
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -69,10 +61,26 @@ public class MainLayout extends AppLayout {
 
     }
 
-    public MainLayout() {
-        addToNavbar(createHeaderContent());
-        setDrawerOpened(false);
+    private SecurityService securityService;
+    public MainLayout(@Autowired SecurityService securityService) {
+//        addToNavbar(createHeaderContent());
+//        setDrawerOpened(false);
+
+        this.securityService = securityService;
+
+        H5 username = new H5(securityService.getLoginUser().getUsername());
+        HorizontalLayout header;
+        if (securityService.getAuthenticatedUser() != null){
+            addToNavbar(createHeaderContent());
+            setDrawerOpened(false);
+            Button logout = new Button("Logout", click -> securityService.logout());
+            header = new HorizontalLayout(username, logout);
+        }else {
+            header = new HorizontalLayout(username);
+        }
+        addToNavbar(header);
     }
+
 
     private Component createHeaderContent() {
         Header header = new Header();
@@ -98,6 +106,8 @@ public class MainLayout extends AppLayout {
 
         }
 
+//        Button logout = new Button("Logout", click -> securityService.logout());
+
         header.add(layout, nav);
         return header;
     }
@@ -108,6 +118,10 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("テーブル使用例", LineAwesomeIcon.TABLE_SOLID.create(), HelloTableView.class),
                 new MenuItemInfo("About", LineAwesomeIcon.FILE.create(), AboutView.class), //
                 new MenuItemInfo("Feed", LineAwesomeIcon.LIST_SOLID.create(), FeedView.class), //
+                new MenuItemInfo("Student", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class),//
+                new MenuItemInfo("成績情報(GPA)",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class),//
+                new MenuItemInfo("IRアンケート",LineAwesomeIcon.ALGOLIA.create(), IrQuestionView.class),//
+                new MenuItemInfo("Teacher", LineAwesomeIcon.CHART_AREA_SOLID.create(), QPOJFICHKVJBView.class)//
         };
     }
 
