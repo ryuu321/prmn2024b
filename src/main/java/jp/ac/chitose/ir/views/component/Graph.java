@@ -100,6 +100,10 @@ public class Graph {
 
     public void setTitle(TitleSubtitle titleSubtitle) { graph.setTitle(titleSubtitle); }
 
+    public void updateSeries(GraphSeries... series) {
+        graph.setSeries(graphSeriesToSeries(series));
+    }
+
     /**
      * 生成したApexChartsを返します。
      * <br>add(Graph.getGraph())といった感じで使ってください。
