@@ -26,46 +26,39 @@ import java.util.function.Consumer;
 @Route(value = "grade/student", layout = MainLayout.class)
 public class StudentView extends VerticalLayout {
     private final StudentService studentService;
+    private String schoolYear;
     private ComboBox<String> comboBox;
     private TextField textField;;
     private RadioButtonGroup<String> schoolYearsRadioButton;
     private RadioButtonGroup<String> departmentsRadioButton;
-    private GradeGrid gradeGrid;
-    private SubjectGrid subjectGrid;
-    private GPAGraph gpaGraph = new GPAGraph();
-    private SubjectGraph subjectGraph = new SubjectGraph();
+    private GPALayout gpaLayout;
+    private SubjectLayout subjectLayout;
 
     public StudentView(StudentService studentService) {
         this.studentService = studentService;
         setup();
-        System.out.println(textField.getParent());
     }
 
     private void setup() {
-        gpaGraph = new GPAGraph();
-        subjectGraph = new SubjectGraph();
-        subjectGraph.setVisible(false);
-        gradeGrid = new GradeGrid(studentService);
-        subjectGrid = new SubjectGrid();
-        subjectGrid.setVisible(false);
         textFieldInitialize();
         schoolYearsRadioButtonInitialize();
         departmentsRadioButtonInitialize();
         comboBoxInitialize();
         add(textField, new H1("Student"), new Paragraph("説明"));
         add(new H3("学年"), schoolYearsRadioButton, new H3("学科"), departmentsRadioButton, comboBox);
-        add(gpaGraph, subjectGraph);
-        add(gradeGrid, subjectGrid);
     }
 
     private void textFieldInitialize() {
         textField = new TextField();
         textField.addValueChangeListener(valueChangeEvent -> {
             if(valueChangeEvent.getValue() == null || valueChangeEvent.getValue().isEmpty()) return;
+            schoolYear = studentService.getStudentSchoolYear(textField.getValue()).data().get(0).学年();
             comboBox.setItems(studentService.getStudentNumberGrades(valueChangeEvent.getValue()).data().stream()
                     .map(StudentGrade::科目名).toList());
-            gpaGraph.create(studentService, studentService.getStudentSchoolYear(textField.getValue()).data().get(0).学年());
-            gradeGrid.create(valueChangeEvent.getValue(), comboBox);
+            gpaLayout = new GPALayout(studentService, schoolYear, comboBox, textField.getValue());
+            subjectLayout = new SubjectLayout(studentService);
+            subjectLayout.setVisible(false);
+            add(gpaLayout, subjectLayout);
         });
     }
 
@@ -91,23 +84,12 @@ public class StudentView extends VerticalLayout {
         comboBox.setClearButtonVisible(true);
         comboBox.addValueChangeListener(valueChangeEvent -> {
             if(valueChangeEvent.getValue() == null || valueChangeEvent.getValue().isEmpty()) {
-                if(textField.getValue() != null) {
-                    comboBox.clear();
-                    comboBox.setItems(studentService.getStudentNumberGrades(textField.getValue()).data().stream()
-                            .map(StudentGrade::科目名).toList());
-                }
-                gradeGrid.create(textField.getValue(), comboBox);
-                gpaGraph.setVisible(true);
-                gradeGrid.setVisible(true);
-                subjectGraph.setVisible(false);
-                subjectGrid.setVisible(false);
+                gpaLayout.setVisible(true);
+                subjectLayout.setVisible(false);
             } else {
-                subjectGraph.create(studentService, schoolYearsRadioButton.getValue(), departmentsRadioButton.getValue(), studentService.getStudentNumberGrade(textField.getValue(), valueChangeEvent.getValue()).data().get(0));
-                subjectGrid.create(studentService, valueChangeEvent.getValue(), studentService.getStudentNumberGrade(textField.getValue(), valueChangeEvent.getValue()).data().get(0));
-                gpaGraph.setVisible(false);
-                gradeGrid.setVisible(false);
-                subjectGraph.setVisible(true);
-                subjectGrid.setVisible(true);
+                subjectLayout.create(textField.getValue(), comboBox.getValue());
+                gpaLayout.setVisible(false);
+                subjectLayout.setVisible(true);
             }
         });
     }

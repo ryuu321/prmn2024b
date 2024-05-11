@@ -2,30 +2,21 @@ package jp.ac.chitose.ir.views.student;
 
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.function.SerializablePredicate;
 import jp.ac.chitose.ir.service.student.StudentService;
 import jp.ac.chitose.ir.service.student.StudentTable;
 
 public class GradeGrid extends VerticalLayout {
-    private StudentService studentService;
-    private RadioButtonGroup<String> schoolYearsRadioButton;
-    private RadioButtonGroup<String> departmentsRadioButton;
-    private RadioButtonGroup<String> subjectTypesRadioButton;
-    private RadioButtonGroup<String> gradeRadioButton;
-    private Grid<StudentTable> grid;
+    private final RadioButtonGroup<String> schoolYearsRadioButton;
+    private final RadioButtonGroup<String> departmentsRadioButton;
+    private final RadioButtonGroup<String> subjectTypesRadioButton;
+    private final RadioButtonGroup<String> gradeRadioButton;
     private GridListDataView<StudentTable> gridListDataView;
-    public GradeGrid(StudentService studentService) {
-        this.studentService = studentService;
-    }
-
-    public void create(String textField, ComboBox comboBox) {
-        removeAll();
+    public GradeGrid(StudentService studentService, ComboBox comboBox, String textFieldValue) {
         schoolYearsRadioButton = new RadioButtonGroup<>("", "全体", "1年生", "2年生", "3年生", "4年生", "修士1年生", "修士2年生");
         schoolYearsRadioButton.setValue("全体");
         schoolYearsRadioButton.addValueChangeListener(valueChangeEvent -> gridListDataView.setFilter(new Filter()));
@@ -37,20 +28,18 @@ public class GradeGrid extends VerticalLayout {
         subjectTypesRadioButton.addValueChangeListener(valueChangeEvent -> gridListDataView.setFilter(new Filter()));
         gradeRadioButton = new RadioButtonGroup<>("", "全体", "不可", "可", "良", "優", "秀");
         gradeRadioButton.setValue("全体");
-        gradeRadioButton.addValueChangeListener(valueChangeEvent -> gridListDataView.setFilter(new Filter()));
-        grid = new Grid<>(StudentTable.class, false);
-        Grid.Column<StudentTable> subjectColumn = grid.addColumn(StudentTable::科目名);
-        Grid.Column<StudentTable> schoolYearColumn = grid.addColumn(data -> data.対象学年() + "年生");
-        Grid.Column<StudentTable> departmentColumn = grid.addColumn(data -> changeDepartmentValue(data.対象学科()));
-        Grid.Column<StudentTable> subjectTypeColumn = grid.addColumn(StudentTable::必選別);
-        Grid.Column<StudentTable> gradeColumn = grid.addColumn(StudentTable::成績評価);
-        gridListDataView = grid.setItems(studentService.getStudentTable(textField).data());
+        gradeRadioButton.addValueChangeListener(valueChangeEvent -> gridListDataView.notifyAll());
+        Grid<StudentTable> grid = new Grid<>(StudentTable.class, false);
+        grid.addColumn(StudentTable::科目名).setHeader("科目名").setWidth("30%");
+        grid.addColumn(data -> data.対象学年() + "年生").setHeader("対象学年");
+        grid.addColumn(data -> changeDepartmentValue(data.対象学科())).setHeader("対象学科");
+        grid.addColumn(StudentTable::必選別).setHeader("必選別");
+        grid.addColumn(StudentTable::科目の単位数).setHeader("単位数");
+        grid.addColumn(StudentTable::成績評価).setHeader("成績評価");
+        gridListDataView = grid.setItems(studentService.getStudentTable(textFieldValue).data());
         grid.setWidthFull();
         grid.setAllRowsVisible(true);
-        grid.addItemDoubleClickListener(e -> {
-            comboBox.setValue(e.getItem().科目名());
-            grid.setVisible(false);
-        });
+        grid.addItemDoubleClickListener(e -> comboBox.setValue(e.getItem().科目名()));
         add(new H3("学年"), schoolYearsRadioButton, new H3("学部・学科"), departmentsRadioButton);
         add(new H3("必選別"), subjectTypesRadioButton, new H3("成績評価"), gradeRadioButton, grid);
     }

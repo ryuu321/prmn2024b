@@ -6,6 +6,7 @@ public record StudentTable(
         String 対象学科,
         int 対象学年,
         String 必選別,
-        String 成績評価
+        String 成績評価,
+        int 科目の単位数
 ) {
 }

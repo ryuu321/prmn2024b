@@ -2,7 +2,7 @@ package jp.ac.chitose.ir.service.student;
 
 public record StudentGPA(
         String 学年,
-        int gpa,
+        float gpa,
         int 度数
 ) {
 }
