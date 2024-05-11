@@ -11,6 +11,8 @@ public class SubjectLayout extends VerticalLayout {
     private final StudentService studentService;
     private final SubjectGraph subjectGraph;
     private final SubjectGrid subjectGrid;
+
+    // コンストラクタ　科目の画面に必要なものを管理するクラス
     public SubjectLayout(StudentService studentService) {
         this.studentService = studentService;
         subjectGraph = new SubjectGraph();
@@ -18,6 +20,7 @@ public class SubjectLayout extends VerticalLayout {
         add(subjectGraph, subjectGrid);
     }
 
+    // 管理しているものに指定されている科目の画面を作らせる機能
     public void create(String textFieldValue, String comboBoxValue) {
         List<StudentSubjectCalc> histData = studentService.getStudentSubjectCalc(comboBoxValue).data();
         StudentGrade studentGrade = studentService.getStudentNumberGrade(textFieldValue, comboBoxValue).data().get(0);

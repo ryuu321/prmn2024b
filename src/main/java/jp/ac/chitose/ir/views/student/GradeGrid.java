@@ -16,6 +16,8 @@ public class GradeGrid extends VerticalLayout {
     private final RadioButtonGroup<String> subjectTypesRadioButton;
     private final RadioButtonGroup<String> gradeRadioButton;
     private GridListDataView<StudentTable> gridListDataView;
+
+    // コンストラクタ 長すぎる気もするため、メソッドで分割してもいいかもしれない
     public GradeGrid(StudentService studentService, ComboBox comboBox, String textFieldValue) {
         schoolYearsRadioButton = new RadioButtonGroup<>("", "全体", "1年生", "2年生", "3年生", "4年生", "修士1年生", "修士2年生");
         schoolYearsRadioButton.setValue("全体");
@@ -44,12 +46,14 @@ public class GradeGrid extends VerticalLayout {
         add(new H3("必選別"), subjectTypesRadioButton, new H3("成績評価"), gradeRadioButton, grid);
     }
 
+    // データベースの学科をラジオボタンの表記に合わせるための機能 情報システム工学科しかデータベースにないため、他の学科は未実装
     private String changeDepartmentValue(String department) {
         if(department.equals("理工学部 情報ｼｽﾃﾑ工学科")) return "情報システム工学科";
         return department;
     }
 
     private class Filter implements SerializablePredicate<StudentTable> {
+        // 表の絞り込み機能　学年、学科、必選別、成績評価で絞り込みできる
         @Override
         public boolean test(StudentTable studentTable) {
             boolean schoolYear = false, department = false, subjectType = false, grade = false;
