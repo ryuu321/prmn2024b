@@ -19,6 +19,12 @@ public class SubjectGrid extends VerticalLayout {
         Grid<StudentSubjectCalc> grid = new Grid(StudentSubjectCalc.class, false);
         grid.setWidthFull();
         grid.setAllRowsVisible(true);
+        grid.addColumn(StudentSubjectCalc::合計の人数).setHeader("受講人数");
+        grid.addColumn(StudentSubjectCalc::不可).setHeader("不可");
+        grid.addColumn(StudentSubjectCalc::可).setHeader("可");
+        grid.addColumn(StudentSubjectCalc::良).setHeader("良");
+        grid.addColumn(StudentSubjectCalc::優).setHeader("優");
+        grid.addColumn(StudentSubjectCalc::秀).setHeader("秀");
         grid.addColumn(StudentSubjectCalc::平均).setHeader("平均");
         grid.addColumn(StudentSubjectCalc::分散).setHeader("分散");
         GridListDataView<StudentSubjectCalc> gridListDataView = grid.setItems(histData);
@@ -27,7 +33,7 @@ public class SubjectGrid extends VerticalLayout {
     }
 
     private class Filter implements SerializablePredicate<StudentSubjectCalc> {
-        // 表のフィルター機能 同じ開講年のものだけを表示するようにフィルタリングする
+        // 表のフィルター機能 ユーザが受けた開講年のものだけを表示するようにフィルタリングする
         @Override
         public boolean test(StudentSubjectCalc studentSubjectCalc) {
             return studentSubjectCalc.開講年() == studentGrade.開講年();
