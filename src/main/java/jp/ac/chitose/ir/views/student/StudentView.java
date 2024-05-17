@@ -1,171 +1,141 @@
 package jp.ac.chitose.ir.views.student;
 
-import com.github.appreciated.apexcharts.ApexCharts;
-import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.Annotations;
-import com.github.appreciated.apexcharts.config.annotations.XAxisAnnotations;
-import com.github.appreciated.apexcharts.config.annotations.builder.AnnotationStyleBuilder;
-import com.github.appreciated.apexcharts.config.annotations.builder.LabelBuilder;
-import com.github.appreciated.apexcharts.config.annotations.builder.XAxisAnnotationsBuilder;
-import com.github.appreciated.apexcharts.config.builder.*;
-import com.github.appreciated.apexcharts.config.chart.Type;
-import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
-import com.github.appreciated.apexcharts.helper.Coordinate;
-import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.dataview.ComboBoxListDataView;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.service.student.StudentGrade;
 import jp.ac.chitose.ir.service.student.StudentService;
 import jp.ac.chitose.ir.views.MainLayout;
 
-import java.util.ArrayList;
-
 @PageTitle("GradeStudent")
 @Route(value = "grade/student", layout = MainLayout.class)
-@PermitAll
 public class StudentView extends VerticalLayout {
+    private final StudentService studentService;
+    private String studentSchoolYear;
+    private ComboBox<StudentGrade> subjectComboBox;
+    private ComboBoxListDataView<StudentGrade> subjectComboBoxDataView;
+    private TextField textField;
+    private RadioButtonGroup<String> schoolYearsRadioButton;
+    private RadioButtonGroup<String> departmentsRadioButton;
+    private GPALayout gpaLayout;
+    private SubjectLayout subjectLayout;
 
-    //private SecurityService securityService;
-    private StudentService studentService;
-    private ComboBox<StudentGrade> comboBox;
-    private ApexCharts chart;
-    final private String blue = "#0000FF";
-    final private String red = "#FF0000";
-
-    public StudentView(StudentService studentService/*, @Autowired SecurityService securityService */) {
-        //this.securityService = securityService;
+    public StudentView(StudentService studentService) {
         this.studentService = studentService;
-        add(createTextField());
-        init();
-        comboBoxInitialyze();
-        add(comboBox);
+        initializeComponents();
+        addComponentsToLayout();
     }
 
-    private void init() {
-        add(new H1("Student"));
-        add(new Paragraph("説明"));
-        add(new H3("学年"));
-        RadioButtonGroup<String> gradesRadioButton = new RadioButtonGroup<>("", "全体", "1年生", "2年生", "3年生", "4年生", "修士1年生", "修士2年生");
-        gradesRadioButton.addValueChangeListener(event -> {
-            if(event.getValue().equals(event.getOldValue())) return;
-            else {
-                String value = event.getValue();
-            }
-        });
-        add(gradesRadioButton);
-        add(new H3("学科"));
-        RadioButtonGroup<String> departmentsRadioButton = new RadioButtonGroup<>("", "全体", "応用科学生物学科", "電子光工学科", "情報システム工学科", "理工学研究科");
-        departmentsRadioButton.addValueChangeListener(event -> {
-            if(event.getValue().equals(event.getOldValue())) return;
-            else {
-                String value = event.getValue();
-            }
-        });
-        add(departmentsRadioButton);
+    // 各コンポーネントの初期化
+    private void initializeComponents() {
+        initializeTextField();
+        initializeSchoolYearsRadioButton();
+        initializeDepartmentsRadioButton();
+        initializeSubjectComboBox();
     }
 
-    private TextField createTextField() {
-        TextField textField = new TextField();
-        textField.addValueChangeListener(e1 -> {
-            if(e1.getValue() == null) return;
-            comboBox.setItems(studentService.getStudentNumberGrades(e1.getValue()).data());
-            comboBox.setItemLabelGenerator(StudentGrade::科目名);
-        });
-        return textField;
+    // コンポーネントをレイアウトに追加
+    private void addComponentsToLayout() {
+        add(textField, new H1("Student"), new Paragraph("説明"));
+        add(new H3("学年"), schoolYearsRadioButton, new H3("学科"), departmentsRadioButton, subjectComboBox);
     }
 
-    private void comboBoxInitialyze() {
-        comboBox = new ComboBox<>("科目名");
-        comboBox.addValueChangeListener(e1 -> {
-            if(e1.getValue() == null) return;
-            if(chart != null) remove(chart);
-            var histData = studentService.getStudentHist(e1.getValue().科目名()).data();
-            Coordinate<String, Integer>[] data = new Coordinate[5];
-            histData.forEach(e2 -> {
-                if(e2.成績評価().equals("秀")) data[4] = new Coordinate<>(e2.成績評価(), e2.度数());
-                else if(e2.成績評価().equals("優")) data[3] = new Coordinate<>(e2.成績評価(), e2.度数());
-                else if(e2.成績評価().equals("良")) data[2] = new Coordinate<>(e2.成績評価(), e2.度数());
-                else if(e2.成績評価().equals("可")) data[1] = new Coordinate<>(e2.成績評価(), e2.度数());
-                else data[0] = new Coordinate<>(e2.成績評価(), e2.度数());
-            });
-            String[] strs = new String[]{"不可", "可", "良", "優", "秀"};
-            for(int i = 0; i < 5; i++) if(data[i] == null) data[i] = new Coordinate<>(strs[i], 0);
-            final Series<Coordinate<String, Integer>> series = new Series(e1.getValue().科目名());
-            series.setData(data);
-            var grade = studentService.getStudentNumberGrade(e1.getValue().学籍番号(), e1.getValue().科目名()).data();
-            Annotations annotations = new Annotations();
-            ArrayList<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
-            String[] target = new String[]{""};
-            for(int i = 0; i < histData.size(); i++) {
-                var e = histData.get(i);
-                if(e.成績評価().equals("平均")) {
-                    if(e.度数() < 1d) target[0] = "不可";
-                    else if(e.度数() < 2d) target[0] = "可";
-                    else if(e.度数() < 3d) target[0] = "良";
-                    else if(e.度数() < 4d) target[0] = "優";
-                    else target[0] = "秀";
-                }
+    // 学籍番号入力用のテキストフィールドの初期化
+    // データベースから生徒を識別できる値を持ってこれるようになったら、消す
+    private void initializeTextField() {
+        textField = new TextField();
+        textField.addValueChangeListener(valueChangeEvent -> {
+            String value = valueChangeEvent.getValue();
+            if (value == null || value.isEmpty()) return;
+            studentSchoolYear = studentService.getStudentSchoolYear(value).data().get(0).学年();
+            subjectComboBox.setItems(studentService.getStudentNumberGrades(value).data());
+            subjectComboBoxDataView = subjectComboBox.getListDataView();
+            gpaLayout = new GPALayout(studentService, studentSchoolYear, subjectComboBox, value);
+            subjectLayout = new SubjectLayout(studentService);
+            add(gpaLayout);
+        });
+    }
+
+    // 学年ラジオボタンの初期化
+    private void initializeSchoolYearsRadioButton() {
+        schoolYearsRadioButton = new RadioButtonGroup<>();
+        schoolYearsRadioButton.setItems("全体", "1年生", "2年生", "3年生", "4年生", "修士1年生", "修士2年生");
+        schoolYearsRadioButton.setValue("全体");
+        schoolYearsRadioButton.addValueChangeListener(valueChangeEvent -> applyFilters());
+    }
+
+    // 学科ラジオボタンの初期化
+    private void initializeDepartmentsRadioButton() {
+        departmentsRadioButton = new RadioButtonGroup<>();
+        departmentsRadioButton.setItems("全体", "応用科学生物学科", "電子光工学科", "情報システム工学科", "理工学研究科");
+        departmentsRadioButton.setValue("全体");
+        departmentsRadioButton.addValueChangeListener(valueChangeEvent -> applyFilters());
+    }
+
+    // ラジオボタンのフィルタ適用メソッド
+    private void applyFilters() {
+        subjectComboBoxDataView.removeFilters();
+        subjectComboBoxDataView.addFilter((SerializablePredicate<StudentGrade>) s -> {
+            if (schoolYearsRadioButton.getValue().equals("全体")) return true;
+            return schoolYearsRadioButton.getValue().equals(changeSchoolYearValue(s.対象学年()));
+        });
+        subjectComboBoxDataView.addFilter((SerializablePredicate<StudentGrade>) s -> {
+            if (departmentsRadioButton.getValue().equals("全体")) return true;
+            return departmentsRadioButton.getValue().equals(changeDepartmentValue(s.対象学科()));
+        });
+    }
+
+    // 学科名をラジオボタンの表記に合わせる
+    private String changeDepartmentValue(String department) {
+        switch (department) {
+            case "理工学部 情報ｼｽﾃﾑ工学科":
+                return "情報システム工学科";
+            default:
+                return department;
+        }
+    }
+
+    // 学年をラジオボタンの表記に合わせる
+    private String changeSchoolYearValue(int schoolYear) {
+        switch (schoolYear) {
+            case 1:
+                return "1年生";
+            case 2:
+                return "2年生";
+            case 3:
+                return "3年生";
+            case 4:
+                return "4年生";
+            default:
+                return "";
+        }
+    }
+
+    // 科目選択用のコンボボックスの初期化
+    private void initializeSubjectComboBox() {
+        subjectComboBox = new ComboBox<>("科目名");
+        subjectComboBox.setItemLabelGenerator(StudentGrade::科目名);
+        subjectComboBox.setWidth("40%");
+        subjectComboBox.setPlaceholder("GPAのグラフを表示しています。選んだ科目のグラフに切り替わります。");
+        subjectComboBox.setClearButtonVisible(true);
+        subjectComboBoxDataView = subjectComboBox.getListDataView();
+        subjectComboBox.addValueChangeListener(valueChangeEvent -> {
+            if (valueChangeEvent.getValue() == null) {
+                remove(subjectLayout);
+                add(gpaLayout);
+            } else {
+                subjectLayout.create(textField.getValue(), valueChangeEvent.getValue().科目名());
+                remove(gpaLayout);
+                add(subjectLayout);
             }
-            xAxisAnnotations.add(XAxisAnnotationsBuilder.get()
-                    .withX(target[0])
-                    .withLabel(LabelBuilder.get()
-                            .withStyle(AnnotationStyleBuilder.get()
-                                    .withFontSize("20px")
-                                    .build())
-                            .withOrientation("horizontal")
-                            .withTextAnchor("middle")
-                            .withText("平均値")
-                            .build())
-                    .build());
-            annotations.setXaxis(xAxisAnnotations);
-            chart = ApexChartsBuilder.get().withChart(
-                            ChartBuilder.get()
-                                    .withType(Type.BAR)
-                                    .build())
-                    .withXaxis(XAxisBuilder.get()
-                            .build())
-                    .withAnnotations(annotations)
-                    .withDataLabels(DataLabelsBuilder.get()
-                            .withEnabled(false)
-                            .build())
-                    .withPlotOptions(PlotOptionsBuilder.get()
-                            .withBar(BarBuilder.get()
-                                    .withColumnWidth("100%")
-                                    .withDistributed(true)
-                                    .build()) // BARの間隔を０に近づける（見た目を調整してヒストグラムにみえるようにする）
-                            .build())
-                    .withLegend(LegendBuilder.get()
-                            .withShow(false)
-                            .build())
-                    .withStroke(StrokeBuilder.get().withWidth(0.1).withColors("#000").build()) // 柱（棒）の外枠を黒色に設定してヒストグラムに見た目を近づける
-                    .withYaxis(YAxisBuilder.get().withForceNiceScale(true).build())
-                    .withSeries(series)
-                    .build();
-            String[] colors = new String[5];
-            String[] labels = new String[5];
-            for(int i = 0; i < 5; i++) {
-                if(strs[i].equals(grade.get(0).成績評価())) {
-                    colors[i] = red;
-                    labels[i] = grade.get(0).成績評価() + "(あなたの成績位置)";
-                }
-                else {
-                    colors[i] = blue;
-                    labels[i] = strs[i];
-                }
-            }
-            chart.setLabels(labels);
-            chart.setColors(colors);
-            chart.setHeight("400px");
-            chart.setWidthFull();
-            add(chart);
         });
     }
 }

@@ -18,4 +18,16 @@ public interface StudentService {
 
     @GetExchange("/subject_calc/{subject}")
     TableData<StudentHist> getStudentHist(@PathVariable String subject);
+
+    @GetExchange("/gpa_calc_par_year")
+    TableData<StudentGPA> getStudentGPA();
+
+    @GetExchange("/table/{studentNumber}")
+    TableData<StudentTable> getStudentTable(@PathVariable String studentNumber);
+
+    @GetExchange("/subject_calc_par_year/{subject}")
+    TableData<StudentSubjectCalc> getStudentSubjectCalc(@PathVariable String subject);
+
+    @GetExchange("/school_year/{studentNumber}")
+    TableData<StudentSchoolYear> getStudentSchoolYear(@PathVariable String studentNumber);
 }
