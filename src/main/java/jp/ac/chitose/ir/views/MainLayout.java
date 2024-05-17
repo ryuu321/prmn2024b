@@ -3,9 +3,6 @@ package jp.ac.chitose.ir.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -68,17 +65,16 @@ public class MainLayout extends AppLayout {
 
         this.securityService = securityService;
 
-        H5 username = new H5(securityService.getLoginUser().getUsername());
-        HorizontalLayout header;
         if (securityService.getAuthenticatedUser() != null){
             addToNavbar(createHeaderContent());
             setDrawerOpened(false);
-            Button logout = new Button("Logout", click -> securityService.logout());
-            header = new HorizontalLayout(username, logout);
         }else {
+            H5 username = new H5(securityService.getLoginUser().getUsername() + " ");
+            HorizontalLayout header;
             header = new HorizontalLayout(username);
+            addToNavbar(header);
         }
-        addToNavbar(header);
+        // addToNavbar(header);
     }
 
 
@@ -91,7 +87,11 @@ public class MainLayout extends AppLayout {
 
         H1 appName = new H1("IR");
         appName.addClassNames(Margin.Vertical.MEDIUM, Margin.End.AUTO, FontSize.LARGE);
-        layout.add(appName);
+
+        H5 username = new H5(securityService.getLoginUser().getUsername() + "　");
+        Button logout = new Button("Logout", click -> securityService.logout());
+
+        layout.add(appName,username, logout);
 
         Nav nav = new Nav();
         nav.addClassNames(Display.FLEX, Overflow.AUTO, Padding.Horizontal.MEDIUM, Padding.Vertical.XSMALL);
