@@ -11,12 +11,14 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.service.student.StudentGrade;
 import jp.ac.chitose.ir.service.student.StudentService;
 import jp.ac.chitose.ir.views.MainLayout;
 
 @PageTitle("GradeStudent")
 @Route(value = "grade/student", layout = MainLayout.class)
+@PermitAll
 public class StudentView extends VerticalLayout {
     private final StudentService studentService;
     private String studentSchoolYear;
