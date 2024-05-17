@@ -1,6 +1,5 @@
 package jp.ac.chitose.ir.views.student;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jp.ac.chitose.ir.service.student.StudentGrade;
@@ -12,8 +11,6 @@ import java.util.List;
 public class SubjectGraph extends VerticalLayout {
     private Graph mainGraph;
     private final Graph preYearGraph;
-    private final Graph dummy1;
-    private final Graph dummy2;
     private final HorizontalLayout mainGraphLayout;
     private final HorizontalLayout underGraphsLayout;
     private final String[] strs = new String[]{"不可", "可", "良", "優", "秀"};
@@ -30,10 +27,8 @@ public class SubjectGraph extends VerticalLayout {
                 .dataLabelsEnabled(false).YAxisForceNiceScale(true).series(new GraphSeries()).distributed(true).build();
         preYearGraph = Graph.Builder.get().graphType(GRAPH_TYPE.BAR).YAxisForceNiceScale(true).distributed(true).dataLabelsEnabled(false).series(new GraphSeries(0, 0, 0, 0, 0))
                 .colors("#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF").height("100%").title("昨年度", GraphAlign.CENTER).legendShow(false).build();
-        dummy1 = preYearGraph.getBuilder().build();
-        dummy2 = preYearGraph.getBuilder().build();
         mainGraphLayout.add(mainGraph.getGraph());
-        underGraphsLayout.add(preYearGraph.getGraph(), dummy1.getGraph(), dummy2.getGraph());
+        underGraphsLayout.add(preYearGraph.getGraph());
         add(mainGraphLayout, underGraphsLayout);
     }
 
@@ -51,22 +46,12 @@ public class SubjectGraph extends VerticalLayout {
         mainGraphLayout.add(mainGraph.getGraph());
         GraphSeries<Data<String, Integer>> preYearSeries = createPreYearSeries(histData, studentGrade);
         if(preYearSeries == null) {
-            underGraphsLayout.removeAll();;
-            underGraphsLayout.setHeight("0vh");
-        }
-        else {
+            underGraphsLayout.setHeight("0px");
+        } else {
             underGraphsLayout.setHeight("40vh");
-            if(underGraphsLayout.getChildren().count() == 0) underGraphsLayout.add(preYearGraph.getGraph(), dummy1.getGraph(), dummy2.getGraph());
+            if(underGraphsLayout.getChildren().findAny().isEmpty()) underGraphsLayout.add(preYearGraph.getGraph());
             preYearGraph.updateSeries(preYearSeries);
-            dummy1.updateSeries(preYearSeries);
-            dummy2.updateSeries(preYearSeries);
         }
-        long cnt = underGraphsLayout.getChildren().count();
-        underGraphsLayout.getChildren().forEach(component -> {
-            if(component.isVisible()) component.getStyle().setWidth((float) 100 / cnt + "%");
-            else component.getStyle().setWidth("0%");
-        });
-        System.out.println(preYearGraph.getGraph().getWidth() + " " + dummy1.getGraph().getWidth() + " " + dummy2.getGraph().getWidth());;
     }
 
     // 選ばれた科目を生徒が受けた年のSeriesを作る機能
@@ -75,7 +60,7 @@ public class SubjectGraph extends VerticalLayout {
         Data<String, Integer>[] data = new Data[5];
         histData.forEach(e2 -> {
             if(e2.開講年() == studentGrade.開講年()) {
-                data[0] = new Data<>("不可", e2.不可());
+                data[0] = new Data<>("不可", e2.不可() + e2.欠席());
                 data[1] = new Data<>("可", e2.可());
                 data[2] = new Data<>("良", e2.良());
                 data[3] = new Data<>("優", e2.優());
@@ -96,14 +81,19 @@ public class SubjectGraph extends VerticalLayout {
         Data<String, Integer>[] preYearData = new Data[5];
         histData.forEach(e2 -> {
             if (e2.開講年() == studentGrade.開講年() - 1) {
-                preYearData[0] = new Data<>("不可", e2.不可());
+                preYearData[0] = new Data<>("不可", e2.不可() + e2.欠席());
                 preYearData[1] = new Data<>("可", e2.可());
                 preYearData[2] = new Data<>("良", e2.良());
                 preYearData[3] = new Data<>("優", e2.優());
                 preYearData[4] = new Data<>("秀", e2.秀());
             }
         });
-        if(preYearData[0] == null) return null;
+        int sum = 0;
+        for(int i = 0; i < 5; i++) {
+            if(preYearData[i] == null) return null;
+            sum += preYearData[i].getY()[0];
+        }
+        if(sum == 0) return null;
         return new GraphSeries<>(studentGrade.科目名(), preYearData);
     }
 

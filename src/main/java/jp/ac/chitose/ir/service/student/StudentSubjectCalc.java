@@ -2,6 +2,7 @@ package jp.ac.chitose.ir.service.student;
 
 public record StudentSubjectCalc(
         int 開講年,
+        int 欠席,
         int 不可,
         int 可,
         int 良,

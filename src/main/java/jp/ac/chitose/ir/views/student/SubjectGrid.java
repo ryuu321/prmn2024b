@@ -20,6 +20,7 @@ public class SubjectGrid extends VerticalLayout {
         grid.setWidthFull();
         grid.setAllRowsVisible(true);
         grid.addColumn(StudentSubjectCalc::合計の人数).setHeader("受講人数");
+        grid.addColumn(StudentSubjectCalc::欠席).setHeader("欠席");
         grid.addColumn(StudentSubjectCalc::不可).setHeader("不可");
         grid.addColumn(StudentSubjectCalc::可).setHeader("可");
         grid.addColumn(StudentSubjectCalc::良).setHeader("良");
