@@ -9,9 +9,9 @@ import jp.ac.chitose.ir.service.student.StudentService;
 public class GPALayout extends VerticalLayout {
 
     // コンストラクタ　GPAの画面に必要なものを管理するクラス 自分にそれらを追加する
-    public GPALayout(StudentService studentService, String schoolYear, ComboBox<StudentGrade> subjectComboBox, ComboBoxListDataView<StudentGrade> subjectComboBoxDataView, String textFieldValue) {
+    public GPALayout(StudentService studentService, String schoolYear, ComboBox<StudentGrade> subjectComboBox, String textFieldValue) {
         GPAGraph gpaGraph = new GPAGraph(studentService, schoolYear);
-        GradeGrid gradeGrid = new GradeGrid(studentService, subjectComboBox, subjectComboBoxDataView, textFieldValue);
+        GradeGrid gradeGrid = new GradeGrid(studentService, subjectComboBox, textFieldValue);
         add(gpaGraph, gradeGrid);
     }
 }

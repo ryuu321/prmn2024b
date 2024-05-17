@@ -9,8 +9,9 @@ public class GPAGraph extends VerticalLayout {
 
     // コンストラクタ　グラフを作成し、自分に追加する
     public GPAGraph(StudentService studentService, String schoolYear) {
+        this.setHeight("60vh");
         final GraphSeries<Data<String, Integer>> series = createSeries(studentService, schoolYear);
-        Graph graph = Graph.Builder.get().histogram().series(series).width("100%").height("250px").YAxisForceNiceScale(true)
+        Graph graph = Graph.Builder.get().histogram().series(series).width("100%").height("100%").YAxisForceNiceScale(true)
                 .title("GPA", GraphAlign.CENTER).dataLabelsEnabled(false).legendShow(false)
                 .colors("#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF").build();
         add(graph.getGraph());

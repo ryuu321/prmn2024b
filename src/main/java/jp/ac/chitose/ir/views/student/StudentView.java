@@ -58,7 +58,7 @@ public class StudentView extends VerticalLayout {
             studentSchoolYear = studentService.getStudentSchoolYear(value).data().get(0).学年();
             subjectComboBox.setItems(studentService.getStudentNumberGrades(value).data());
             subjectComboBoxDataView = subjectComboBox.getListDataView();
-            gpaLayout = new GPALayout(studentService, studentSchoolYear, subjectComboBox, subjectComboBoxDataView, value);
+            gpaLayout = new GPALayout(studentService, studentSchoolYear, subjectComboBox, value);
             subjectLayout = new SubjectLayout(studentService);
             add(gpaLayout);
         });
@@ -123,18 +123,18 @@ public class StudentView extends VerticalLayout {
     private void initializeSubjectComboBox() {
         subjectComboBox = new ComboBox<>("科目名");
         subjectComboBox.setItemLabelGenerator(StudentGrade::科目名);
-        subjectComboBox.setWidth("600px");
+        subjectComboBox.setWidth("40%");
         subjectComboBox.setPlaceholder("GPAのグラフを表示しています。選んだ科目のグラフに切り替わります。");
         subjectComboBox.setClearButtonVisible(true);
         subjectComboBoxDataView = subjectComboBox.getListDataView();
         subjectComboBox.addValueChangeListener(valueChangeEvent -> {
             if (valueChangeEvent.getValue() == null) {
-                add(gpaLayout);
                 remove(subjectLayout);
+                add(gpaLayout);
             } else {
                 subjectLayout.create(textField.getValue(), valueChangeEvent.getValue().科目名());
-                add(subjectLayout);
                 remove(gpaLayout);
+                add(subjectLayout);
             }
         });
     }

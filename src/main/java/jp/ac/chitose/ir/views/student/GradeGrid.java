@@ -1,7 +1,6 @@
 package jp.ac.chitose.ir.views.student;
 
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.combobox.dataview.ComboBoxListDataView;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.H3;
@@ -19,7 +18,7 @@ public class GradeGrid extends VerticalLayout {
     private GridListDataView<StudentGrade> gridListDataView;
 
     // コンストラクタ
-    public GradeGrid(StudentService studentService, ComboBox<StudentGrade> subjectComboBox, ComboBoxListDataView<StudentGrade> subjectComboBoxDataView, String textFieldValue) {
+    public GradeGrid(StudentService studentService, ComboBox<StudentGrade> subjectComboBox, String textFieldValue) {
         initializeRadioButtons();
         Grid<StudentGrade> grid = initializeGrid(studentService, textFieldValue, subjectComboBox);
         addComponentsToLayout(grid);

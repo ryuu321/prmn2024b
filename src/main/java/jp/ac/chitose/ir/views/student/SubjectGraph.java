@@ -1,6 +1,6 @@
 package jp.ac.chitose.ir.views.student;
 
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jp.ac.chitose.ir.service.student.StudentGrade;
@@ -10,40 +10,63 @@ import jp.ac.chitose.ir.views.component.*;
 import java.util.List;
 
 public class SubjectGraph extends VerticalLayout {
-    private final HorizontalLayout underCharts;
+    private Graph mainGraph;
+    private final Graph preYearGraph;
+    private final Graph dummy1;
+    private final Graph dummy2;
+    private final HorizontalLayout mainGraphLayout;
+    private final HorizontalLayout underGraphsLayout;
     private final String[] strs = new String[]{"不可", "可", "良", "優", "秀"};
 
     // コンストラクタ　複数のグラフを横並びにするためのHorizontalLayoutの初期化
     public SubjectGraph() {
-        underCharts = new HorizontalLayout();
-        underCharts.setAlignItems(FlexComponent.Alignment.STRETCH);
+        mainGraphLayout = new HorizontalLayout();
+        mainGraphLayout.setWidthFull();
+        mainGraphLayout.setHeight("40vh");
+        underGraphsLayout = new HorizontalLayout();
+        underGraphsLayout.setWidthFull();
+        underGraphsLayout.setHeight("40vh");
+        mainGraph = Graph.Builder.get().graphType(GRAPH_TYPE.BAR).width("100%").height("100%").legendShow(false)
+                .dataLabelsEnabled(false).YAxisForceNiceScale(true).series(new GraphSeries()).distributed(true).build();
+        preYearGraph = Graph.Builder.get().graphType(GRAPH_TYPE.BAR).YAxisForceNiceScale(true).distributed(true).dataLabelsEnabled(false).series(new GraphSeries(0, 0, 0, 0, 0))
+                .colors("#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF").height("100%").title("昨年度", GraphAlign.CENTER).legendShow(false).build();
+        dummy1 = preYearGraph.getBuilder().build();
+        dummy2 = preYearGraph.getBuilder().build();
+        mainGraphLayout.add(mainGraph.getGraph());
+        underGraphsLayout.add(preYearGraph.getGraph(), dummy1.getGraph(), dummy2.getGraph());
+        add(mainGraphLayout, underGraphsLayout);
     }
 
     // 指定された科目のグラフを生成する機能　受けた年のグラフ、その前年のグラフを実装済み
     public void create(List<StudentSubjectCalc> histData, StudentGrade studentGrade) {
-        removeAll();
-        underCharts.removeAll();
         String[] target = new String[1];
         final GraphSeries<Data<String, Integer>> series = createGraphSeries(histData, target, studentGrade);
         String[] colors = new String[5];
         String[] labels = new String[5];
         String grade = studentGrade.成績評価();
         createColorsAndLabels(grade, colors, labels);
-        Graph graph = Graph.Builder.get().graphType(GRAPH_TYPE.BAR).labels(labels).colors(colors).height("250px").width("100%")
-                .distributed(true).YAxisForceNiceScale(true).series(series).dataLabelsEnabled(false).legendShow(false)
-                .XAxisAnnotation(target[0].equals(studentGrade.成績評価()) ? target[0] + "(あなたの成績位置)" : target[0], "20px", "horizontal", "middle", "平均値").build();
+        mainGraphLayout.remove(mainGraph.getGraph());
+        mainGraph = mainGraph.getBuilder().labels(labels).colors(colors).series(series).resetAnnotations()
+                        .XAxisAnnotation(target[0].equals(studentGrade.成績評価()) ? target[0] + "(あなたの成績位置)" : target[0], "20px", "horizontal", "middle", "平均値").build();
+        mainGraphLayout.add(mainGraph.getGraph());
         GraphSeries<Data<String, Integer>> preYearSeries = createPreYearSeries(histData, studentGrade);
         if(preYearSeries == null) {
-            add(graph.getGraph());
-            return;
+            underGraphsLayout.removeAll();;
+            underGraphsLayout.setHeight("0vh");
         }
-        Graph preYearGraph = Graph.Builder.get().graphType(GRAPH_TYPE.BAR).YAxisForceNiceScale(true).distributed(true).dataLabelsEnabled(false).series(preYearSeries).height("100%")
-                .colors("#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF").height("100%").title("昨年度", GraphAlign.CENTER).legendShow(false).build();
-        Graph dummy = Graph.Builder.get().height("100%").series(preYearSeries).build();
-        underCharts.add(preYearGraph.getGraph(), dummy.getGraph());
-        underCharts.setWidthFull();
-        underCharts.setHeight("250px");
-        add(graph.getGraph(), underCharts);
+        else {
+            underGraphsLayout.setHeight("40vh");
+            if(underGraphsLayout.getChildren().count() == 0) underGraphsLayout.add(preYearGraph.getGraph(), dummy1.getGraph(), dummy2.getGraph());
+            preYearGraph.updateSeries(preYearSeries);
+            dummy1.updateSeries(preYearSeries);
+            dummy2.updateSeries(preYearSeries);
+        }
+        long cnt = underGraphsLayout.getChildren().count();
+        underGraphsLayout.getChildren().forEach(component -> {
+            if(component.isVisible()) component.getStyle().setWidth((float) 100 / cnt + "%");
+            else component.getStyle().setWidth("0%");
+        });
+        System.out.println(preYearGraph.getGraph().getWidth() + " " + dummy1.getGraph().getWidth() + " " + dummy2.getGraph().getWidth());;
     }
 
     // 選ばれた科目を生徒が受けた年のSeriesを作る機能
