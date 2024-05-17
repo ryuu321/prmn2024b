@@ -21,4 +21,7 @@ public interface StudentService {
 
     @GetExchange("/subject_calc_par_year/{subject}")
     TableData<StudentSubjectCalc> getStudentSubjectCalc(@PathVariable String subject);
+
+    @GetExchange("/school_year/{studentNumber}")
+    TableData<StudentSchoolYear> getStudentSchoolYear(@PathVariable String studentNumber);
 }
