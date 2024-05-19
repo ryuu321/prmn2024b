@@ -1,8 +1,7 @@
 package jp.ac.chitose.ir.service.student;
 
-public record StudentGPA(
+public record StudentSchoolYear(
         String 学年,
-        float gpa,
-        int 度数
+        String 学籍番号
 ) {
 }

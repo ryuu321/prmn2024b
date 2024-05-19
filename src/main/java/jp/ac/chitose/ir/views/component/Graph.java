@@ -6,6 +6,7 @@ import com.github.appreciated.apexcharts.config.annotations.XAxisAnnotations;
 import com.github.appreciated.apexcharts.config.annotations.builder.AnnotationStyleBuilder;
 import com.github.appreciated.apexcharts.config.annotations.builder.LabelBuilder;
 import com.github.appreciated.apexcharts.config.annotations.builder.XAxisAnnotationsBuilder;
+import com.github.appreciated.apexcharts.config.builder.NoDataBuilder;
 import com.github.appreciated.apexcharts.config.chart.Animations;
 import com.github.appreciated.apexcharts.config.chart.StackType;
 import com.github.appreciated.apexcharts.config.chart.Type;
@@ -13,6 +14,7 @@ import com.github.appreciated.apexcharts.config.chart.animations.Easing;
 import com.github.appreciated.apexcharts.config.chart.builder.*;
 import com.github.appreciated.apexcharts.config.plotoptions.Bar;
 import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
+import com.github.appreciated.apexcharts.config.subtitle.Align;
 import com.github.appreciated.apexcharts.config.yaxis.Labels;
 import com.github.appreciated.apexcharts.config.yaxis.Title;
 import com.github.appreciated.apexcharts.config.yaxis.builder.LabelsBuilder;
@@ -33,7 +35,10 @@ import java.util.List;
  */
 public class Graph {
     final private ApexCharts graph = new ApexCharts();
+    private final Builder builder;
+
     private Graph(Builder builder) {
+        this.builder = builder;
         setChart(builder.chart);
         if(builder.chart.getType() == Type.PIE || builder.chart.getType() == Type.DONUT) setDoubles(builder.doubles);
         else setSeries(builder.series);
@@ -48,51 +53,64 @@ public class Graph {
         setDataLabels(builder.dataLabels);
         setXAxis(builder.xAxis);
         setYAxis(builder.yAxis);
+        setTitle(builder.titleSubtitle);
+        if((builder.chart.getType() == Type.PIE || builder.chart.getType() == Type.DONUT) && builder.colors.length == builder.doubles.length && builder.colors.length != 0) setColors(builder.colors);
+        else if(builder.series.length != 0 && builder.colors.length == builder.series[0].getData().length) setColors(builder.colors);
     }
 
-    public void setChart(Chart chart) {
+    private void setChart(Chart chart) {
         graph.setChart(chart);
     }
 
-    public void setSeries(Series... series) {
-        graph.setSeries(series);
+    private void setSeries(GraphSeries... series) {
+        graph.setSeries(graphSeriesToSeries(series));
     }
 
-    public void setDoubles(Double... doubles) { graph.setSeries(doubles); }
+    private void setDoubles(Double... doubles) { graph.setSeries(doubles); }
 
-    public void setLabels(String... labels) { graph.setLabels(labels); }
+    private void setLabels(String... labels) { graph.setLabels(labels); }
 
-    public void setLegend(Legend legend) { graph.setLegend(legend); }
+    private void setLegend(Legend legend) { graph.setLegend(legend); }
 
-    public void setResponsive(Responsive responsive) { graph.setResponsive(responsive); }
+    private void setResponsive(Responsive responsive) { graph.setResponsive(responsive); }
 
-    public void setPlotOptions(PlotOptions options) {
+    private void setPlotOptions(PlotOptions options) {
         graph.setPlotOptions(options);
     }
 
-    public void setStroke(Stroke stroke) {
+    private void setStroke(Stroke stroke) {
         graph.setStroke(stroke);
     }
 
-    public void setHeight(String height) {
+    private void setHeight(String height) {
         graph.setHeight(height);
     }
 
-    public void setWidth(String width) {
+    private void setWidth(String width) {
         graph.setWidth(width);
     }
 
-    public void setDataLabels(DataLabels dataLabels) {
+    private void setDataLabels(DataLabels dataLabels) {
         graph.setDataLabels(dataLabels);
     }
 
-    public void setAnnotations(Annotations annotations) { graph.setAnnotations(annotations); }
+    private void setAnnotations(Annotations annotations) { graph.setAnnotations(annotations); }
 
-    public void setYAxis(YAxis yAxis) { graph.setYaxis(new YAxis[]{yAxis}); }
+    private void setYAxis(YAxis yAxis) { graph.setYaxis(new YAxis[]{yAxis}); }
 
-    public void setXAxis(XAxis xAxis) { graph.setXaxis(xAxis); }
+    private void setXAxis(XAxis xAxis) { graph.setXaxis(xAxis); }
 
-    public void setColors(String[] colors) { graph.setColors(colors); }
+    private void setColors(String[] colors) { graph.setColors(colors); }
+
+    private void setTitle(TitleSubtitle titleSubtitle) { graph.setTitle(titleSubtitle); }
+
+    public void updateSeries(GraphSeries... series) {;
+        graph.updateSeries(graphSeriesToSeries(series));
+    }
+
+    public Builder getBuilder() {
+        return builder;
+    }
 
     /**
      * 生成したApexChartsを返します。
@@ -107,17 +125,13 @@ public class Graph {
         return Arrays.stream(graphSeries).map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
     }
 
-    private static Series[] graphSeriesToSeries(Collection<GraphSeries> graphSeries) {
-        return graphSeries.stream().map(graphSeries1 -> new Series(graphSeries1.getName(), graphSeries1.getData())).toArray(Series[]::new);
-    }
-
     /**
      * Graphのインスタンスを作成するためのBuilderクラスです。<br>
      * Graph.Builder.get().メソッド1().メソッド2()...のように.でメソッドをつなげて、Graphの設定をしてください。
      */
     public static class Builder {
         private final Chart chart = new Chart();
-        private Series[] series = new Series[]{new Series(0)};
+        private GraphSeries[] series = new GraphSeries[]{};
         private Double[] doubles = new Double[]{0.0};
         private final PlotOptions options = new PlotOptions();
         private final Stroke stroke = new Stroke();
@@ -127,6 +141,8 @@ public class Graph {
         private final Responsive responsive = new Responsive();
         private final YAxis yAxis = new YAxis();
         private final XAxis xAxis = new XAxis();
+        private final TitleSubtitle titleSubtitle = new TitleSubtitle();
+        private ArrayList<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
         private String[] labels = new String[]{};
         private String[] colors = new String[]{};
         private String width = "400px";
@@ -293,7 +309,7 @@ public class Graph {
          * @return Builder
          */
         public Builder series(GraphSeries... series) {
-            this.series = graphSeriesToSeries(series);
+            this.series = series;
             return this;
         }
 
@@ -303,8 +319,8 @@ public class Graph {
          * @param series データ
          * @return Builder
          */
-        public Builder series(Collection<GraphSeries> series) {
-            this.series = graphSeriesToSeries(series);
+        public Builder series(List<GraphSeries> series) {
+            this.series = series.toArray(new GraphSeries[0]);
             return this;
         }
 
@@ -339,13 +355,75 @@ public class Graph {
             return this;
         }
 
+        public Builder YAxisForceNiceScale(boolean niceScale) {
+            yAxis.setForceNiceScale(niceScale);
+            return this;
+        }
+
+        public Builder YAxisMax(double max) {
+            yAxis.setMax(max);
+            return this;
+        }
+
+        public Builder YAxisMin(double min) {
+            yAxis.setMin(min);
+            return this;
+        }
+
+        public Builder XAxisMax(double max) {
+            xAxis.setMax(max);
+            return this;
+        }
+
+        public Builder XAxisMin(double min) {
+            xAxis.setMin(min);
+            return this;
+        }
+
+        public Builder XAxisAnnotation(String target, String fontSize, String orientation, String textAnchor, String text) {
+            xAxisAnnotations.add(XAxisAnnotationsBuilder.get()
+                    .withX(target)
+                    .withLabel(LabelBuilder.get()
+                            .withStyle(AnnotationStyleBuilder.get()
+                                    .withFontSize(fontSize)
+                                    .build())
+                            .withOrientation(orientation)
+                            .withTextAnchor(textAnchor)
+                            .withText(text)
+                            .build())
+                    .build());
+            annotations.setXaxis(xAxisAnnotations);
+            return this;
+        }
+
+        public Builder colors(String... colors) {
+            this.colors = colors;
+            return this;
+        }
+
+        public Builder title(String title, GraphAlign align) {
+            titleSubtitle.setAlign(align.align);
+            titleSubtitle.setText(title);
+            return this;
+        }
+
+        public Builder legendShow(boolean show) {
+            legend.setShow(show);
+            return this;
+        }
+
+        public Builder resetAnnotations() {
+            xAxisAnnotations = new ArrayList<>();
+            return this;
+        }
+
         /**
          * 今まで指定してきたものが反映されたGraphクラスが返されます。
          * Graphクラスの指定がすべて終わった後にこのメソッドを呼び出してください。
          * @return Graph
          */
         public Graph build() {
-            return new Graph(this);
+            return new Graph(this.animationsEnabled(false));
         }
     }
 }
