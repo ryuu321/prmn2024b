@@ -231,6 +231,7 @@ public class SeisekiGraph {
                 .labels(name)
                 .height("250px")
                 .animationsEnabled(false)
+                .colors("#0000FF","#000080","#008080","#008000","#00FF00","#00FFFF","#FFFF00","#FF0000")
                 .build()
                 .getGraph();
 
