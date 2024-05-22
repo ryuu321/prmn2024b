@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.views.commission.seiseki;
 
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -41,7 +42,7 @@ public class SeisekiGraphView {
 
         main.add(all,first,second,third,fourth);
         //ここからall
-        HorizontalLayout layout=new HorizontalLayout();
+        FormLayout layout = getUnderLayout();
         HorizontalLayout layout2=new HorizontalLayout();
         ArrayList<VerticalLayout> chartList=seisekiGraph.makeAll();
         ArrayList<VerticalLayout> chartListB=seisekiGraph.makeBigAll();
@@ -95,7 +96,7 @@ public class SeisekiGraphView {
 
         //ここからfirst
         HorizontalLayout layout3=new HorizontalLayout();
-        HorizontalLayout layout4=new HorizontalLayout();
+        FormLayout layout4=getUnderLayout();
         ArrayList<VerticalLayout> chartList1=seisekiGraph.makeFirst();
         ArrayList<VerticalLayout> chartList1B=seisekiGraph.makeBigFirst();
 
@@ -148,7 +149,7 @@ public class SeisekiGraphView {
 
         //ここからsecond
         HorizontalLayout layout5=new HorizontalLayout();
-        HorizontalLayout layout6=new HorizontalLayout();
+        FormLayout layout6 = getUnderLayout();
         ArrayList<VerticalLayout> chartList2=seisekiGraph.makeSecond();
         ArrayList<VerticalLayout> chartList2B=seisekiGraph.makeBigSecond();
 
@@ -195,7 +196,7 @@ public class SeisekiGraphView {
 
         //ここからthird
         HorizontalLayout layout7=new HorizontalLayout();
-        HorizontalLayout layout8=new HorizontalLayout();
+        FormLayout layout8=getUnderLayout();
         ArrayList<VerticalLayout> chartList3=seisekiGraph.makeThird();
         ArrayList<VerticalLayout> chartList3B=seisekiGraph.makeBigThird();
 
@@ -241,7 +242,7 @@ public class SeisekiGraphView {
         //ここまでthird
 
         //ここからfourth
-        HorizontalLayout layout9=new HorizontalLayout();
+        FormLayout layout9=getUnderLayout();
         HorizontalLayout layout0=new HorizontalLayout();
         ArrayList<VerticalLayout> chartList4=seisekiGraph.makeFourth();
         ArrayList<VerticalLayout> chartList4B=seisekiGraph.makeBigFourth();
@@ -302,5 +303,24 @@ public class SeisekiGraphView {
         //ここまで基本統計量
 
         return main;
+    }
+    private FormLayout getUnderLayout(){
+        FormLayout layout=new FormLayout();
+        layout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("0",1),
+                new FormLayout.ResponsiveStep("600px",2),
+                new FormLayout.ResponsiveStep("900px",3),
+                new FormLayout.ResponsiveStep("1200px",4),
+                new FormLayout.ResponsiveStep("1500px",5)
+        );
+        return layout;
+    }
+    private FormLayout getUpLayout(){
+        FormLayout layout=new FormLayout();
+        layout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("0",1),
+                new FormLayout.ResponsiveStep("600px",2)
+            );
+        return layout;
     }
 }

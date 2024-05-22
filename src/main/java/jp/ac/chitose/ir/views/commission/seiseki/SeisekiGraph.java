@@ -170,7 +170,7 @@ public class SeisekiGraph {
         layout.add(new H2(b));
         HorizontalLayout graphLayout = new HorizontalLayout();
         graphLayout.add(bigHistgram(a,b));
-        graphLayout.add(band(a,b));
+        graphLayout.add(pie(a,b));
         layout.add(graphLayout);
         return layout;
     }
@@ -209,11 +209,11 @@ public class SeisekiGraph {
                 dataList.get(5),
                 dataList.get(6),
                 dataList.get(7));
-
+//width:もともと700px
         return Graph.Builder.get().histogram()
-                .height("250px").width("700px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
+                .height("250px").width("300px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
     }
-    private ApexCharts band(ArrayList<Integer> a, String b){
+    private ApexCharts pie(ArrayList<Integer> a, String b){
         String[] name = {"0以上0.5未満","0.5以上1.0未満","1.0以上1.5未満","1.5以上2.0未満","2.0以上2.5未満","2.5以上3.0未満","3.0以上3.5未満","3.5以上"};
 
         ArrayList<Double> dataList = new ArrayList<>();
@@ -234,9 +234,6 @@ public class SeisekiGraph {
                 .colors("#0000FF","#000080","#008080","#008000","#00FF00","#00FFFF","#FFFF00","#FF0000")
                 .build()
                 .getGraph();
-
-
     }
-
 
 }
