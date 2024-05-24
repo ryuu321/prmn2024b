@@ -1,11 +1,11 @@
 package jp.ac.chitose.ir.views.commission.seiseki;
 
 import com.github.appreciated.apexcharts.ApexCharts;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import jp.ac.chitose.ir.service.TableData;
 import jp.ac.chitose.ir.service.commission.*;
 import jp.ac.chitose.ir.views.component.Data;
@@ -17,12 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SeisekiGraph {
-    private RadioButtonGroup<String> r;
-    private ArrayList<VerticalLayout> chartList;
-    private ArrayList<VerticalLayout> chartList1;
-    private ArrayList<VerticalLayout> chartList2;
-    private ArrayList<VerticalLayout> chartList3;
-    private ArrayList<VerticalLayout> chartList4;
     private TableData<CommissionGpa> tableAll;
     private TableData<CommissionGpaFirst> tableFirst;
     private TableData<CommissionGpaSecond> tableSecond;
@@ -33,11 +27,6 @@ public class SeisekiGraph {
     private CommissionService commissionService;
     public SeisekiGraph(CommissionService com){
         this.commissionService=com;
-        this.chartList=new ArrayList<>();
-        this.chartList1=new ArrayList<>();
-        this.chartList2=new ArrayList<>();
-        this.chartList3=new ArrayList<>();
-        this.chartList4=new ArrayList<>();
         tableAll = commissionService.getCommissionGpa();
         tableFirst = commissionService.getCommissionGpaFirst();
         tableSecond = commissionService.getCommissionGpaSecond();
@@ -168,9 +157,13 @@ public class SeisekiGraph {
     private VerticalLayout bigGraph(ArrayList<Integer> a, String b){
         VerticalLayout layout = new VerticalLayout();
         layout.add(new H2(b));
-        HorizontalLayout graphLayout = new HorizontalLayout();
+        FormLayout graphLayout = new FormLayout();
         graphLayout.add(bigHistgram(a,b));
         graphLayout.add(pie(a,b));
+        graphLayout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("0",1),
+                new FormLayout.ResponsiveStep("600px",2)
+        );
         layout.add(graphLayout);
         return layout;
     }
