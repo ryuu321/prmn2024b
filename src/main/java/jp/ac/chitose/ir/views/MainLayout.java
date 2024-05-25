@@ -9,12 +9,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import jp.ac.chitose.ir.security.SecurityService;
-import jp.ac.chitose.ir.views.about.AboutView;
 import jp.ac.chitose.ir.views.class_select.QPOJFICHKVJBView;
 import jp.ac.chitose.ir.views.commission.ir.IrQuestionView;
 import jp.ac.chitose.ir.views.commission.seiseki.CommissionView;
-import jp.ac.chitose.ir.views.feed.FeedView;
-import jp.ac.chitose.ir.views.helloworld.HelloTableView;
 import jp.ac.chitose.ir.views.helloworld.HelloWorldView;
 import jp.ac.chitose.ir.views.student.StudentView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,10 +111,7 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
-                new MenuItemInfo("Hello World", LineAwesomeIcon.GLOBE_SOLID.create(), HelloWorldView.class), //
-                new MenuItemInfo("テーブル使用例", LineAwesomeIcon.TABLE_SOLID.create(), HelloTableView.class),
-                new MenuItemInfo("About", LineAwesomeIcon.FILE.create(), AboutView.class), //
-                new MenuItemInfo("Feed", LineAwesomeIcon.LIST_SOLID.create(), FeedView.class), //
+                new MenuItemInfo("Top", LineAwesomeIcon.GLOBE_SOLID.create(), HelloWorldView.class), //
                 new MenuItemInfo("Student", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class),//
                 new MenuItemInfo("成績情報(GPA)",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class),//
                 new MenuItemInfo("IRアンケート",LineAwesomeIcon.ALGOLIA.create(), IrQuestionView.class),//
