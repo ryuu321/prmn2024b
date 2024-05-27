@@ -22,4 +22,9 @@ public interface ClassSelect {
     TableData<ClassQPOJFICHKVJB> getClassQPOJFICHKVJB();
     @GetExchange("/QPOJFICHKVJB_description")
     TableData<ReviewQPOJFICHKVJBDescription> getReviewQPOJFICHKVJBDescription();
+
+    /*@GetExchange("/ReviewTitle")
+    TableData<ReviewTitle> getReviewTitle();
+    */
 }
+
