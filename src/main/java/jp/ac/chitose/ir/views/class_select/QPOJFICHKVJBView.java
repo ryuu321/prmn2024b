@@ -33,9 +33,9 @@ public class QPOJFICHKVJBView extends VerticalLayout {
 
         index();//目次
 
-        /*title();
+        title();
 
-         */
+
 
         add(new H3("Q4:実験・実習テーマの全般的な難易度について、どのように感じましたか。"));
         add(band1(4));
@@ -93,13 +93,13 @@ public class QPOJFICHKVJBView extends VerticalLayout {
         //質問項目一覧の表示
         //クリックすると該当科目まで遷移
     }
-    /*
+
     private void title() {
         var Classtitle = classSelect.getReviewTitle().data();
         add(String.valueOf(Classtitle.get(0)));
     }
 
-     */
+
 
     private ApexCharts band(int Question_num) {
         var ClassTest = classSelect.getClassQPOJFICHKVJB().data();
