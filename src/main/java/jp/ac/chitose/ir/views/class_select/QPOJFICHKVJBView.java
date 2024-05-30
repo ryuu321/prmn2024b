@@ -32,9 +32,11 @@ public class QPOJFICHKVJBView extends VerticalLayout {
 
 
         index();//目次
+        for (int i = 0; i < 15; i++) {
 
-        title();
 
+            title(i);
+        }
 
 
         add(new H3("Q4:実験・実習テーマの全般的な難易度について、どのように感じましたか。"));
@@ -94,9 +96,17 @@ public class QPOJFICHKVJBView extends VerticalLayout {
         //クリックすると該当科目まで遷移
     }
 
-    private void title() {
+    private void title(int i) {
         var Classtitle = classSelect.getReviewTitle().data();
-        add(String.valueOf(Classtitle.get(0)));
+        String Title = String.valueOf(Classtitle.get(i));
+
+        if (Title != null && Title.length() > 0) {
+            String newTitle = Title.substring(0, Title.length() - 1);
+            String[] parts = newTitle.split("=");
+            StringBuilder num = new StringBuilder();
+            num.append("Q").append(i+4).append(":");
+            add(new H3(num + parts[1]));
+        }
     }
 
 
