@@ -14,6 +14,8 @@ import com.vaadin.flow.router.Route;
 import jp.ac.chitose.ir.service.student.StudentGrade;
 import jp.ac.chitose.ir.service.student.StudentService;
 import jp.ac.chitose.ir.views.MainLayout;
+import jp.ac.chitose.ir.views.component.ErrorNotification;
+import jp.ac.chitose.ir.views.component.SuccessNotification;
 
 @PageTitle("GradeStudent")
 @Route(value = "grade/student", layout = MainLayout.class)
@@ -129,9 +131,11 @@ public class StudentView extends VerticalLayout {
         subjectComboBoxDataView = subjectComboBox.getListDataView();
         subjectComboBox.addValueChangeListener(valueChangeEvent -> {
             if (valueChangeEvent.getValue() == null) {
+                new ErrorNotification("GPAのレイアウトに変更完了");
                 remove(subjectLayout);
                 add(gpaLayout);
             } else {
+                new SuccessNotification("教科ごとのレイアウトに変更完了");
                 subjectLayout.create(textField.getValue(), valueChangeEvent.getValue().科目名());
                 remove(gpaLayout);
                 add(subjectLayout);
