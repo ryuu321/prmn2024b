@@ -289,13 +289,19 @@ public class SeisekiGraphView {
         //ここまでfourth
 
         //ここから基本統計量
-        Grid<CommissionGpa2> gridAll = SeisekiTable.getTable(commissionService.getCommissionGpa2().data());
-        Grid<CommissionGpa2First> gridFirst = SeisekiTable.getTableFirst(commissionService.getCommissionGpa2First().data());
-        Grid<CommissionGpa2Second> gridSecond = SeisekiTable.getTableSecond(commissionService.getCommissionGpa2Second().data());
-        Grid<CommissionGpa2Third> gridThird = SeisekiTable.getTableThird(commissionService.getCommissionGpa2Third().data());
-        Grid<CommissionGpa2Fourth> gridFourth = SeisekiTable.getTableFourth(commissionService.getCommissionGpa2Fourth().data());
-
+        SeisekiTable table = new SeisekiTable(commissionService);
+        Grid<CommissionGpa2> gridAll = table.getTableYearFirstAll();
+        Grid<CommissionGpa2First> gridFirst = table.getTableFirst();
+        Grid<CommissionGpa2Second> gridSecond = table.getTableSecond();
+        Grid<CommissionGpa2Third> gridThird = table.getTableThird();
+        Grid<CommissionGpa2Fourth> gridFourth = table.getTableFourth();
+        //試験的に表を追加
+        Grid<GetTableData> gri = table.getTableSubjectFirst();
+        Grid<GetTableData> gri1 = table.getTableSubjectFirstScience();
+        Grid<GetTableData> gri2 = table.getTableSubjectFirstElectronic();
+        Grid<GetTableData> gri3 = table.getTableSubjectFirstInformation();
         all.add(gridAll);
+        all.add(gri,gri1,gri2,gri3);
         first.add(gridFirst);
         second.add(gridSecond);
         third.add(gridThird);
@@ -315,12 +321,5 @@ public class SeisekiGraphView {
         );
         return layout;
     }
-    private FormLayout getUpLayout(){
-        FormLayout layout=new FormLayout();
-        layout.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("0",1),
-                new FormLayout.ResponsiveStep("600px",2)
-            );
-        return layout;
-    }
+
 }

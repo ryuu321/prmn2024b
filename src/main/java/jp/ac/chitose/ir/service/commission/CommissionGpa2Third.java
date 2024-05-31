@@ -17,6 +17,7 @@ public record CommissionGpa2Third(String 学科,
     public float average(){
         return 平均値();
     }
+    public float mid(){return 中央値();}
     public float min(){
         return 最小値();
     }
