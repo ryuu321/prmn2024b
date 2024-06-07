@@ -37,15 +37,15 @@ public class SeisekiView implements View {
             }
             else if(e.getValue().equals("学科")){
                 subjectFirstLayout = getSeisekiSubjectFirstLayout();
-                main.add(subjectFirstLayout);
                 main.remove(yearFirstLayout);
+                main.add(subjectFirstLayout);
             }
         });
         return main;
     }
     private VerticalLayout getSeisekiYearFirstLayout(){
         VerticalLayout seisekiYearFirstLayout = new VerticalLayout();
-        Seiseki seiseki=new Seiseki();
+        Seiseki seiseki = new Seiseki(0);
         seisekiYearFirstLayout.add(seiseki.view());
         SeisekiGraphView seisekiGraphView=new SeisekiGraphView(commissionService,seiseki);
         seisekiYearFirstLayout.add(seisekiGraphView.view());
@@ -55,6 +55,8 @@ public class SeisekiView implements View {
 
     private VerticalLayout getSeisekiSubjectFirstLayout(){
         VerticalLayout seisekiSubjectFirstLayout = new VerticalLayout();
+        Seiseki seiseki = new Seiseki(1);
+        seisekiSubjectFirstLayout.add(seiseki.view());
         return seisekiSubjectFirstLayout;
     }
 
