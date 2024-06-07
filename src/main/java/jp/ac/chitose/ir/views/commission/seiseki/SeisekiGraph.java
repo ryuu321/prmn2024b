@@ -1,11 +1,11 @@
 package jp.ac.chitose.ir.views.commission.seiseki;
 
 import com.github.appreciated.apexcharts.ApexCharts;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import jp.ac.chitose.ir.service.TableData;
 import jp.ac.chitose.ir.service.commission.*;
 import jp.ac.chitose.ir.views.component.Data;
@@ -17,12 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SeisekiGraph {
-    private RadioButtonGroup<String> r;
-    private ArrayList<VerticalLayout> chartList;
-    private ArrayList<VerticalLayout> chartList1;
-    private ArrayList<VerticalLayout> chartList2;
-    private ArrayList<VerticalLayout> chartList3;
-    private ArrayList<VerticalLayout> chartList4;
     private TableData<CommissionGpa> tableAll;
     private TableData<CommissionGpaFirst> tableFirst;
     private TableData<CommissionGpaSecond> tableSecond;
@@ -33,11 +27,6 @@ public class SeisekiGraph {
     private CommissionService commissionService;
     public SeisekiGraph(CommissionService com){
         this.commissionService=com;
-        this.chartList=new ArrayList<>();
-        this.chartList1=new ArrayList<>();
-        this.chartList2=new ArrayList<>();
-        this.chartList3=new ArrayList<>();
-        this.chartList4=new ArrayList<>();
         tableAll = commissionService.getCommissionGpa();
         tableFirst = commissionService.getCommissionGpaFirst();
         tableSecond = commissionService.getCommissionGpaSecond();
@@ -168,9 +157,13 @@ public class SeisekiGraph {
     private VerticalLayout bigGraph(ArrayList<Integer> a, String b){
         VerticalLayout layout = new VerticalLayout();
         layout.add(new H2(b));
-        HorizontalLayout graphLayout = new HorizontalLayout();
-        graphLayout.add(bigHistgram(a,b));
+        FormLayout graphLayout = new FormLayout();
+        graphLayout.add(histgram(a,b));
         graphLayout.add(pie(a,b));
+        graphLayout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("0",1),
+                new FormLayout.ResponsiveStep("600px",2)
+        );
         layout.add(graphLayout);
         return layout;
     }
@@ -191,25 +184,6 @@ public class SeisekiGraph {
                 dataList.get(6),
                 dataList.get(7));
 
-        return Graph.Builder.get().histogram()
-                .height("250px").width("300px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
-    }
-    private ApexCharts bigHistgram(ArrayList<Integer> a,String b){
-        String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
-        ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
-        for(int i = 0;i < a.size();i++){
-            dataList.add(new Data<>((name[i]),a.get(i)));
-        }
-        GraphSeries<Data<String, Integer>> series = new GraphSeries<>(b,
-                dataList.get(0),
-                dataList.get(1),
-                dataList.get(2),
-                dataList.get(3),
-                dataList.get(4),
-                dataList.get(5),
-                dataList.get(6),
-                dataList.get(7));
-//width:もともと700px
         return Graph.Builder.get().histogram()
                 .height("250px").width("300px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
     }
