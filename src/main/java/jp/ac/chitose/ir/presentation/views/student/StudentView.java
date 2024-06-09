@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.views.student;
+package jp.ac.chitose.ir.presentation.views.student;
 
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.combobox.dataview.ComboBoxListDataView;
@@ -11,9 +11,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import jp.ac.chitose.ir.service.student.StudentGrade;
-import jp.ac.chitose.ir.service.student.StudentService;
-import jp.ac.chitose.ir.views.MainLayout;
+import jp.ac.chitose.ir.presentation.views.student.GPALayout;
+import jp.ac.chitose.ir.presentation.views.student.SubjectLayout;
+import jp.ac.chitose.ir.application.service.student.StudentGrade;
+import jp.ac.chitose.ir.application.service.student.StudentService;
+import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.views.component.ErrorNotification;
 import jp.ac.chitose.ir.views.component.SuccessNotification;
 
