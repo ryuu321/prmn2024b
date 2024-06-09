@@ -4,9 +4,10 @@
 .settings
 .project
 .classpath
-.application
+.properties
 *.iml
 .DS_Store
+.env
 
 # The following files are generated/updated by vaadin-maven-plugin
 node_modules/
