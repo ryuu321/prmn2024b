@@ -71,25 +71,25 @@ public class Seiseki {
 
             this.r2 = new RadioButtonGroup<>();
             r2.setLabel("学年選択");
-            r2.setItems("全体","1年", "2年", "３年", "４年");
+            r2.setItems("全体","1年", "2年", "3年", "4年");
             r2.setVisible(false);
             r1.addValueChangeListener(e -> r2.setVisible(e.getValue().equals("全体")));
 
             this.r3 = new RadioButtonGroup<>();
             r3.setLabel("学年選択");
-            r3.setItems("全体", "2年",  "３年", "４年");
+            r3.setItems("全体", "2年",  "3年", "4年");
             r3.setVisible(false);
             r1.addValueChangeListener(e -> r3.setVisible(e.getValue().equals("応用化学生物学科")));
 
             this.r4 = new RadioButtonGroup<>();
             r4.setLabel("学年選択");
-            r4.setItems("全体", "2年",  "３年", "４年");
+            r4.setItems("全体", "2年",  "3年", "4年");
             r4.setVisible(false);
             r1.addValueChangeListener(e -> r4.setVisible(e.getValue().equals("電子光工学科")));
 
             this.r5 = new RadioButtonGroup<>();
             r5.setLabel("学年選択");
-            r5.setItems("全体", "2年",  "３年", "４年");
+            r5.setItems("全体", "2年",  "3年", "4年");
             r5.setVisible(false);
             r1.addValueChangeListener(e -> r5.setVisible(e.getValue().equals("情報システム工学科")));
         }
