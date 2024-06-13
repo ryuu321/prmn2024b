@@ -57,6 +57,8 @@ public class SeisekiView implements View {
         VerticalLayout seisekiSubjectFirstLayout = new VerticalLayout();
         Seiseki seiseki = new Seiseki(1);
         seisekiSubjectFirstLayout.add(seiseki.view());
+        SeisekiGraphView seisekiGraphView =  new SeisekiGraphView(commissionService,seiseki);
+        seisekiSubjectFirstLayout.add(seisekiGraphView.view());
         return seisekiSubjectFirstLayout;
     }
 

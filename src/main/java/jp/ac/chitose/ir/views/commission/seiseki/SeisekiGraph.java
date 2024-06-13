@@ -2,7 +2,6 @@ package jp.ac.chitose.ir.views.commission.seiseki;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -14,7 +13,6 @@ import jp.ac.chitose.ir.views.component.Graph;
 import jp.ac.chitose.ir.views.component.GraphSeries;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SeisekiGraph {
     private TableData<CommissionGpa> tableAll;
@@ -34,10 +32,9 @@ public class SeisekiGraph {
         tableFourth = commissionService.getCommissionGpaFourth();
     }
 
-
+    //mode = 0
     public ArrayList<VerticalLayout> makeAll(){
         ArrayList<VerticalLayout> chartList = new ArrayList<>();
-//        TableData<CommissionGpa> table = commissionService.getCommissionGpa();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
             String b=tableAll.data().get(i).getName();
             chartList.add(graph(tableAll.data().get(i).getData(),b));
@@ -46,7 +43,6 @@ public class SeisekiGraph {
     }
     public ArrayList<VerticalLayout> makeBigAll(){
         ArrayList<VerticalLayout> chartListAll = new ArrayList<>();
-//        TableData<CommissionGpa> table = commissionService.getCommissionGpa();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
             String b=tableAll.data().get(i).getName();
             chartListAll.add(bigGraph(tableAll.data().get(i).getData(),b));
@@ -56,7 +52,6 @@ public class SeisekiGraph {
 
     public ArrayList<VerticalLayout> makeFirst(){
         ArrayList<VerticalLayout> chartList1 = new ArrayList<>();
-//        TableData<CommissionGpaFirst> table = commissionService.getCommissionGpaFirst();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
             String b=tableFirst.data().get(i).getName();
             chartList1.add(graph(tableFirst.data().get(i).getData(),b));
@@ -66,7 +61,6 @@ public class SeisekiGraph {
 
     public ArrayList<VerticalLayout> makeBigFirst(){
         ArrayList<VerticalLayout> chartList1B = new ArrayList<>();
-//        TableData<CommissionGpaFirst> table = commissionService.getCommissionGpaFirst();//こうしたらロード時間短くなった
         for(int i=0;i<5;i++){
             String b=tableFirst.data().get(i).getName();
             chartList1B.add(bigGraph(tableFirst.data().get(i).getData(),b));
@@ -76,7 +70,6 @@ public class SeisekiGraph {
 
     public ArrayList<VerticalLayout> makeSecond(){
         ArrayList<VerticalLayout> chartList2 = new ArrayList<>();
-//        TableData<CommissionGpaSecond> table = commissionService.getCommissionGpaSecond();//こうしたらロード時間短くなった
         for(int i=0;i<4;i++){
             String b=tableSecond.data().get(i).getName();
             chartList2.add(graph(tableSecond.data().get(i).getData(),b));
@@ -86,7 +79,6 @@ public class SeisekiGraph {
 
     public ArrayList<VerticalLayout> makeBigSecond(){
         ArrayList<VerticalLayout> chartList2B = new ArrayList<>();
-//        TableData<CommissionGpaSecond> table = commissionService.getCommissionGpaSecond();//こうしたらロード時間短くなった
         for(int i=0;i<4;i++){
             String b=tableSecond.data().get(i).getName();
             chartList2B.add(bigGraph(tableSecond.data().get(i).getData(),b));
@@ -96,7 +88,6 @@ public class SeisekiGraph {
 
     public ArrayList<VerticalLayout> makeThird(){
         ArrayList<VerticalLayout> chartList3 = new ArrayList<>();
-//        TableData<CommissionGpaThird> table = commissionService.getCommissionGpaThird();//こうしたらロード時間短くなった
         for(int i=0;i<4;i++){
             String b=tableThird.data().get(i).getName();
             chartList3.add(graph(tableThird.data().get(i).getData(),b));
@@ -106,7 +97,6 @@ public class SeisekiGraph {
 
     public ArrayList<VerticalLayout> makeBigThird(){
         ArrayList<VerticalLayout> chartList3B = new ArrayList<>();
-//        TableData<CommissionGpaThird> table = commissionService.getCommissionGpaThird();//こうしたらロード時間短くなった
         for(int i=0;i<4;i++){
             String b=tableThird.data().get(i).getName();
             chartList3B.add(bigGraph(tableThird.data().get(i).getData(),b));
@@ -116,7 +106,6 @@ public class SeisekiGraph {
 
     public ArrayList<VerticalLayout> makeFourth(){
         ArrayList<VerticalLayout> chartList4 = new ArrayList<>();
-//        TableData<CommissionGpaFourth> table = commissionService.getCommissionGpaFourth();//こうしたらロード時間短くなった。
         for(int i=0;i<4;i++){
             String b=tableFourth.data().get(i).getName();
             chartList4.add(graph(tableFourth.data().get(i).getData(),b));
@@ -126,26 +115,79 @@ public class SeisekiGraph {
 
     public ArrayList<VerticalLayout> makeBigFourth(){
         ArrayList<VerticalLayout> chartList4B = new ArrayList<>();
-//        TableData<CommissionGpaFourth> table = commissionService.getCommissionGpaFourth();//こうしたらロード時間短くなった
         for(int i=0;i<4;i++){
             String b=tableFourth.data().get(i).getName();
             chartList4B.add(bigGraph(tableFourth.data().get(i).getData(),b));
         }
         return chartList4B;
     }
-    private Grid<CommissionGpa2> hyou(List<CommissionGpa2> sample){
-        Grid<CommissionGpa2> grid = new Grid<>();
-        grid.addColumn(CommissionGpa2::subject).setHeader("学科");
-        grid.addColumn(CommissionGpa2::human).setHeader("人数");
-        grid.addColumn(CommissionGpa2::average).setHeader("平均値");
-        grid.addColumn(CommissionGpa2::min).setHeader("最小値");
-        grid.addColumn(CommissionGpa2::max).setHeader("最大値");
-        grid.addColumn(CommissionGpa2::std).setHeader("標準偏差");
-        grid.setItems(sample);
-        return grid;
+//mode = 1
+    public ArrayList<VerticalLayout> makeAll2(){
+        ArrayList<VerticalLayout> chartList= new ArrayList<>();
+        chartList.add(graph(tableAll.data().get(0).getData(),"全体"));
+        chartList.add(graph(tableFirst.data().get(0).getData(),"1年"));
+        chartList.add(graph(tableSecond.data().get(0).getData(),"2年"));
+        chartList.add(graph(tableThird.data().get(0).getData(),"3年"));
+        chartList.add(graph(tableFourth.data().get(0).getData(),"4年"));
+        return chartList;
     }
-
-
+    public ArrayList<VerticalLayout> makeBigAll2(){
+        ArrayList<VerticalLayout> chartList= new ArrayList<>();
+        chartList.add(bigGraph(tableAll.data().get(0).getData(),"全体"));
+        chartList.add(bigGraph(tableFirst.data().get(0).getData(),"1年"));
+        chartList.add(bigGraph(tableSecond.data().get(0).getData(),"2年"));
+        chartList.add(bigGraph(tableThird.data().get(0).getData(),"3年"));
+        chartList.add(bigGraph(tableFourth.data().get(0).getData(),"4年"));
+        return chartList;
+    }
+    public ArrayList<VerticalLayout> makeScience(){
+        ArrayList<VerticalLayout> chartList= new ArrayList<>();
+        chartList.add(graph(tableAll.data().get(1).getData(),"全体"));
+        chartList.add(graph(tableSecond.data().get(1).getData(),"2年"));
+        chartList.add(graph(tableThird.data().get(1).getData(),"3年"));
+        chartList.add(graph(tableFourth.data().get(1).getData(),"4年"));
+        return chartList;
+    }
+    public ArrayList<VerticalLayout> makeBigScience() {
+        ArrayList<VerticalLayout> chartList = new ArrayList<>();
+        chartList.add(bigGraph(tableAll.data().get(1).getData(), "全体"));
+        chartList.add(bigGraph(tableSecond.data().get(1).getData(), "2年"));
+        chartList.add(bigGraph(tableThird.data().get(1).getData(), "3年"));
+        chartList.add(bigGraph(tableFourth.data().get(1).getData(), "4年"));
+        return chartList;
+    }
+    public ArrayList<VerticalLayout> makeElectronic(){
+        ArrayList<VerticalLayout> chartList= new ArrayList<>();
+        chartList.add(graph(tableAll.data().get(2).getData(),"全体"));
+        chartList.add(graph(tableSecond.data().get(2).getData(),"2年"));
+        chartList.add(graph(tableThird.data().get(2).getData(),"3年"));
+        chartList.add(graph(tableFourth.data().get(2).getData(),"4年"));
+        return chartList;
+    }
+    public ArrayList<VerticalLayout> makeBigElectronic() {
+        ArrayList<VerticalLayout> chartList = new ArrayList<>();
+        chartList.add(bigGraph(tableAll.data().get(2).getData(), "全体"));
+        chartList.add(bigGraph(tableSecond.data().get(2).getData(), "2年"));
+        chartList.add(bigGraph(tableThird.data().get(2).getData(), "3年"));
+        chartList.add(bigGraph(tableFourth.data().get(2).getData(), "4年"));
+        return chartList;
+    }
+    public ArrayList<VerticalLayout> makeInformation(){
+        ArrayList<VerticalLayout> chartList= new ArrayList<>();
+        chartList.add(graph(tableAll.data().get(3).getData(),"全体"));
+        chartList.add(graph(tableSecond.data().get(3).getData(),"2年"));
+        chartList.add(graph(tableThird.data().get(3).getData(),"3年"));
+        chartList.add(graph(tableFourth.data().get(3).getData(),"4年"));
+        return chartList;
+    }
+    public ArrayList<VerticalLayout> makeBigInformation() {
+        ArrayList<VerticalLayout> chartList = new ArrayList<>();
+        chartList.add(bigGraph(tableAll.data().get(3).getData(), "全体"));
+        chartList.add(bigGraph(tableSecond.data().get(3).getData(), "2年"));
+        chartList.add(bigGraph(tableThird.data().get(3).getData(), "3年"));
+        chartList.add(bigGraph(tableFourth.data().get(3).getData(), "4年"));
+        return chartList;
+    }
     private VerticalLayout graph(ArrayList<Integer> a, String b){
         VerticalLayout layout = new VerticalLayout();
         layout.add(new H2(b));
@@ -205,7 +247,7 @@ public class SeisekiGraph {
                 .labels(name)
                 .height("250px")
                 .animationsEnabled(false)
-                .colors("#0000FF","#000080","#008080","#008000","#00FF00","#00FFFF","#FFFF00","#FF0000")
+                .colors("#4795F5","#71B0F7","#A0CEF9","#BCE0FA","#A8D8ED","#7FC3DD","#54ADCC","#2B99BC")
                 .build()
                 .getGraph();
     }
