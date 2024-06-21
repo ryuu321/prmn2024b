@@ -75,11 +75,11 @@ public class QuestionnaireGrid extends VerticalLayout {
 
     // グリッドにカラムを追加
     private void addColumnsToGrid(Grid<QuestionnaireTopGrid> grid) {
-        grid.addColumn(QuestionnaireTopGrid::科目名).setHeader("科目名").setWidth("30%");
-        grid.addColumn(data -> data.対象学年() + "年生").setHeader("対象学年");
-        grid.addColumn(data -> changeDepartmentValue(data.対象学科())).setHeader("対象学科");
-        grid.addColumn(QuestionnaireTopGrid::必選別).setHeader("必選別");
-        grid.addColumn(QuestionnaireTopGrid::単位数).setHeader("単位数");
+        grid.addColumn(QuestionnaireTopGrid::lecture_name).setHeader("科目名").setWidth("30%");
+        grid.addColumn(data -> data.target_grade() + "年生").setHeader("対象学年");
+        grid.addColumn(data -> changeDepartmentValue(data.target_department())).setHeader("対象学科");
+        grid.addColumn(QuestionnaireTopGrid::compulsory_subjects).setHeader("必選別");
+        grid.addColumn(QuestionnaireTopGrid::number_credits_course).setHeader("単位数");
     }
 
     // コンポーネントをレイアウトに追加
@@ -104,9 +104,9 @@ public class QuestionnaireGrid extends VerticalLayout {
     private class Filter implements SerializablePredicate<QuestionnaireTopGrid> {
         @Override
         public boolean test(QuestionnaireTopGrid questionnaireTopGrid) {
-            boolean schoolYearMatches = "全体".equals(schoolYearsRadioButton.getValue()) || (questionnaireTopGrid.対象学年() + "年生").equals(schoolYearsRadioButton.getValue());
-            boolean departmentMatches = "全体".equals(departmentsRadioButton.getValue()) || changeDepartmentValue(questionnaireTopGrid.対象学科()).equals(departmentsRadioButton.getValue());
-            boolean subjectTypeMatches = "全体".equals(subjectTypesRadioButton.getValue()) || questionnaireTopGrid.必選別().equals(subjectTypesRadioButton.getValue());
+            boolean schoolYearMatches = "全体".equals(schoolYearsRadioButton.getValue()) || (questionnaireTopGrid.target_grade() + "年生").equals(schoolYearsRadioButton.getValue());
+            boolean departmentMatches = "全体".equals(departmentsRadioButton.getValue()) || changeDepartmentValue(questionnaireTopGrid.target_department()).equals(departmentsRadioButton.getValue());
+            boolean subjectTypeMatches = "全体".equals(subjectTypesRadioButton.getValue()) || questionnaireTopGrid.compulsory_subjects().equals(subjectTypesRadioButton.getValue());
             return schoolYearMatches && departmentMatches && subjectTypeMatches;
         }
     }
