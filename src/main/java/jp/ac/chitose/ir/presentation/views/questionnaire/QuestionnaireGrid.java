@@ -77,6 +77,7 @@ public class QuestionnaireGrid extends VerticalLayout {
     private void addColumnsToGrid(Grid<QuestionnaireTopGrid> grid) {
         grid.addColumn(QuestionnaireTopGrid::lecture_name).setHeader("科目名").setWidth("30%");
         grid.addColumn(data -> data.target_grade() + "年生").setHeader("対象学年");
+        grid.addColumn(data -> data.available_year() + "年").setHeader("開講年次");
         grid.addColumn(data -> changeDepartmentValue(data.target_department())).setHeader("対象学科");
         grid.addColumn(QuestionnaireTopGrid::compulsory_subjects).setHeader("必選別");
         grid.addColumn(QuestionnaireTopGrid::number_credits_course).setHeader("単位数");
