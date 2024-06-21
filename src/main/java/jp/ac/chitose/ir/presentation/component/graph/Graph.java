@@ -19,6 +19,7 @@ import com.github.appreciated.apexcharts.helper.Series;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -139,6 +140,7 @@ public class Graph {
         private ArrayList<XAxisAnnotations> xAxisAnnotations = new ArrayList<>();
         private String[] labels = new String[]{};
         private String[] colors = new String[]{};
+        final private String[] finalColors = new String[]{"#4795F5", "#71B0F7", "#A0CEF9", "#BCE0FA", "#A8D8ED", "#7FC3DD", "#54ADCC", "#2B99BC"};
         private String width = "400px";
         private String height = "400px";
 
@@ -392,6 +394,16 @@ public class Graph {
 
         public Builder colors(String... colors) {
             this.colors = colors;
+            return this;
+        }
+
+        public Builder colors() {
+            if((this.chart.getType() == Type.PIE || this.chart.getType() == Type.DONUT) && this.doubles.length != 0) {
+                colors = Arrays.copyOfRange(finalColors, 0, this.doubles.length);
+            }
+            else if(this.series.length != 0) {
+                colors = Arrays.copyOfRange(finalColors, 0, this.series[0].getData().length);
+            }
             return this;
         }
 

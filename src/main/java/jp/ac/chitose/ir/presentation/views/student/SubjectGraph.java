@@ -26,7 +26,7 @@ public class SubjectGraph extends VerticalLayout {
         mainGraph = Graph.Builder.get().graphType(GRAPH_TYPE.BAR).width("100%").height("100%").legendShow(false)
                 .dataLabelsEnabled(false).YAxisForceNiceScale(true).series(new GraphSeries()).distributed(true).build();
         preYearGraph = Graph.Builder.get().graphType(GRAPH_TYPE.BAR).YAxisForceNiceScale(true).distributed(true).dataLabelsEnabled(false).series(new GraphSeries(0, 0, 0, 0, 0))
-                .colors("#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF").height("100%").title("昨年度", GraphAlign.CENTER).legendShow(false).build();
+                .colors().height("100%").title("昨年度", GraphAlign.CENTER).legendShow(false).build();
         mainGraphLayout.add(mainGraph.getGraph());
         underGraphsLayout.add(preYearGraph.getGraph());
         add(mainGraphLayout, underGraphsLayout);

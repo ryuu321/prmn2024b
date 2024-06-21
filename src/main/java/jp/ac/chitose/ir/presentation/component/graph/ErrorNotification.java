@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.views.component;
+package jp.ac.chitose.ir.presentation.component.graph;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
