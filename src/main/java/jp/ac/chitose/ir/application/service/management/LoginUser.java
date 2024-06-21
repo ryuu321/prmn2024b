@@ -64,15 +64,19 @@ public class LoginUser implements UserDetails {
     }
 
     public boolean isTeacher() {
-        return user.role().equals("TEACHER");
+        return user.role().equals("ROLE_teacher");
     }
 
     public boolean isStudent() {
-        return user.role().equals("STUDENT");
+        return user.role().equals("ROLE_student");
     }
 
-    public boolean isCommission() { return user.role().equals("COMMISSION"); }
+    public boolean isCommission() { return user.role().equals("ROLE_commission"); }
 
-    public boolean isAdmin() { return user.role().equals("ADMIN"); }
+    public boolean isAdmin() { return user.role().equals("ROLE_administrator"); }
+
+    public void print() {
+        System.out.println(user.role());
+    }
 
 }
