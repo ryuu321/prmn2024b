@@ -3,6 +3,7 @@ package jp.ac.chitose.ir.application.config;
 import jp.ac.chitose.ir.application.service.HelloService;
 import jp.ac.chitose.ir.application.service.class_select.ClassSelect;
 import jp.ac.chitose.ir.application.service.commission.CommissionService;
+import jp.ac.chitose.ir.application.service.questionnaire.QuestionnaireService;
 import jp.ac.chitose.ir.application.service.sample.SampleService;
 import jp.ac.chitose.ir.application.service.student.StudentService;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,5 +48,10 @@ public class HttpClientConfiguration {
     @Bean
     public CommissionService commissionService(HttpServiceProxyFactory factory){
         return factory.createClient(CommissionService.class);
+    }
+
+    @Bean
+    public QuestionnaireService questionnaireService(HttpServiceProxyFactory factory){
+        return factory.createClient(QuestionnaireService.class);
     }
 }
