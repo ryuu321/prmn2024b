@@ -15,10 +15,13 @@ import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.application.service.student.StudentGrade;
 import jp.ac.chitose.ir.application.service.student.StudentService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
+import jp.ac.chitose.ir.presentation.component.graph.ErrorNotification;
+import jp.ac.chitose.ir.presentation.component.graph.FatalErrorNotification;
+import jp.ac.chitose.ir.presentation.component.graph.SuccessNotification;
 
+@PermitAll
 @PageTitle("GradeStudent")
 @Route(value = "grade/student", layout = MainLayout.class)
-@PermitAll
 public class StudentView extends VerticalLayout {
     private final StudentService studentService;
     private String studentSchoolYear;
@@ -131,9 +134,12 @@ public class StudentView extends VerticalLayout {
         subjectComboBoxDataView = subjectComboBox.getListDataView();
         subjectComboBox.addValueChangeListener(valueChangeEvent -> {
             if (valueChangeEvent.getValue() == null) {
+                new ErrorNotification("GPAのレイアウトに変更完了");
+                new FatalErrorNotification("FatalError");
                 remove(subjectLayout);
                 add(gpaLayout);
             } else {
+                new SuccessNotification("教科ごとのレイアウトに変更完了");
                 subjectLayout.create(textField.getValue(), valueChangeEvent.getValue().科目名());
                 remove(gpaLayout);
                 add(subjectLayout);
