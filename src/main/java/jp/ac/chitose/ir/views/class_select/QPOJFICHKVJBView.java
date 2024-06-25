@@ -1,6 +1,5 @@
 package jp.ac.chitose.ir.views.class_select;
 
-import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.helper.Coordinate;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
@@ -33,17 +32,16 @@ public class QPOJFICHKVJBView extends VerticalLayout {
 
         index();//目次
 
-        title(0);
-        add(band(4));
-        title(1);
-        add(band(5));//グラフ表示
-        title(2);
-        add(band(6));
-        for (int i = 3; i < 15; i++) {
+        for (int i = 0; i < 11; i++) {
+            if(i == 3 || i == 6){
+                title(3);
+                test();//自由記述
+                continue;}
+
             title(i);//example
+            band(i+4).getGraph();
         }
 
-        test();//自由記述example
 
     }
 
@@ -85,7 +83,7 @@ public class QPOJFICHKVJBView extends VerticalLayout {
 
 
         Grid<ReviewQPOJFICHKVJBDescription> grid = new Grid<>(ReviewQPOJFICHKVJBDescription.class, false);
-        grid.addColumn(ReviewQPOJFICHKVJBDescription::q19).setHeader("First name");
+        grid.addColumn(ReviewQPOJFICHKVJBDescription::q19).setHeader("Q7");
         List<ReviewQPOJFICHKVJBDescription> people = classSelect.getReviewQPOJFICHKVJBDescription().data();
         grid.setItems(people);
 
@@ -110,29 +108,69 @@ public class QPOJFICHKVJBView extends VerticalLayout {
 
 
 
-    private ApexCharts band(int Question_num) {
+    private Graph band(int Question_num) {
         var ClassTest = classSelect.getClassQPOJFICHKVJB().data();
 
         if (Question_num == 4) {
             return Graph.Builder.get().band()
                     .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
                             new GraphSeries(e3.q4_項目(), new Coordinate<>("Q4", e3.q4_割合()))).toArray(GraphSeries[]::new))
-                    .animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
+                    .animationsEnabled(false).dataLabelsEnabled(false).build();
         } else if (Question_num == 5) {
             return Graph.Builder.get().band()
                     .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
                             new GraphSeries(e3.q5_項目(), new Coordinate<>("Q5", e3.q5_割合()))).toArray(GraphSeries[]::new))
-                    .animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
-        }else if (Question_num == 6){
+                    .animationsEnabled(false).dataLabelsEnabled(false).build();
+        } else if (Question_num == 6) {
             return Graph.Builder.get().band()
                     .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
                             new GraphSeries(e3.q6_項目(), new Coordinate<>("Q6", e3.q6_割合()))).toArray(GraphSeries[]::new))
-                    .animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
+                    .animationsEnabled(false).dataLabelsEnabled(false).build();
+
+        } else if (Question_num == 8) {
+            return Graph.Builder.get().band()
+                    .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
+                            new GraphSeries(e3.q8_項目(), new Coordinate<>("Q8", e3.q8_割合()))).toArray(GraphSeries[]::new))
+                    .animationsEnabled(false).dataLabelsEnabled(false).build();
+        } else if (Question_num == 9) {
+            return Graph.Builder.get().band()
+                    .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
+                            new GraphSeries(e3.q9_項目(), new Coordinate<>("Q9", e3.q9_割合()))).toArray(GraphSeries[]::new))
+                    .animationsEnabled(false).dataLabelsEnabled(false).build();
+
+        } else if (Question_num == 11) {
+            return Graph.Builder.get().band()
+                    .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
+                            new GraphSeries(e3.q11_項目(), new Coordinate<>("Q11", e3.q11_割合()))).toArray(GraphSeries[]::new))
+                    .animationsEnabled(false).dataLabelsEnabled(false).build();
+        } else if (Question_num == 12) {
+            return Graph.Builder.get().band()
+                    .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
+                            new GraphSeries(e3.q12_項目(), new Coordinate<>("Q12", e3.q12_割合()))).toArray(GraphSeries[]::new))
+                    .animationsEnabled(false).dataLabelsEnabled(false).build();
+        } else if (Question_num == 13) {
+            return Graph.Builder.get().band()
+                    .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
+                            new GraphSeries(e3.q13_項目(), new Coordinate<>("Q13", e3.q13_割合()))).toArray(GraphSeries[]::new))
+                    .animationsEnabled(false).dataLabelsEnabled(false).build();
+
+        } else if (Question_num == 14) {
+            return Graph.Builder.get().band()
+                    .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
+                            new GraphSeries(e3.q14_項目(), new Coordinate<>("Q14", e3.q14_割合()))).toArray(GraphSeries[]::new))
+                    .animationsEnabled(false).dataLabelsEnabled(false).build();
+
+        } else if (Question_num == 15) {
+            return Graph.Builder.get().band()
+                    .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
+                            new GraphSeries(e3.q15_項目(), new Coordinate<>("Q15", e3.q15_割合()))).toArray(GraphSeries[]::new))
+                    .animationsEnabled(false).dataLabelsEnabled(false).build();
         }
 
-        return null;
 
+        return null;
     }
+
 
 
 
