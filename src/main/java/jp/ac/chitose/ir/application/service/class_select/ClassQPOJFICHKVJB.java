@@ -21,7 +21,6 @@ public record ClassQPOJFICHKVJB(
         float q14_割合,
         String q15_項目,
         float q15_割合
-
-
 ) {
+    //public String 項目index(int index){return 項目()[0][index];}
 }
