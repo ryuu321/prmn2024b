@@ -279,10 +279,10 @@
     "proj4": "$proj4",
     "@vaadin/vaadin-themable-mixin": "$@vaadin/vaadin-themable-mixin",
     "date-fns": "$date-fns",
-    "@google-web-components/google-chart": "$@google-web-components/google-chart",
     "mobile-drag-drop": "$mobile-drag-drop",
-    "@axa-ch/input-text": "$@axa-ch/input-text",
     "apexcharts": "$apexcharts",
-    "onecolor": "$onecolor"
+    "onecolor": "$onecolor",
+    "@google-web-components/google-chart": "$@google-web-components/google-chart",
+    "@axa-ch/input-text": "$@axa-ch/input-text"
   }
 }
