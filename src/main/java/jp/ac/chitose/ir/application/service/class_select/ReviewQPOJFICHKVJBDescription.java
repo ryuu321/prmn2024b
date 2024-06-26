@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.service.class_select;
+package jp.ac.chitose.ir.application.service.class_select;
 
 public record ReviewQPOJFICHKVJBDescription(
         String 科目名,

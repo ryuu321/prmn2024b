@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.views.class_select;
+package jp.ac.chitose.ir.presentation.views.class_select;
 
 import com.github.appreciated.apexcharts.helper.Coordinate;
 import com.vaadin.flow.component.grid.Grid;
@@ -10,13 +10,15 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
-import jp.ac.chitose.ir.service.class_select.ClassSelect;
-import jp.ac.chitose.ir.service.class_select.ReviewQPOJFICHKVJBDescription;
-import jp.ac.chitose.ir.views.MainLayout;
-import jp.ac.chitose.ir.views.component.Graph;
-import jp.ac.chitose.ir.views.component.GraphSeries;
+import jp.ac.chitose.ir.application.service.class_select.ClassSelect;
+import jp.ac.chitose.ir.presentation.component.MainLayout;
+import jp.ac.chitose.ir.presentation.component.graph.Graph;
+import jp.ac.chitose.ir.presentation.component.graph.GraphSeries;
+import jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription;
 
 import java.util.List;
+
+;
 
 @PageTitle("class_QPOJFICHKVJB")
 @Route(value = "class_select/QPOJFICHKVJB", layout = MainLayout.class)
@@ -39,7 +41,7 @@ public class QPOJFICHKVJBView extends VerticalLayout {
                 continue;}
 
             title(i);//example
-            band(i+4).getGraph();
+            add(band(i+4).getGraph());
         }
 
 
@@ -82,9 +84,9 @@ public class QPOJFICHKVJBView extends VerticalLayout {
     private void test() {
 
 
-        Grid<ReviewQPOJFICHKVJBDescription> grid = new Grid<>(ReviewQPOJFICHKVJBDescription.class, false);
+        Grid<jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription> grid = new Grid<>(jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription.class, false);
         grid.addColumn(ReviewQPOJFICHKVJBDescription::q19).setHeader("Q7");
-        List<ReviewQPOJFICHKVJBDescription> people = classSelect.getReviewQPOJFICHKVJBDescription().data();
+        List<jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription> people = classSelect.getReviewQPOJFICHKVJBDescription().data();
         grid.setItems(people);
 
         add(grid);
