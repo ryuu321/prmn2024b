@@ -10,7 +10,8 @@ public record CommissionGpaFirst(String name,
                                  int e,
                                  int f,
                                  int g,
-                                 int h
+                                 int h,
+                                 int i
 ){
     public ArrayList<Integer> getData(){
         ArrayList<Integer> aa = new ArrayList<>();
@@ -22,6 +23,7 @@ public record CommissionGpaFirst(String name,
         aa.add(f);
         aa.add(g);
         aa.add(h);
+        aa.add(i);
         return aa;
     }
 
