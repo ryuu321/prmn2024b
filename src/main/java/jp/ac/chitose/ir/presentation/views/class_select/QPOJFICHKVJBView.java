@@ -1,6 +1,7 @@
 package jp.ac.chitose.ir.presentation.views.class_select;
 
 import com.github.appreciated.apexcharts.helper.Coordinate;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
@@ -11,10 +12,10 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.application.service.class_select.ClassSelect;
+import jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.component.graph.Graph;
 import jp.ac.chitose.ir.presentation.component.graph.GraphSeries;
-import jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription;
 
 import java.util.List;
 
@@ -33,15 +34,17 @@ public class QPOJFICHKVJBView extends VerticalLayout {
 
 
         index();//目次
-
+        VerticalLayout layout = new VerticalLayout();
+        layout.getStyle().set("padding", "40px");
         for (int i = 0; i < 11; i++) {
             if(i == 3 || i == 6){
                 title(3);
-                test();//自由記述
+                layout.add(test());//自由記述
                 continue;}
 
-            title(i);//example
-            add(band(i+4).getGraph());
+            layout.add(title(i));//example
+            layout.add(band(i+4).getGraph());
+            add(layout);
         }
 
 
@@ -81,7 +84,7 @@ public class QPOJFICHKVJBView extends VerticalLayout {
     /**
      * 自由記述解答の表示example
      */
-    private void test() {
+    private Component test() {
 
 
         Grid<jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription> grid = new Grid<>(jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription.class, false);
@@ -89,13 +92,13 @@ public class QPOJFICHKVJBView extends VerticalLayout {
         List<jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription> people = classSelect.getReviewQPOJFICHKVJBDescription().data();
         grid.setItems(people);
 
-        add(grid);
+        return grid;
 
         //質問項目一覧の表示
         //クリックすると該当科目まで遷移
     }
 
-    private void title(int i) {
+    private H3 title(int i) {
         var Classtitle = classSelect.getReviewTitle().data();
         String Title = String.valueOf(Classtitle.get(i));
 
@@ -104,8 +107,9 @@ public class QPOJFICHKVJBView extends VerticalLayout {
             String[] parts = newTitle.split("=");
             StringBuilder num = new StringBuilder();
             num.append("Q").append(i+4).append(":");
-            add(new H3(num + parts[1]));
+            return new H3(num + parts[1]);
         }
+        return null;
     }
 
 
