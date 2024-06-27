@@ -1,16 +1,15 @@
-package jp.ac.chitose.ir.views.commission.seiseki;
+package jp.ac.chitose.ir.presentation.views.commission.seiseki;
 
 import com.github.appreciated.apexcharts.ApexCharts;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import jp.ac.chitose.ir.service.TableData;
-import jp.ac.chitose.ir.service.commission.*;
-import jp.ac.chitose.ir.views.component.Data;
-import jp.ac.chitose.ir.views.component.GRAPH_TYPE;
-import jp.ac.chitose.ir.views.component.Graph;
-import jp.ac.chitose.ir.views.component.GraphSeries;
+import jp.ac.chitose.ir.application.service.TableData;
+import jp.ac.chitose.ir.application.service.commission.*;
+import jp.ac.chitose.ir.presentation.component.graph.Data;
+import jp.ac.chitose.ir.presentation.component.graph.GRAPH_TYPE;
+import jp.ac.chitose.ir.presentation.component.graph.Graph;
+import jp.ac.chitose.ir.presentation.component.graph.GraphSeries;
 
 import java.util.ArrayList;
 
@@ -199,19 +198,23 @@ public class SeisekiGraph {
     private VerticalLayout bigGraph(ArrayList<Integer> a, String b){
         VerticalLayout layout = new VerticalLayout();
         layout.add(new H2(b));
-        FormLayout graphLayout = new FormLayout();
-        graphLayout.add(histgram(a,b));
+//        FormLayout graphLayout = new FormLayout();
+//        graphLayout.add(bigHistgram(a,b));
+//        graphLayout.add(pie(a,b));
+//        graphLayout.setResponsiveSteps(
+//                new FormLayout.ResponsiveStep("0",1),
+//                new FormLayout.ResponsiveStep("1050px",2)
+//        );
+//        layout.add(graphLayout);
+        HorizontalLayout graphLayout = new HorizontalLayout();
+        graphLayout.add(bigHistgram(a,b));
         graphLayout.add(pie(a,b));
-        graphLayout.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("0",1),
-                new FormLayout.ResponsiveStep("600px",2)
-        );
         layout.add(graphLayout);
         return layout;
     }
 
     private ApexCharts histgram(ArrayList<Integer> a, String b){
-        String[] name = {"0.25","0.75","1.25","1.75","2.25","2.75","3.25","3.75"};
+        String[] name = {"0.0~0.5","0.5~1.0","1.0~1.5","1.5~2.0","2.0~2.5","2.5~3.0","3.0~3.5","3.5~4.0","4.0"};
         ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
         for(int i = 0;i < a.size();i++){
             dataList.add(new Data<>((name[i]),a.get(i)));
@@ -224,13 +227,34 @@ public class SeisekiGraph {
                 dataList.get(4),
                 dataList.get(5),
                 dataList.get(6),
-                dataList.get(7));
+                dataList.get(7),
+                dataList.get(8));
 
         return Graph.Builder.get().histogram()
                 .height("250px").width("300px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
     }
+    private ApexCharts bigHistgram(ArrayList<Integer> a, String b){
+        String[] name = {"0.0~0.5","0.5~1.0","1.0~1.5","1.5~2.0","2.0~2.5","2.5~3.0","3.0~3.5","3.5~4.0","4.0"};
+        ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
+        for(int i = 0;i < a.size();i++){
+            dataList.add(new Data<>((name[i]),a.get(i)));
+        }
+        GraphSeries<Data<String, Integer>> series = new GraphSeries<>(b,
+                dataList.get(0),
+                dataList.get(1),
+                dataList.get(2),
+                dataList.get(3),
+                dataList.get(4),
+                dataList.get(5),
+                dataList.get(6),
+                dataList.get(7),
+                dataList.get(8));
+
+        return Graph.Builder.get().histogram()
+                .height("300px").width("800px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
+    }
     private ApexCharts pie(ArrayList<Integer> a, String b){
-        String[] name = {"0以上0.5未満","0.5以上1.0未満","1.0以上1.5未満","1.5以上2.0未満","2.0以上2.5未満","2.5以上3.0未満","3.0以上3.5未満","3.5以上"};
+        String[] name = {"0以上0.5未満","0.5以上1.0未満","1.0以上1.5未満","1.5以上2.0未満","2.0以上2.5未満","2.5以上3.0未満","3.0以上3.5未満","3.5以上4.0未満","4.0"};
 
         ArrayList<Double> dataList = new ArrayList<>();
         for(int data : a){
@@ -245,7 +269,8 @@ public class SeisekiGraph {
                 .graphType(GRAPH_TYPE.PIE)
                 .doubles(datalist)
                 .labels(name)
-                .height("250px")
+                .height("450px")
+                .width("450px")
                 .animationsEnabled(false)
                 .colors("#4795F5","#71B0F7","#A0CEF9","#BCE0FA","#A8D8ED","#7FC3DD","#54ADCC","#2B99BC")
                 .build()
