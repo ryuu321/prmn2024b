@@ -141,7 +141,7 @@ public class QPOJFICHKVJBView extends VerticalLayout {
         return Graph.Builder.get().band()
                 .height("400px").width("400px").series(ClassTest.stream().map(e3 ->
                         new GraphSeries(e3.q4_項目(), new Coordinate<>("Q4", e3.q4_割合()))).toArray(GraphSeries[]::new))
-                .animationsEnabled(false).dataLabelsEnabled(false).build().getGraph();
+                .animationsEnabled(false).dataLabelsEnabled(false).colors().build().getGraph();
     }
 
     private ApexCharts band2(int Question_num) {

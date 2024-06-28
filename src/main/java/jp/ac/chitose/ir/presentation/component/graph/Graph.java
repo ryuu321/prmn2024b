@@ -50,7 +50,8 @@ public class Graph {
         setYAxis(builder.yAxis);
         setTitle(builder.titleSubtitle);
         if((builder.chart.getType() == Type.PIE || builder.chart.getType() == Type.DONUT) && builder.colors.length == builder.doubles.length && builder.colors.length != 0) setColors(builder.colors);
-        else if(builder.series.length != 0 && builder.colors.length == builder.series[0].getData().length) setColors(builder.colors);
+        else if(builder.series.length == 1 && builder.colors.length == builder.series[0].getData().length) setColors(builder.colors);
+        else if(builder.series.length != 0 && builder.colors.length == builder.series.length) setColors(builder.colors);
     }
 
     private void setChart(Chart chart) {
@@ -401,8 +402,11 @@ public class Graph {
             if((this.chart.getType() == Type.PIE || this.chart.getType() == Type.DONUT) && this.doubles.length != 0) {
                 colors = Arrays.copyOfRange(finalColors, 0, this.doubles.length);
             }
-            else if(this.series.length != 0) {
+            else if(this.series.length == 1) {
                 colors = Arrays.copyOfRange(finalColors, 0, this.series[0].getData().length);
+            }
+            else if(this.series.length != 0) {
+                colors = Arrays.copyOfRange(finalColors, 0, this.series.length);
             }
             return this;
         }

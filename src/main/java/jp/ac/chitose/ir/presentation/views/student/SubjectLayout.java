@@ -21,10 +21,10 @@ public class SubjectLayout extends VerticalLayout {
     }
 
     // 管理しているものに指定されている科目の画面を作らせる機能
-    public void create(String textFieldValue, String comboBoxValue) {
+    public void update(String textFieldValue, String comboBoxValue) {
         List<StudentSubjectCalc> histData = studentService.getStudentSubjectCalc(comboBoxValue).data();
         StudentGrade studentGrade = studentService.getStudentNumberGrade(textFieldValue, comboBoxValue).data().get(0);
-        subjectGraph.create(histData, studentGrade);
-        subjectGrid.create(histData, studentGrade);
+        subjectGraph.updateGraphs(histData, studentGrade);
+        subjectGrid.updateGrid(histData, studentGrade);
     }
 }
