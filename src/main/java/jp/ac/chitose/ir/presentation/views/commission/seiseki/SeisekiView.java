@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.application.service.commission.CommissionGpa;
 import jp.ac.chitose.ir.application.service.commission.CommissionGpa2;
 import jp.ac.chitose.ir.application.service.commission.CommissionService;
@@ -17,6 +18,7 @@ import jp.ac.chitose.ir.presentation.component.graph.GraphSeries;
 import java.util.ArrayList;
 import java.util.List;
 
+@PermitAll
 public class SeisekiView implements View {
     private CommissionService commissionService;
 

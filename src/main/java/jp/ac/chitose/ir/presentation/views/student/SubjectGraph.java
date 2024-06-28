@@ -6,110 +6,131 @@ import jp.ac.chitose.ir.application.service.student.StudentGrade;
 import jp.ac.chitose.ir.application.service.student.StudentSubjectCalc;
 import jp.ac.chitose.ir.presentation.component.graph.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class SubjectGraph extends VerticalLayout {
     private Graph mainGraph;
     private final Graph preYearGraph;
     private final HorizontalLayout mainGraphLayout;
     private final HorizontalLayout underGraphsLayout;
-    private final String[] strs = new String[]{"不可", "可", "良", "優", "秀"};
+    private final static String[] GRADE_LABELS = new String[]{"不可", "可", "良", "優", "秀"};
+    private static final double[] GRADE_THRESHOLDS = {0.5, 1.5, 2.5, 3.5, 4.5};
+    private final static String RED = "#FF0000";
+    private final static String BLUE = "#0000FF";
 
-    // コンストラクタ　複数のグラフを横並びにするためのHorizontalLayoutの初期化
     public SubjectGraph() {
-        mainGraphLayout = new HorizontalLayout();
-        mainGraphLayout.setWidthFull();
-        mainGraphLayout.setHeight("40vh");
-        underGraphsLayout = new HorizontalLayout();
-        underGraphsLayout.setWidthFull();
-        underGraphsLayout.setHeight("40vh");
-        mainGraph = Graph.Builder.get().graphType(GRAPH_TYPE.BAR).width("100%").height("100%").legendShow(false)
-                .dataLabelsEnabled(false).YAxisForceNiceScale(true).series(new GraphSeries()).distributed(true).build();
-        preYearGraph = Graph.Builder.get().graphType(GRAPH_TYPE.BAR).YAxisForceNiceScale(true).distributed(true).dataLabelsEnabled(false).series(new GraphSeries(0, 0, 0, 0, 0))
-                .colors().height("100%").title("昨年度", GraphAlign.CENTER).legendShow(false).build();
+        mainGraphLayout = createLayout();
+        underGraphsLayout = createLayout();
+        mainGraph = createInitialMainGraph();
+        preYearGraph = createInitialPreYearGraph();
+        addInitialLayout();
+    }
+
+    private HorizontalLayout createLayout() {
+        final HorizontalLayout Layout = new HorizontalLayout();
+        Layout.setWidthFull();
+        Layout.setHeight("40vh");
+        return Layout;
+    }
+
+    private Graph createInitialMainGraph() {
+        return Graph.Builder.get().graphType(GRAPH_TYPE.BAR).width("100%").height("100%").legendShow(false)
+                .dataLabelsEnabled(false).YAxisForceNiceScale(true).series(new GraphSeries<>())
+                .distributed(true).build();
+    }
+
+    private Graph createInitialPreYearGraph() {
+        return Graph.Builder.get().graphType(GRAPH_TYPE.BAR).YAxisForceNiceScale(true).distributed(true)
+                .dataLabelsEnabled(false).series(new GraphSeries<>(0, 0, 0, 0, 0)).colors().height("100%")
+                .title("昨年度", GraphAlign.CENTER).legendShow(false).build();
+    }
+
+    private void addInitialLayout() {
         mainGraphLayout.add(mainGraph.getGraph());
         underGraphsLayout.add(preYearGraph.getGraph());
         add(mainGraphLayout, underGraphsLayout);
     }
 
     // 指定された科目のグラフを生成する機能　受けた年のグラフ、その前年のグラフを実装済み
-    public void create(List<StudentSubjectCalc> histData, StudentGrade studentGrade) {
-        String[] target = new String[1];
-        final GraphSeries<Data<String, Integer>> series = createGraphSeries(histData, target, studentGrade);
-        String[] colors = new String[5];
-        String[] labels = new String[5];
-        String grade = studentGrade.成績評価();
-        createColorsAndLabels(grade, colors, labels);
-        mainGraphLayout.remove(mainGraph.getGraph());
-        mainGraph = mainGraph.getBuilder().labels(labels).colors(colors).series(series).resetAnnotations()
-                        .XAxisAnnotation(target[0].equals(studentGrade.成績評価()) ? target[0] + "(あなたの成績位置)" : target[0], "20px", "horizontal", "middle", "平均値").build();
-        mainGraphLayout.add(mainGraph.getGraph());
-        GraphSeries<Data<String, Integer>> preYearSeries = createPreYearSeries(histData, studentGrade);
-        if(preYearSeries == null) {
+    public void updateGraphs(List<StudentSubjectCalc> histData, StudentGrade studentGrade) {
+        final String target = findTargetGrade(histData, studentGrade);
+        final String[] colors = createColors(studentGrade.成績評価());
+        final String[] labels = createLabels(studentGrade.成績評価());
+        final GraphSeries<Data<String, Integer>> mainGraphSeries = createSelectYearSeries(histData, studentGrade.開講年(), studentGrade.科目名());
+        updateMainGraph(studentGrade.成績評価(), target, colors, labels, mainGraphSeries);
+
+        if(!hasYearData(histData, studentGrade.開講年() - 1)) {
             underGraphsLayout.setHeight("0px");
-        } else {
-            underGraphsLayout.setHeight("40vh");
-            if(underGraphsLayout.getChildren().findAny().isEmpty()) underGraphsLayout.add(preYearGraph.getGraph());
-            preYearGraph.updateSeries(preYearSeries);
+            return;
         }
+        GraphSeries<Data<String, Integer>> preYearSeries = createSelectYearSeries(histData, studentGrade.開講年() - 1, studentGrade.科目名());
+        updatePreYearGraph(preYearSeries);
     }
 
-    // 選ばれた科目を生徒が受けた年のSeriesを作る機能
-    // 平均値も同時に割り出す
-    private GraphSeries<Data<String, Integer>> createGraphSeries(List<StudentSubjectCalc> histData, String[] target, StudentGrade studentGrade) {
-        Data<String, Integer>[] data = new Data[5];
-        histData.forEach(e2 -> {
-            if(e2.開講年() == studentGrade.開講年()) {
-                data[0] = new Data<>("不可", e2.不可() + e2.欠席());
-                data[1] = new Data<>("可", e2.可());
-                data[2] = new Data<>("良", e2.良());
-                data[3] = new Data<>("優", e2.優());
-                data[4] = new Data<>("秀", e2.秀());
-                if(e2.平均() + 0.5 < 1d) target[0] = "不可";
-                else if(e2.平均() + 0.5 < 2d) target[0] = "可";
-                else if(e2.平均() + 0.5 < 3d) target[0] = "良";
-                else if(e2.平均() + 0.5 < 4d) target[0] = "優";
-                else target[0] = "秀";
-            }
-        });
-        return new GraphSeries(studentGrade.科目名(), data);
+    private void updateMainGraph(String grade, String target, String[] colors, String[] labels, GraphSeries<Data<String, Integer>> series) {
+        final String annotationString = target.equals(grade) ? target + "(あなたの成績位置)" : target;
+        mainGraphLayout.remove(mainGraph.getGraph());
+        mainGraph = mainGraph.getBuilder()
+                .labels(labels)
+                .colors(colors)
+                .series(series)
+                .resetAnnotations()
+                .XAxisAnnotation(annotationString, "20px", "horizontal", "middle", "平均値")
+                .build();
+        mainGraphLayout.add(mainGraph.getGraph());
     }
 
-    // 選ばれた科目の生徒が受ける前の年のSeriesを作る機能
-    // 去年のデータがない場合、nullを返す
-    private GraphSeries<Data<String, Integer>> createPreYearSeries(List<StudentSubjectCalc> histData, StudentGrade studentGrade) {
-        Data<String, Integer>[] preYearData = new Data[5];
-        histData.forEach(e2 -> {
-            if (e2.開講年() == studentGrade.開講年() - 1) {
-                preYearData[0] = new Data<>("不可", e2.不可() + e2.欠席());
-                preYearData[1] = new Data<>("可", e2.可());
-                preYearData[2] = new Data<>("良", e2.良());
-                preYearData[3] = new Data<>("優", e2.優());
-                preYearData[4] = new Data<>("秀", e2.秀());
+    private String findTargetGrade(List<StudentSubjectCalc> histData, StudentGrade studentGrade) {
+        double average = histData.stream()
+                .filter(data -> data.開講年() == studentGrade.開講年())
+                .findFirst()
+                .get()
+                .平均();
+        for (int i = 0; i < GRADE_THRESHOLDS.length; i++) {
+            if (average + 0.5 < GRADE_THRESHOLDS[i]) {
+                return GRADE_LABELS[i];
             }
-        });
-        int sum = 0;
-        for(int i = 0; i < 5; i++) {
-            if(preYearData[i] == null) return null;
-            sum += preYearData[i].getY()[0];
         }
-        if(sum == 0) return null;
-        return new GraphSeries<>(studentGrade.科目名(), preYearData);
+        return "";
     }
 
-    // 成績位置などを知らせるためのグラフのカラーとラベルを作るための機能
-    private void createColorsAndLabels(String grade, String[] colors, String[] labels) {
-        for(int i = 0; i < 5; i++) {
-            if(strs[i].equals(grade)) {
-                String red = "#FF0000";
-                colors[i] = red;
-                labels[i] = grade + "(あなたの成績位置)";
-            }
-            else {
-                String blue = "#0000FF";
-                colors[i] = blue;
-                labels[i] = strs[i];
-            }
+    private GraphSeries<Data<String, Integer>> createSelectYearSeries(List<StudentSubjectCalc> histData, int year, String subject) {
+        final Data<String, Integer>[] selectYearData = new Data[5];
+        for(StudentSubjectCalc data : histData) {
+            if(data.開講年() != year) continue;
+            selectYearData[0] = new Data<>(GRADE_LABELS[0], data.不可() + data.欠席());
+            selectYearData[1] = new Data<>(GRADE_LABELS[1], data.可());
+            selectYearData[2] = new Data<>(GRADE_LABELS[2], data.良());
+            selectYearData[3] = new Data<>(GRADE_LABELS[3], data.優());
+            selectYearData[4] = new Data<>(GRADE_LABELS[4], data.秀());
         }
+        return new GraphSeries<>(subject, selectYearData);
+    }
+
+    private boolean hasYearData(List<StudentSubjectCalc> histData, int year) {
+        Optional<StudentSubjectCalc> opt = histData.stream()
+                .filter(data -> data.開講年() == year)
+                .findFirst();
+        return opt.isPresent();
+    }
+
+    private String[] createColors(String grade) {
+        return Arrays.stream(GRADE_LABELS)
+                .map(label -> label.equals(grade) ? RED : BLUE)
+                .toArray(String[]::new);
+    }
+
+    private String[] createLabels(String grade) {
+        return Arrays.stream(GRADE_LABELS)
+                .map(label -> label.equals(grade) ? grade + "(あなたの成績位置)" : label)
+                .toArray(String[]::new);
+    }
+
+    private void updatePreYearGraph(GraphSeries<Data<String, Integer>> preYearSeries) {
+        underGraphsLayout.setHeight("40vh");
+        if (underGraphsLayout.getChildren().findAny().isEmpty()) underGraphsLayout.add(preYearGraph.getGraph());
+        preYearGraph.updateSeries(preYearSeries);
     }
 }
