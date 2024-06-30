@@ -32,7 +32,6 @@ public class SubjectGrid extends VerticalLayout {
         grid.addColumn(StudentSubjectCalc::分散).setHeader("分散");
     }
 
-    // 指定された科目の表を作る機能　平均値と分散値を実際の数値で見れるようにする
     public void updateGrid(List<StudentSubjectCalc> histData, StudentGrade studentGrade) {
         GridListDataView<StudentSubjectCalc> gridListDataView = subjectGrid.setItems(histData);
         gridListDataView.setFilter(studentSubjectCalc -> studentSubjectCalc.開講年() == studentGrade.開講年());

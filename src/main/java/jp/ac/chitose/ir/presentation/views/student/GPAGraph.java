@@ -8,27 +8,60 @@ import jp.ac.chitose.ir.presentation.component.graph.Graph;
 import jp.ac.chitose.ir.presentation.component.graph.GraphAlign;
 import jp.ac.chitose.ir.presentation.component.graph.GraphSeries;
 
-public class GPAGraph extends VerticalLayout {
+import java.util.List;
 
-    // コンストラクタ　グラフを作成し、自分に追加する
+public class GPAGraph extends VerticalLayout {
+    private static final String HEIGHT = "60vh";
+    private static final int GPA_CATEGORY_NUM = 9;
+    private static final int DEFAULT_DATA = 0;
+    private static final String[] GPA_CATEGORY = {"0.0 ~ 0.5", "0.5 ~ 1.0", "1.0 ~ 1.5", "1.5 ~ 2.0", "2.0 ~ 2.5", "2.5 ~ 3.0", "3.0 ~ 3.5", "3.5 ~ 4.0", "4.0"};
+
     public GPAGraph(StudentService studentService, String schoolYear) {
-        this.setHeight("60vh");
-        final GraphSeries<Data<String, Integer>> series = createSeries(studentService, schoolYear);
-        Graph graph = Graph.Builder.get().histogram().series(series).width("100%").height("100%").YAxisForceNiceScale(true)
-                .title("GPA", GraphAlign.CENTER).dataLabelsEnabled(false).legendShow(false)
-                .colors("#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF").build();
+        this.setHeight(HEIGHT);
+        GraphSeries<Data<String, Integer>> series = createSeries(studentService, schoolYear);
+        Graph graph = createGraph(series);
         add(graph.getGraph());
     }
 
-    // GPAのデータから、GPAのSeriesを作り出す機能
     private GraphSeries<Data<String, Integer>> createSeries(StudentService studentService, String schoolYear) {
-        final var GPAData = studentService.getStudentGPA().data();
-        Data<String, Integer>[] data = new Data[9];
-        for(StudentGPA GPA : GPAData) {
-            if(!GPA.学年().equals(schoolYear)) continue;
-            data[(int) (GPA.gpa() * 2.0)] = new Data<>(String.valueOf(GPA.gpa()), GPA.度数());
-        }
-        for(int i = 0; i < 9; i++) if(data[i] == null) data[i] = new Data<>(String.valueOf((float) (i / 2)), 0);
+        List<StudentGPA> GPAData = studentService.getStudentGPA().data();
+        Data<String, Integer>[] data = createData(GPAData, schoolYear);
+        fillNullData(data);
         return new GraphSeries<>(data);
+    }
+
+    private Data<String, Integer>[] createData(List<StudentGPA> GPAData, String schoolYear) {
+        Data<String, Integer>[] data = new Data[GPA_CATEGORY_NUM];
+        for (StudentGPA gpa : GPAData) {
+            String gpaString = String.valueOf(gpa.gpa());
+            for (int i = 0; i < GPA_CATEGORY_NUM; i++) {
+                if(!gpaString.startsWith(GPA_CATEGORY[i].substring(0, 3)) || !gpa.学年().equals(schoolYear)) continue;
+                data[i] = new Data<>(GPA_CATEGORY[i], gpa.度数());
+                break;
+            }
+        }
+        return data;
+    }
+
+    private void fillNullData(Data<String, Integer>[] data) {
+        for (int i = 0; i < GPA_CATEGORY_NUM; i++) {
+            if (data[i] == null) {
+                data[i] = new Data<>(GPA_CATEGORY[i], DEFAULT_DATA);
+            }
+        }
+    }
+
+    private Graph createGraph(GraphSeries<Data<String, Integer>> series) {
+        return Graph.Builder.get()
+                .histogram()
+                .series(series)
+                .width("100%")
+                .height("100%")
+                .YAxisForceNiceScale(true)
+                .title("GPA", GraphAlign.CENTER)
+                .dataLabelsEnabled(false)
+                .legendShow(false)
+                .colors("#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF", "#0000FF")
+                .build();
     }
 }
