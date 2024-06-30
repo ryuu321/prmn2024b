@@ -23,13 +23,12 @@ public class GPAGraph extends VerticalLayout {
     // GPAのデータから、GPAのSeriesを作り出す機能
     private GraphSeries<Data<String, Integer>> createSeries(StudentService studentService, String schoolYear) {
         final var GPAData = studentService.getStudentGPA().data();
-        Data<String, Integer>[] datas = new Data[9];
+        Data<String, Integer>[] data = new Data[9];
         for(StudentGPA GPA : GPAData) {
-            if(GPA.学年().equals(schoolYear)) {
-                datas[(int) (GPA.gpa() * 2.0)] = new Data<>(String.valueOf(GPA.gpa()), GPA.度数());
-            }
+            if(!GPA.学年().equals(schoolYear)) continue;
+            data[(int) (GPA.gpa() * 2.0)] = new Data<>(String.valueOf(GPA.gpa()), GPA.度数());
         }
-        for(int i = 0; i < 9; i++) if(datas[i] == null) datas[i] = new Data<>(String.valueOf((float) (i / 2)), 0);
-        return new GraphSeries<>(datas);
+        for(int i = 0; i < 9; i++) if(data[i] == null) data[i] = new Data<>(String.valueOf((float) (i / 2)), 0);
+        return new GraphSeries<>(data);
     }
 }
