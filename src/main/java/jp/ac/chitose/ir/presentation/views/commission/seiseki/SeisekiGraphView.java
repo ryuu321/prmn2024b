@@ -2,6 +2,7 @@ package jp.ac.chitose.ir.presentation.views.commission.seiseki;
 
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jp.ac.chitose.ir.application.service.commission.*;
@@ -308,13 +309,17 @@ public class SeisekiGraphView {
         Grid<CommissionGpa2Second> gridSecond = table.getTableSecond();
         Grid<CommissionGpa2Third> gridThird = table.getTableThird();
         Grid<CommissionGpa2Fourth> gridFourth = table.getTableFourth();
-        //試験的に表を追加
 
-        all.add(gridAll);
-        first.add(gridFirst);
-        second.add(gridSecond);
-        third.add(gridThird);
-        fourth.add(gridFourth);
+        H3 str = new H3("基本統計量");
+        H3 str1 = new H3("基本統計量");
+        H3 str2 = new H3("基本統計量");
+        H3 str3 = new H3("基本統計量");
+        H3 str4 = new H3("基本統計量");
+        all.add(str,gridAll);
+        first.add(str1,gridFirst);
+        second.add(str2,gridSecond);
+        third.add(str3,gridThird);
+        fourth.add(str4,gridFourth);
         //ここまで基本統計量
         return main;
     }
@@ -538,10 +543,14 @@ public class SeisekiGraphView {
         Grid<GetTableData> gridElectronic = table.getTableSubjectFirstElectronic();
         Grid<GetTableData> gridInformation = table.getTableSubjectFirstInformation();
 
-        all.add(gridAll);
-        science.add(gridScience);
-        electronic.add(gridElectronic);
-        information.add(gridInformation);
+        H3 str = new H3("基本統計量");
+        H3 str1 = new H3("基本統計量");
+        H3 str2 = new H3("基本統計量");
+        H3 str3 = new H3("基本統計量");
+        all.add(str,gridAll);
+        science.add(str1,gridScience);
+        electronic.add(str2,gridElectronic);
+        information.add(str3,gridInformation);
 
         return main;
     }
