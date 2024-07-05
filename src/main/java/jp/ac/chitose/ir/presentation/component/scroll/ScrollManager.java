@@ -3,79 +3,61 @@ package jp.ac.chitose.ir.presentation.component.scroll;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ScrollOptions;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+
 
 public class ScrollManager {
-    private final List<Scroll> scrolls;
+    private final Map<String, Component> scrolls;
 
     public ScrollManager() {
-        scrolls = new ArrayList<>();
+        scrolls = new HashMap<>();
+    }
+
+    public ScrollManager(Map<String, Component> scrolls) {
+        this.scrolls = scrolls;
     }
 
     public ScrollManager(Component component, String idName) {
         this();
-        scrolls.add(new Scroll(component, idName));
+        scrolls.put(idName, component);
     }
 
     public ScrollManager(List<Component> components, List<String> idNames) {
         this();
         for(int i = 0; i < Math.min(components.size(), idNames.size()); i++) {
-            scrolls.add(new Scroll(components.get(i), idNames.get(i)));
+            scrolls.put(idNames.get(i), components.get(i));
         }
     }
 
-    public ScrollManager(Scroll scroll) {
-        this();
-        scrolls.add(scroll);
-    }
-
-    public ScrollManager(List<Scroll> scrolls) {
-        this.scrolls = scrolls;
-    }
-
     public void add(Component component, String idName) {
-        scrolls.add(new Scroll(component, idName));
+        scrolls.put(idName, component);
     }
 
-    public void add(Scroll scroll) {
-        scrolls.add(scroll);
-    }
-
-    public void remove(Component component, String idName) {
-        scrolls.remove(new Scroll(component, idName));
-    }
-
-    public void remove(Scroll scroll) {
-        scrolls.remove(scroll);
+    public void remove(String idName) {
+        scrolls.remove(idName);
     }
 
     public void scrollToComponentById(String idName) {
-        Optional<Scroll> optionalScroll = scrollFindById(idName);
-        if(optionalScroll.isEmpty()) return;
-        Scroll scroll = optionalScroll.get();
-        scroll.scroll();
+        Component component = scrolls.get(idName);
+        if(component == null) return;
+        component.scrollIntoView();
     }
 
-    public void scrollToComponentById(String idName, ScrollOptions option) {
-        Optional<Scroll> optionalScroll = scrollFindById(idName);
-        if(optionalScroll.isEmpty()) return;
-        Scroll scroll = optionalScroll.get();
-        scroll.scroll(option);
-    }
-
-    private Optional<Scroll> scrollFindById(String idName) {
-        return scrolls.stream()
-                .filter(scroll -> scroll.getId().equals(idName))
-                .findFirst();
+    public void scrollToComponentById(String idName, ScrollOptions options) {
+        Component component = scrolls.get(idName);
+        if(component == null) return;
+        component.scrollIntoView(options);
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for(Scroll scroll : scrolls) {
-            builder.append(scroll.toString());
+        for (Map.Entry<String, Component> entry : scrolls.entrySet()) {
+            String id = entry.getKey();
+            Component component = entry.getValue();
+            builder.append("Id: ").append(id).append(", Component: ").append(component.getClass().getSimpleName());
             builder.append("\n");
         }
         return builder.toString();
