@@ -5,6 +5,7 @@ import com.vaadin.flow.component.combobox.dataview.ComboBoxListDataView;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class FilterComboBox<T, U> extends ComboBox<U> implements FilteredComponent {
@@ -30,21 +31,21 @@ public class FilterComboBox<T, U> extends ComboBox<U> implements FilteredCompone
     @Override
     public void filter() {
         dataView.removeFilters();
-        filters.forEach(f -> dataView.addFilter(f::filter));
+        filters.forEach(f -> dataView.addFilter(f::applyFilter));
     }
 
     public void addFilter(Filter<T, U> filter) {
         filters.add(filter);
-        dataView.addFilter(filter::filter);
+        dataView.addFilter(filter::applyFilter);
     }
 
     public void removeFilter(Filter<T, U> filter) {
         filters.remove(filter);
         dataView.removeFilters();
-        filters.forEach(f -> dataView.addFilter(f::filter));
+        filters.forEach(f -> dataView.addFilter(f::applyFilter));
     }
 
     public List<Filter<T, U>> getFilters() {
-        return filters;
+        return Collections.unmodifiableList(filters);
     }
 }

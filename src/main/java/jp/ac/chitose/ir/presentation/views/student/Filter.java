@@ -6,6 +6,6 @@ import java.util.function.BiPredicate;
 
 public interface Filter<T, U> {
     Component getFilterComponent();
-    void setFilter(BiPredicate<U, T> filter);
-    boolean filter(U item);
+    void setFilterPredicate(BiPredicate<U, T> filter);
+    boolean applyFilter(U item);
 }

@@ -2,27 +2,29 @@ package jp.ac.chitose.ir.presentation.views.student;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
-import jp.ac.chitose.ir.application.service.student.StudentGrade;
 
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class FilterGrid<T, U> extends Grid<U> implements FilteredComponent {
+public class FilterableGrid<T, U> extends Grid<U> implements FilteredComponent {
     private final List<Filter<T, U>> filters = new ArrayList<>();
     private final GridListDataView<U> dataView = getListDataView();
 
-    public FilterGrid(Collection<U> items) {super(items);}
+    public FilterableGrid(Collection<U> items) {
+        super(items);
+    }
 
-    public FilterGrid(Class<U> beanType, boolean autoCreateColumns) {
+    public FilterableGrid(Class<U> beanType, boolean autoCreateColumns) {
         super(beanType, autoCreateColumns);
     }
 
     @Override
     public void filter() {
         dataView.setFilter(item -> filters.stream()
-                        .map(filter -> filter.filter(item))
-                        .reduce(true, (isMatch, filterResult) -> isMatch && filterResult));
+                .map(filter -> filter.applyFilter(item))
+                .reduce(true, (isMatch, filterResult) -> isMatch && filterResult));
     }
 
     public void addFilter(Filter<T, U> filter) {
@@ -33,7 +35,11 @@ public class FilterGrid<T, U> extends Grid<U> implements FilteredComponent {
         filters.remove(filter);
     }
 
+    public void clearFilters() {
+        filters.clear();
+    }
+
     public List<Filter<T, U>> getFilters() {
-        return filters;
+        return Collections.unmodifiableList(filters);
     }
 }

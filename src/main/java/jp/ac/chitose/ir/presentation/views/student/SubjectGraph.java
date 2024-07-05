@@ -136,11 +136,10 @@ public class SubjectGraph extends VerticalLayout {
     }
 
     private boolean hasAvailableYearData(List<StudentSubjectCalc> histData, int year) {
-        final int sum = histData.stream()
+        return histData.stream()
                 .filter(data -> data.開講年() == year)
                 .mapToInt(data -> data.欠席() + data.不可() + data.可() + data.良() + data.優() + data.秀())
-                .sum();
-        return sum != 0;
+                .sum() != 0;
     }
 
     private List<StudentSubjectCalc> filterByYear(List<StudentSubjectCalc> histData, int year) {
