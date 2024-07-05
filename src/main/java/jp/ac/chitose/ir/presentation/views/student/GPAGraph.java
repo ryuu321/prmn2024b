@@ -24,21 +24,23 @@ public class GPAGraph extends VerticalLayout {
 
     private GraphSeries<Data<String, Integer>> createSeries(List<StudentGPA> GPAData, String schoolYear) {
         Data<String, Integer>[] data = createData(GPAData, schoolYear);
-        fillNullData(data);
         return new GraphSeries<>(data);
     }
 
     private Data<String, Integer>[] createData(List<StudentGPA> GPAData, String schoolYear) {
         Data<String, Integer>[] data = new Data[GPA_CATEGORY_NUM];
-        for (StudentGPA gpa : GPAData) {
-            String gpaString = String.valueOf(gpa.gpa());
-            for (int i = 0; i < GPA_CATEGORY_NUM; i++) {
-                if(!gpaString.startsWith(GPA_CATEGORY[i].substring(0, 3)) || !gpa.学年().equals(schoolYear)) continue;
-                data[i] = new Data<>(GPA_CATEGORY[i], gpa.度数());
-                break;
-            }
-        }
+        GPAData.forEach(gpa -> categorizeGPAData(gpa, schoolYear, data));;
+        fillNullData(data);
         return data;
+    }
+
+    private void categorizeGPAData(StudentGPA gpa, String schoolYear, Data<String, Integer>[] data) {
+        String gpaString = String.valueOf(gpa.gpa());
+        for (int i = 0; i < GPA_CATEGORY_NUM; i++) {
+            if(!gpaString.startsWith(GPA_CATEGORY[i].substring(0, 3)) || !gpa.学年().equals(schoolYear)) continue;
+            data[i] = new Data<>(GPA_CATEGORY[i], gpa.度数());
+            return;
+        }
     }
 
     private void fillNullData(Data<String, Integer>[] data) {
