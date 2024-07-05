@@ -1,8 +1,6 @@
 package jp.ac.chitose.ir.presentation.views.student;
 
 import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.ScrollOptions;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -122,10 +120,6 @@ public class StudentView extends VerticalLayout {
         initializeGPALayout(studentNumber);
         initializeSubjectLayout(studentNumber);
         add(gpaLayout);
-        Div div = new Div();
-        div.setText("テスト");
-        scrollManager.add(div, "student");
-        add(div);
     }
 
     private void initializeGPALayout(String studentNumber) {
