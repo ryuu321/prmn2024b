@@ -25,7 +25,7 @@ import java.util.function.Function;
 @Route(value = "grade/student", layout = MainLayout.class)
 public class StudentView extends VerticalLayout {
     private final StudentService studentService;
-    private final FilterComboBox<String, StudentGrade> subjectComboBox;
+    private final FilterableComboBox<String, StudentGrade> subjectComboBox;
     private final TextField studentNumberField;
     private FilteredGrid<Number, StudentSubjectCalc> subjectGrid;
     private SubjectGraph subjectGraph;
@@ -65,7 +65,7 @@ public class StudentView extends VerticalLayout {
 
     public StudentView(StudentService studentService) {
         this.studentService = studentService;
-        this.subjectComboBox = new FilterComboBox<>("科目名");
+        this.subjectComboBox = new FilterableComboBox<>("科目名");
         this.studentNumberField = new TextField();
 
         initializeComponents();
@@ -91,7 +91,7 @@ public class StudentView extends VerticalLayout {
         addRadioButtonFilter(subjectComboBox, RadioButtonValues.DEPARTMENTS, StudentGrade::department);
     }
 
-    private void addRadioButtonFilter(FilterComboBox<String, StudentGrade> comboBox, RadioButtonValues values, Function<StudentGrade, String> valueProvider) {
+    private void addRadioButtonFilter(FilterableComboBox<String, StudentGrade> comboBox, RadioButtonValues values, Function<StudentGrade, String> valueProvider) {
         comboBox.addFilter(RadioButtonFilter.create(
                 comboBox,
                 values.getValues(),

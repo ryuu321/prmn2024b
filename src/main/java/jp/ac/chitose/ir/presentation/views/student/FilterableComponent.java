@@ -1,5 +1,5 @@
 package jp.ac.chitose.ir.presentation.views.student;
 
-public interface FilteredComponent {
+public interface FilterableComponent {
     void filter();
 }

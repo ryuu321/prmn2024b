@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class FilterableGrid<T, U> extends Grid<U> implements FilteredComponent {
+public class FilterableGrid<T, U> extends Grid<U> implements FilterableComponent {
     private final List<Filter<T, U>> filters = new ArrayList<>();
     private final GridListDataView<U> dataView = getListDataView();
 

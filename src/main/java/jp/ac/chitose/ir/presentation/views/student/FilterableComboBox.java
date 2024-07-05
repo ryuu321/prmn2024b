@@ -8,23 +8,23 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class FilterComboBox<T, U> extends ComboBox<U> implements FilteredComponent {
+public class FilterableComboBox<T, U> extends ComboBox<U> implements FilterableComponent {
     private final List<Filter<T, U>> filters = new ArrayList<>();
     private final ComboBoxListDataView<U> dataView = getListDataView();
 
-    public FilterComboBox() {
+    public FilterableComboBox() {
         super();
     }
 
-    public FilterComboBox(String label) {
+    public FilterableComboBox(String label) {
         super(label);
     }
 
-    public FilterComboBox(String label, U[] items) {
+    public FilterableComboBox(String label, U[] items) {
         super(label, items);
     }
 
-    public FilterComboBox(String label, Collection<U> items) {
+    public FilterableComboBox(String label, Collection<U> items) {
         super(label, items);
     }
 

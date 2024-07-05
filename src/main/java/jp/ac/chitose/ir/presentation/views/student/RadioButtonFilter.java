@@ -14,7 +14,7 @@ public class RadioButtonFilter<T, U> implements Filter<T, U> {
         this.filter = filter;
     }
 
-    public static <T, U> RadioButtonFilter<T, U> create(FilteredComponent component, T[] values, BiPredicate<U, T> filterPredicate) {
+    public static <T, U> RadioButtonFilter<T, U> create(FilterableComponent component, T[] values, BiPredicate<U, T> filterPredicate) {
         RadioButtonGroup<T> radioButtonGroup = createRadioButtonGroup(values);
         RadioButtonFilter<T, U> filter = new RadioButtonFilter<>(radioButtonGroup, filterPredicate);
         radioButtonGroup.addValueChangeListener(event -> component.filter());
