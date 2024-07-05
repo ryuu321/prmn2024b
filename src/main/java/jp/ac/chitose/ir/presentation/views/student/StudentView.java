@@ -1,10 +1,10 @@
 package jp.ac.chitose.ir.presentation.views.student;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.ScrollOptions;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.function.ValueProvider;
@@ -15,6 +15,7 @@ import jp.ac.chitose.ir.application.service.student.StudentGrade;
 import jp.ac.chitose.ir.application.service.student.StudentService;
 import jp.ac.chitose.ir.application.service.student.StudentSubjectCalc;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
+import jp.ac.chitose.ir.presentation.component.scroll.ScrollManager;
 
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -62,6 +63,7 @@ public class StudentView extends VerticalLayout {
             StudentSubjectCalc::秀,
             StudentSubjectCalc::平均,
             StudentSubjectCalc::分散);
+    private final ScrollManager scrollManager = new ScrollManager();
 
     public StudentView(StudentService studentService) {
         this.studentService = studentService;
@@ -120,6 +122,10 @@ public class StudentView extends VerticalLayout {
         initializeGPALayout(studentNumber);
         initializeSubjectLayout(studentNumber);
         add(gpaLayout);
+        Div div = new Div();
+        div.setText("テスト");
+        scrollManager.add(div, "student");
+        add(div);
     }
 
     private void initializeGPALayout(String studentNumber) {

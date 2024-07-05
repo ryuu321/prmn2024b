@@ -31,7 +31,7 @@ public class FilterableComboBox<T, U> extends ComboBox<U> implements FilterableC
     @Override
     public void filter() {
         dataView.removeFilters();
-        filters.forEach(f -> dataView.addFilter(f::applyFilter));
+        filters.forEach(filter -> dataView.addFilter(filter::applyFilter));
     }
 
     public void addFilter(Filter<T, U> filter) {

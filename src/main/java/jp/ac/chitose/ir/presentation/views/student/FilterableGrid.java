@@ -8,30 +8,31 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class FilterableGrid<T, U> extends Grid<U> implements FilterableComponent {
-    private final List<Filter<T, U>> filters = new ArrayList<>();
-    private final GridListDataView<U> dataView = getListDataView();
+public class FilterableGrid<FilterType, ItemType> extends Grid<ItemType> implements FilterableComponent {
+    private final List<Filter<FilterType, ItemType>> filters = new ArrayList<>();
+    private final GridListDataView<ItemType> dataView;
 
-    public FilterableGrid(Collection<U> items) {
-        super(items);
+    public FilterableGrid(Collection<ItemType> items) {
+        super();
+        this.dataView = setItems(items);
     }
 
-    public FilterableGrid(Class<U> beanType, boolean autoCreateColumns) {
+    public FilterableGrid(Class<ItemType> beanType, boolean autoCreateColumns) {
         super(beanType, autoCreateColumns);
+        this.dataView = getListDataView();
     }
 
     @Override
     public void filter() {
         dataView.setFilter(item -> filters.stream()
-                .map(filter -> filter.applyFilter(item))
-                .reduce(true, (isMatch, filterResult) -> isMatch && filterResult));
+                .allMatch(filter -> filter.applyFilter(item)));
     }
 
-    public void addFilter(Filter<T, U> filter) {
+    public void addFilter(Filter<FilterType, ItemType> filter) {
         filters.add(filter);
     }
 
-    public void removeFilter(Filter<T, U> filter) {
+    public void removeFilter(Filter<FilterType, ItemType> filter) {
         filters.remove(filter);
     }
 
@@ -39,7 +40,7 @@ public class FilterableGrid<T, U> extends Grid<U> implements FilterableComponent
         filters.clear();
     }
 
-    public List<Filter<T, U>> getFilters() {
+    public List<Filter<FilterType, ItemType>> getFilters() {
         return Collections.unmodifiableList(filters);
     }
 }
