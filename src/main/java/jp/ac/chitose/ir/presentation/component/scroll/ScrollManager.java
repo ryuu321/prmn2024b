@@ -15,19 +15,19 @@ public class ScrollManager {
     }
 
     public ScrollManager(Component component, String idName) {
-        scrolls = new ArrayList<>();
+        this();
         scrolls.add(new Scroll(component, idName));
     }
 
     public ScrollManager(List<Component> components, List<String> idNames) {
-        scrolls = new ArrayList<>();
+        this();
         for(int i = 0; i < Math.min(components.size(), idNames.size()); i++) {
             scrolls.add(new Scroll(components.get(i), idNames.get(i)));
         }
     }
 
     public ScrollManager(Scroll scroll) {
-        scrolls = new ArrayList<>();
+        this();
         scrolls.add(scroll);
     }
 
@@ -69,5 +69,15 @@ public class ScrollManager {
         return scrolls.stream()
                 .filter(scroll -> scroll.getId().equals(idName))
                 .findFirst();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for(Scroll scroll : scrolls) {
+            builder.append(scroll.toString());
+            builder.append("\n");
+        }
+        return builder.toString();
     }
 }

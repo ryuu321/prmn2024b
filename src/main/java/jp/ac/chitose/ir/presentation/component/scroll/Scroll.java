@@ -39,4 +39,9 @@ public class Scroll {
         if(!(o instanceof Scroll scroll)) return false;
         return this.component.equals(scroll.component) && this.id.equals(scroll.id);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Scroll: id: %s, component: %s)", id, component.toString());
+    }
 }
