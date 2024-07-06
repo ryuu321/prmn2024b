@@ -13,7 +13,8 @@ public class GPAGraph extends VerticalLayout {
     private static final String HEIGHT = "60vh";
     private static final int GPA_CATEGORY_NUM = 9;
     private static final int DEFAULT_DATA = 0;
-    private static final String[] GPA_CATEGORY = {"0.0 ~ 0.5", "0.5 ~ 1.0", "1.0 ~ 1.5", "1.5 ~ 2.0", "2.0 ~ 2.5", "2.5 ~ 3.0", "3.0 ~ 3.5", "3.5 ~ 4.0", "4.0"};
+    private static final String[] GPA_CATEGORY = {"0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0"};
+    private static final String[] GPA_CATEGORY_LABEL = {"0.0 ~ 0.5", "0.5 ~ 1.0", "1.0 ~ 1.5", "1.5 ~ 2.0", "2.0 ~ 2.5", "2.5 ~ 3.0", "3.0 ~ 3.5", "3.5 ~ 4.0", "4.0"};
 
     public GPAGraph(List<StudentGPA> GPAData, String schoolYear) {
         this.setHeight(HEIGHT);
@@ -37,8 +38,8 @@ public class GPAGraph extends VerticalLayout {
     private void categorizeGPAData(StudentGPA gpa, String schoolYear, Data<String, Integer>[] data) {
         String gpaString = String.valueOf(gpa.gpa());
         for (int i = 0; i < GPA_CATEGORY_NUM; i++) {
-            if(!gpaString.startsWith(GPA_CATEGORY[i].substring(0, 3)) || !gpa.学年().equals(schoolYear)) continue;
-            data[i] = new Data<>(GPA_CATEGORY[i], gpa.度数());
+            if(!gpa.学年().equals(schoolYear) || !gpaString.equals(GPA_CATEGORY[i])) continue;
+            data[i] = new Data<>(GPA_CATEGORY_LABEL[i], gpa.度数());
             return;
         }
     }

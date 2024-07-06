@@ -8,45 +8,46 @@ import java.util.List;
 import java.util.Map;
 
 
+
 public class ScrollManager {
-    private final Map<String, Component> scrolls;
+    private final Map<String, Component> scrollComponents;
 
     public ScrollManager() {
-        scrolls = new HashMap<>();
+        scrollComponents = new HashMap<>();
     }
 
     public ScrollManager(Map<String, Component> scrolls) {
-        this.scrolls = scrolls;
+        this.scrollComponents = scrolls;
     }
 
     public ScrollManager(Component component, String idName) {
         this();
-        scrolls.put(idName, component);
+        scrollComponents.put(idName, component);
     }
 
     public ScrollManager(List<Component> components, List<String> idNames) {
         this();
         for(int i = 0; i < Math.min(components.size(), idNames.size()); i++) {
-            scrolls.put(idNames.get(i), components.get(i));
+            scrollComponents.put(idNames.get(i), components.get(i));
         }
     }
 
     public void add(Component component, String idName) {
-        scrolls.put(idName, component);
+        scrollComponents.put(idName, component);
     }
 
     public void remove(String idName) {
-        scrolls.remove(idName);
+        scrollComponents.remove(idName);
     }
 
     public void scrollToComponentById(String idName) {
-        Component component = scrolls.get(idName);
+        Component component = scrollComponents.get(idName);
         if(component == null) return;
         component.scrollIntoView();
     }
 
     public void scrollToComponentById(String idName, ScrollOptions options) {
-        Component component = scrolls.get(idName);
+        Component component = scrollComponents.get(idName);
         if(component == null) return;
         component.scrollIntoView(options);
     }
@@ -54,7 +55,7 @@ public class ScrollManager {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for (Map.Entry<String, Component> entry : scrolls.entrySet()) {
+        for (Map.Entry<String, Component> entry : scrollComponents.entrySet()) {
             String id = entry.getKey();
             Component component = entry.getValue();
             builder.append("Id: ").append(id).append(", Component: ").append(component.getClass().getSimpleName());
