@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class FilterableComboBox<T, U> extends ComboBox<U> implements FilterableComponent {
-    private final List<Filter<T, U>> filters = new ArrayList<>();
-    private final ComboBoxListDataView<U> dataView = getListDataView();
+public class FilterableComboBox<FilterType, ItemType> extends ComboBox<ItemType> implements FilterableComponent<FilterType, ItemType> {
+    private final List<Filter<FilterType, ItemType>> filters = new ArrayList<>();
+    private final ComboBoxListDataView<ItemType> dataView = getListDataView();
 
     public FilterableComboBox() {
         super();
@@ -20,11 +20,11 @@ public class FilterableComboBox<T, U> extends ComboBox<U> implements FilterableC
         super(label);
     }
 
-    public FilterableComboBox(String label, U[] items) {
+    public FilterableComboBox(String label, ItemType[] items) {
         super(label, items);
     }
 
-    public FilterableComboBox(String label, Collection<U> items) {
+    public FilterableComboBox(String label, Collection<ItemType> items) {
         super(label, items);
     }
 
@@ -34,18 +34,18 @@ public class FilterableComboBox<T, U> extends ComboBox<U> implements FilterableC
         filters.forEach(filter -> dataView.addFilter(filter::applyFilter));
     }
 
-    public void addFilter(Filter<T, U> filter) {
+    public void addFilter(Filter<FilterType, ItemType> filter) {
         filters.add(filter);
         dataView.addFilter(filter::applyFilter);
     }
 
-    public void removeFilter(Filter<T, U> filter) {
+    public void removeFilter(Filter<FilterType, ItemType> filter) {
         filters.remove(filter);
         dataView.removeFilters();
         filters.forEach(f -> dataView.addFilter(f::applyFilter));
     }
 
-    public List<Filter<T, U>> getFilters() {
+    public List<Filter<FilterType, ItemType>> getFilters() {
         return Collections.unmodifiableList(filters);
     }
 }

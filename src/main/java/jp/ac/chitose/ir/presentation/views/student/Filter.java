@@ -4,8 +4,8 @@ import com.vaadin.flow.component.Component;
 
 import java.util.function.BiPredicate;
 
-public interface Filter<T, U> {
+public interface Filter<FilterType, ItemType> {
     Component getFilterComponent();
-    void setFilterPredicate(BiPredicate<U, T> filter);
-    boolean applyFilter(U item);
+    void setFilterPredicate(BiPredicate<ItemType, FilterType> filter);
+    boolean applyFilter(ItemType item);
 }

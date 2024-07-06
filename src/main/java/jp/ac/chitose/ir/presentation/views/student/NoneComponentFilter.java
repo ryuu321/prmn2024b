@@ -4,11 +4,11 @@ import com.vaadin.flow.component.Component;
 
 import java.util.function.BiPredicate;
 
-public class NoneComponentFilter<T, U> implements Filter<T, U> {
-    private T value;
-    private BiPredicate<U, T> filter;
+public class NoneComponentFilter<FilterType, ItemType> implements Filter<FilterType, ItemType> {
+    private FilterType value;
+    private BiPredicate<ItemType, FilterType> filter;
 
-    public NoneComponentFilter(BiPredicate<U, T> filter, T value) {
+    public NoneComponentFilter(BiPredicate<ItemType, FilterType> filter, FilterType value) {
         this.filter = filter;
         this.value = value;
     }
@@ -19,16 +19,16 @@ public class NoneComponentFilter<T, U> implements Filter<T, U> {
     }
 
     @Override
-    public void setFilterPredicate(BiPredicate<U, T> filter) {
+    public void setFilterPredicate(BiPredicate<ItemType, FilterType> filter) {
         this.filter = filter;
     }
 
-    public void setValue(T value) {
+    public void setValue(FilterType value) {
         this.value = value;
     }
 
     @Override
-    public boolean applyFilter(U item) {
+    public boolean applyFilter(ItemType item) {
         return filter.test(item, value);
     }
 }
