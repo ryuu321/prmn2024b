@@ -5,11 +5,11 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 
 import java.util.function.BiPredicate;
 
-public class RadioButtonFilter<T, U> implements Filter<T, U> {
-    private final RadioButtonGroup<T> radioButton;
-    private BiPredicate<U, T> filter;
+public class RadioButtonFilter<FilterType, ItemType> implements Filter<FilterType, ItemType> {
+    private final RadioButtonGroup<FilterType> radioButton;
+    private BiPredicate<ItemType, FilterType> filter;
 
-    private RadioButtonFilter(final RadioButtonGroup<T> radioButton, BiPredicate<U, T> filter) {
+    private RadioButtonFilter(final RadioButtonGroup<FilterType> radioButton, BiPredicate<ItemType, FilterType> filter) {
         this.radioButton = radioButton;
         this.filter = filter;
     }
@@ -31,12 +31,12 @@ public class RadioButtonFilter<T, U> implements Filter<T, U> {
 
 
     @Override
-    public void setFilterPredicate(BiPredicate<U, T> filter) {
+    public void setFilterPredicate(BiPredicate<ItemType, FilterType> filter) {
         this.filter = filter;
     }
 
     @Override
-    public boolean applyFilter(final U item) {
+    public boolean applyFilter(final ItemType item) {
         return filter.test(item, radioButton.getValue());
     }
 
