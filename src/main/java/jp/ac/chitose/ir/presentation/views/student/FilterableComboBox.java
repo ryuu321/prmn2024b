@@ -6,7 +6,6 @@ import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.combobox.dataview.ComboBoxListDataView;
-import jp.ac.chitose.ir.application.service.student.StudentGrade;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,7 +54,7 @@ public class FilterableComboBox<FilterType, ItemType> implements FilterableCompo
         filters.forEach(f -> dataView.addFilter(f::applyFilter));
     }
 
-    public List<Filter<FilterType, ItemType>> getFilters() {
+    public List<Filter<?, ?>> getFilters() {
         return Collections.unmodifiableList(filters);
     }
 

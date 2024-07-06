@@ -2,33 +2,42 @@ package jp.ac.chitose.ir.presentation.views.student;
 
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.grid.ItemClickEvent;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.function.ValueProvider;
 
 import java.util.List;
-import java.util.function.BiPredicate;
 
 
-public class FilteredGrid<FilterType, ItemType> extends VerticalLayout {
+public class FilteredGrid<FilterType, ItemType> extends VerticalLayout implements FilteredComponent<FilterType, ItemType> {
     private final FilterableGrid<FilterType, ItemType> filterableGrid;
 
-    public FilteredGrid(Class<ItemType> beanTypeClass, List<ValueProvider<ItemType, FilterType>> valueProviders, List<String> headerNames) {
+    public FilteredGrid(Class<ItemType> beanTypeClass, List<ValueProvider<ItemType, FilterType>> valueProviders, List<String> headerNames, List<Filter<FilterType, ItemType>> filters, FilterPosition filterPosition) {
         filterableGrid = new FilterableGrid<>(beanTypeClass, false);
+        filters.forEach(filterableGrid::addFilter);
+        filters.forEach(this::registerThis);
         addColumns(valueProviders, headerNames);
-        setupLayout();
-        add(filterableGrid.getComponent());
+        setupLayout(filterPosition);
     }
 
-    public FilteredGrid(FilterableGrid<FilterType, ItemType> filterableGrid) {
+    public FilteredGrid(FilterableGrid<FilterType, ItemType> filterableGrid, List<Filter<FilterType, ItemType>> filters, FilterPosition filterPosition) {
         this.filterableGrid = filterableGrid;
-        setupLayout();
-        add(filterableGrid.getComponent());
+        filters.forEach(filterableGrid::addFilter);
+        filters.forEach(this::registerThis);
+        setupLayout(filterPosition);
     }
 
-    private void setupLayout() {
-        filterableGrid.setWidthFull();
-        filterableGrid.setAllRowsVisible(true);
+    @Override
+    public void setupLayout(FilterPosition filterPosition) {
+        filterPosition.apply(this, filterableGrid.getComponent(), filterableGrid.getFilters());
+    }
+
+    @Override
+    public void registerThis(Filter<FilterType, ItemType> filter) {
+        filter.registerComponent(this);
+    }
+
+    public void setAllRowsVisible(boolean allRowsVisible) {
+        filterableGrid.setAllRowsVisible(allRowsVisible);
     }
 
     private void addColumns(List<ValueProvider<ItemType, FilterType>> valueProviders, List<String> headerName) {
@@ -41,25 +50,18 @@ public class FilteredGrid<FilterType, ItemType> extends VerticalLayout {
         filterableGrid.addItemClickListener(listener);
     }
 
-    public void addRadioButtonFilters(List<RadioButtonValues> filterValues, List<BiPredicate<ItemType, FilterType>> filterFunctions, List<String> filterNames) {
-        for (int i = 0; i < Math.min(filterValues.size(), Math.min(filterFunctions.size(), filterNames.size())); i++) {
-            addRadioButtonFilter(filterValues.get(i), filterFunctions.get(i), filterNames.get(i));
-        }
-    }
-
-    public void addRadioButtonFilter(RadioButtonValues filterValue, BiPredicate<ItemType, FilterType> filterFunction, String filterName) {
-        remove(filterableGrid.getComponent());
-        filterableGrid.addFilter(RadioButtonFilter.create(filterableGrid, (FilterType[])filterValue.getValues(), filterFunction));
-        add(new H3(filterName), filterableGrid.getFilters().get(filterableGrid.getFilters().size() - 1).getFilterComponent());
-        add(filterableGrid.getComponent());
-    }
-
+    @Override
     public void filter() {
         filterableGrid.filter();
     }
 
     public void addFilter(Filter<FilterType, ItemType> filter) {
         filterableGrid.addFilter(filter);
+        registerThis(filter);
+    }
+
+    public void removeFilter(Filter<FilterType, ItemType> filter) {
+        filterableGrid.removeFilter(filter);
     }
 
     public void clearFilters() {

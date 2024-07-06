@@ -31,4 +31,9 @@ public class NoneComponentFilter<FilterType, ItemType> implements Filter<FilterT
     public boolean applyFilter(ItemType item) {
         return filter.test(item, value);
     }
+
+    @Override
+    public void registerComponent(FilteredComponent<FilterType, ItemType> filteredComponent) {
+        return;
+    }
 }

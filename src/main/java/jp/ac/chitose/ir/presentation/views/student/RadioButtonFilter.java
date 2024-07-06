@@ -9,17 +9,31 @@ public class RadioButtonFilter<FilterType, ItemType> implements Filter<FilterTyp
     private final RadioButtonGroup<FilterType> radioButton;
     private BiPredicate<ItemType, FilterType> filter;
 
-    private RadioButtonFilter(final RadioButtonGroup<FilterType> radioButton, BiPredicate<ItemType, FilterType> filter) {
+    public RadioButtonFilter(final RadioButtonGroup<FilterType> radioButton, BiPredicate<ItemType, FilterType> filter) {
         this.radioButton = radioButton;
         this.filter = filter;
     }
 
-    public static <FilterType, ItemType> RadioButtonFilter<FilterType, ItemType> create(FilterableComponent<FilterType, ItemType> component, FilterType[] values, BiPredicate<ItemType, FilterType> filterPredicate) {
-        RadioButtonGroup<FilterType> radioButtonGroup = createRadioButtonGroup(values);
-        RadioButtonFilter<FilterType, ItemType> filter = new RadioButtonFilter<>(radioButtonGroup, filterPredicate);
-        radioButtonGroup.addValueChangeListener(event -> component.filter());
+    public RadioButtonFilter(FilterType[] values, BiPredicate<ItemType, FilterType> filter) {
+        this.radioButton = createRadioButtonGroup(values);
+        this.filter = filter;
+    }
 
-        return filter;
+    public RadioButtonFilter(final RadioButtonGroup<FilterType> radioButton, BiPredicate<ItemType, FilterType> filter, String idName) {
+        this.radioButton = radioButton;
+        this.filter = filter;
+        radioButton.getElement().setAttribute("id", idName);
+    }
+
+    public RadioButtonFilter(FilterType[] values, BiPredicate<ItemType, FilterType> filter, String idName) {
+        this.radioButton = createRadioButtonGroup(values);
+        this.filter = filter;
+        radioButton.getElement().setAttribute("id", idName);
+    }
+
+    @Override
+    public void registerComponent(FilteredComponent<FilterType, ItemType> filteredComponent) {
+        radioButton.addValueChangeListener(event -> filteredComponent.filter());
     }
 
     private static <T> RadioButtonGroup<T> createRadioButtonGroup(T[] values) {
@@ -28,7 +42,6 @@ public class RadioButtonFilter<FilterType, ItemType> implements Filter<FilterTyp
         radioButtonGroup.setValue(values[0]);
         return radioButtonGroup;
     }
-
 
     @Override
     public void setFilterPredicate(BiPredicate<ItemType, FilterType> filter) {

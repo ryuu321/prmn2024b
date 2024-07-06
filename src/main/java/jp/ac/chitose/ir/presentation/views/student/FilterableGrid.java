@@ -6,7 +6,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.ItemClickEvent;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.function.ValueProvider;
-import com.vaadin.flow.shared.Registration;
 
 import java.util.Collections;
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class FilterableGrid<FilterType, ItemType> implements FilterableComponent
         filters.clear();
     }
 
-    public List<Filter<FilterType, ItemType>> getFilters() {
+    public List<Filter<?, ?>> getFilters() {
         return Collections.unmodifiableList(filters);
     }
 
@@ -67,8 +66,8 @@ public class FilterableGrid<FilterType, ItemType> implements FilterableComponent
         return grid.addColumn(valueProvider);
     }
 
-    public Registration addItemClickListener(ComponentEventListener<ItemClickEvent<ItemType>> listener) {
-        return grid.addItemClickListener(listener);
+    public void addItemClickListener(ComponentEventListener<ItemClickEvent<ItemType>> listener) {
+        grid.addItemClickListener(listener);
     }
 
     public GridListDataView<ItemType> setItems(List<ItemType> items) {

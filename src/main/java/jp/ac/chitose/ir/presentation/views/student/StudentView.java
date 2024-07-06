@@ -13,22 +13,20 @@ import jp.ac.chitose.ir.application.service.student.StudentGrade;
 import jp.ac.chitose.ir.application.service.student.StudentService;
 import jp.ac.chitose.ir.application.service.student.StudentSubjectCalc;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
-import jp.ac.chitose.ir.presentation.component.scroll.ScrollManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
 
 @PermitAll
 @PageTitle("GradeStudent")
 @Route(value = "grade/student", layout = MainLayout.class)
 public class StudentView extends VerticalLayout {
     private final StudentService studentService;
-    private final FilterableComboBox<String, StudentGrade> subjectComboBox;
+    private final FilteredComboBox<String, StudentGrade> subjectComboBox;
     private final TextField studentNumberField;
     private FilteredGrid<Number, StudentSubjectCalc> subjectGrid;
     private SubjectGraph subjectGraph;
-    private final static String ALL = "全体";
     private VerticalLayout gpaLayout;
     private VerticalLayout subjectLayout;
     private final static List<String> FILTER_NAMES = List.of("学年", "学科", "必選別", "成績評価");
@@ -61,15 +59,21 @@ public class StudentView extends VerticalLayout {
             StudentSubjectCalc::秀,
             StudentSubjectCalc::平均,
             StudentSubjectCalc::分散);
-    private final ScrollManager scrollManager = new ScrollManager();
 
     public StudentView(StudentService studentService) {
         this.studentService = studentService;
-        this.subjectComboBox = new FilterableComboBox<>("科目名");
-        this.studentNumberField = new TextField();
+        subjectComboBox = new FilteredComboBox<>("科目名", createComboBoxFilters(), FilterPosition.TOP);
+        studentNumberField = new TextField();
 
         initializeComponents();
         addComponentsToLayout();
+    }
+
+    private List<Filter<String, StudentGrade>> createComboBoxFilters() {
+        List<Filter<String, StudentGrade>> filters = new ArrayList<>();
+        filters.add(new RadioButtonFilter<>(RadioButtonValues.SCHOOL_YEARS.getValues(), FILTER_FUNCTIONS.get(0), FILTER_NAMES.get(0)));
+        filters.add(new RadioButtonFilter<>(RadioButtonValues.DEPARTMENTS.getValues(), FILTER_FUNCTIONS.get(1), FILTER_NAMES.get(1)));
+        return filters;
     }
 
     private void initializeComponents() {
@@ -79,27 +83,14 @@ public class StudentView extends VerticalLayout {
 
     private void initializeSubjectComboBox() {
         subjectComboBox.setItemLabelGenerator(StudentGrade::科目名);
-        subjectComboBox.setWidth("40%");
+        subjectComboBox.setComboBoxWidth("40%");
         subjectComboBox.setPlaceholder("GPAのグラフを表示しています。選んだ科目のグラフに切り替わります。");
         subjectComboBox.setClearButtonVisible(true);
         subjectComboBox.addValueChangeListener(this::updateLayout);
-        addFiltersToComboBox();
-    }
-
-    private void addFiltersToComboBox() {
-        addRadioButtonFilter(subjectComboBox, RadioButtonValues.SCHOOL_YEARS, StudentGrade::schoolYear);
-        addRadioButtonFilter(subjectComboBox, RadioButtonValues.DEPARTMENTS, StudentGrade::department);
-    }
-
-    private void addRadioButtonFilter(FilterableComboBox<String, StudentGrade> comboBox, RadioButtonValues values, Function<StudentGrade, String> valueProvider) {
-        comboBox.addFilter(RadioButtonFilter.create(
-                comboBox,
-                values.getValues(),
-                (grade, filterValue) -> matchesFilter(filterValue, valueProvider.apply(grade))));
     }
 
     private static boolean matchesFilter(String filterValue, String itemValue) {
-        return filterValue.equals(ALL) || filterValue.equals(itemValue);
+        return filterValue.equals("全体") || filterValue.equals(itemValue);
     }
 
     private void initializeStudentNumberField() {
@@ -138,15 +129,26 @@ public class StudentView extends VerticalLayout {
     }
 
     private FilteredGrid<String, StudentGrade> createGradeGrid(String studentNumber) {
-        FilteredGrid<String, StudentGrade> gradeGrid = new FilteredGrid<>(StudentGrade.class, GRADE_VALUE_PROVIDERS, GRADE_HEADER_NAMES);
+        FilteredGrid<String, StudentGrade> gradeGrid = new FilteredGrid<>(StudentGrade.class, GRADE_VALUE_PROVIDERS, GRADE_HEADER_NAMES,
+                createGradeGridFilters(), FilterPosition.TOP);
+        gradeGrid.setAllRowsVisible(true);
         gradeGrid.setItems(studentService.getStudentNumberGrades(studentNumber).data());
-        gradeGrid.addRadioButtonFilters(FILTER_VALUES, FILTER_FUNCTIONS, FILTER_NAMES);
         gradeGrid.addItemClickListener(grade -> subjectComboBox.setValue(grade.getItem()));
         return gradeGrid;
     }
 
+    private List<Filter<String, StudentGrade>> createGradeGridFilters() {
+        List<Filter<String, StudentGrade>> filters = new ArrayList<>();
+        for(int i = 0; i < Math.min(StudentView.FILTER_VALUES.size(), StudentView.FILTER_FUNCTIONS.size()); i++) {
+            filters.add(new RadioButtonFilter<>(StudentView.FILTER_VALUES.get(i).getValues(), StudentView.FILTER_FUNCTIONS.get(i), FILTER_NAMES.get(i)));
+        }
+        return filters;
+    }
+
     private FilteredGrid<Number, StudentSubjectCalc> createSubjectGrid() {
-        return new FilteredGrid<>(StudentSubjectCalc.class, SUBJECT_VALUE_PROVIDERS, SUBJECT_HEADER_NAMES);
+        FilteredGrid<Number, StudentSubjectCalc> grid = new FilteredGrid<>(StudentSubjectCalc.class, SUBJECT_VALUE_PROVIDERS, SUBJECT_HEADER_NAMES, new ArrayList<>(), FilterPosition.TOP);
+        grid.setAllRowsVisible(true);
+        return grid;
     }
 
     private void updateLayout(AbstractField.ComponentValueChangeEvent<ComboBox<StudentGrade>, StudentGrade> event) {
@@ -174,15 +176,14 @@ public class StudentView extends VerticalLayout {
     private void updateSubjectGrid(String subject) {
         subjectGrid.setItems(studentService.getStudentSubjectCalc(subject).data());
         subjectGrid.clearFilters();
-        NoneComponentFilter<Number, StudentSubjectCalc> filter = new NoneComponentFilter<>((subjectCalc, grade) -> subjectCalc.開講年() == (int)grade, studentService.getStudentNumberGrade(studentNumberField.getValue(), subject).data().get(0).開講年());
+        NoneComponentFilter<Number, StudentSubjectCalc> filter = new NoneComponentFilter<>((subjectCalc, grade) -> subjectCalc.開講年() == (int)grade,
+                studentService.getStudentNumberGrade(studentNumberField.getValue(), subject).data().get(0).開講年());
         subjectGrid.addFilter(filter);
         subjectGrid.filter();
     }
 
     private void addComponentsToLayout() {
         add(studentNumberField, new H1("Student"), new Paragraph("説明"));
-        add(new H3("学年"), subjectComboBox.getFilters().get(0).getFilterComponent());
-        add(new H3("学科"), subjectComboBox.getFilters().get(1).getFilterComponent());
-        add(subjectComboBox.getComponent());
+        add(subjectComboBox);
     }
 }
