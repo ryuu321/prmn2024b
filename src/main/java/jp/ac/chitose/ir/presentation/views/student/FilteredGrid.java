@@ -17,13 +17,13 @@ public class FilteredGrid<FilterType, ItemType> extends VerticalLayout {
         filterableGrid = new FilterableGrid<>(beanTypeClass, false);
         addColumns(valueProviders, headerNames);
         setupLayout();
-        add(filterableGrid);
+        add(filterableGrid.getComponent());
     }
 
     public FilteredGrid(FilterableGrid<FilterType, ItemType> filterableGrid) {
         this.filterableGrid = filterableGrid;
         setupLayout();
-        add(filterableGrid);
+        add(filterableGrid.getComponent());
     }
 
     private void setupLayout() {
@@ -48,10 +48,10 @@ public class FilteredGrid<FilterType, ItemType> extends VerticalLayout {
     }
 
     public void addRadioButtonFilter(RadioButtonValues filterValue, BiPredicate<ItemType, FilterType> filterFunction, String filterName) {
-        remove(filterableGrid);
+        remove(filterableGrid.getComponent());
         filterableGrid.addFilter(RadioButtonFilter.create(filterableGrid, (FilterType[])filterValue.getValues(), filterFunction));
         add(new H3(filterName), filterableGrid.getFilters().get(filterableGrid.getFilters().size() - 1).getFilterComponent());
-        add(filterableGrid);
+        add(filterableGrid.getComponent());
     }
 
     public void filter() {

@@ -183,6 +183,6 @@ public class StudentView extends VerticalLayout {
         add(studentNumberField, new H1("Student"), new Paragraph("説明"));
         add(new H3("学年"), subjectComboBox.getFilters().get(0).getFilterComponent());
         add(new H3("学科"), subjectComboBox.getFilters().get(1).getFilterComponent());
-        add(subjectComboBox);
+        add(subjectComboBox.getComponent());
     }
 }
