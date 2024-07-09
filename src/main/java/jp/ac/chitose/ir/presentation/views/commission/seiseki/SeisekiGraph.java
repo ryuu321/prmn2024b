@@ -251,7 +251,7 @@ public class SeisekiGraph {
                 dataList.get(8));
 
         return Graph.Builder.get().histogram()
-                .height("300px").width("800px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
+                .height("300px").width("700px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
     }
     private ApexCharts pie(ArrayList<Integer> a, String b){
         String[] name = {"0以上0.5未満","0.5以上1.0未満","1.0以上1.5未満","1.5以上2.0未満","2.0以上2.5未満","2.5以上3.0未満","3.0以上3.5未満","3.5以上4.0未満","4.0"};
@@ -272,7 +272,7 @@ public class SeisekiGraph {
                 .height("450px")
                 .width("450px")
                 .animationsEnabled(false)
-                .colors("#4795F5","#71B0F7","#A0CEF9","#BCE0FA","#A8D8ED","#7FC3DD","#54ADCC","#2B99BC")
+                .colors("#1676F3","#4795F5","#71B0F7","#A0CEF9","#BCE0FA","#A8D8ED","#7FC3DD","#54ADCC")
                 .build()
                 .getGraph();
     }

@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.presentation.views.commission.seiseki;
 
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -13,13 +14,16 @@ public class Seiseki {
     private RadioButtonGroup<String> r6;
 
     private int mode;
-
+    private String str1;
+    private String str2;
     public Seiseki(int mode){
         this.mode = mode;
 
         HorizontalLayout radioAndText = new HorizontalLayout();
         //mode=0 : yearFirstのレイアウト、mode=1 : subjectFirstのレイアウト
         if(mode == 0) {
+            str1 = "学年";
+            str2 = "学科";
             this.r1 = new RadioButtonGroup<>();
             r1.setLabel("学年選択");
             r1.setItems("全体", "1年", "2年", "3年", "4年", "M1", "M2");
@@ -64,6 +68,8 @@ public class Seiseki {
 
 
         } else if (mode == 1) {
+            str1 = "学科";
+            str2 = "学年";
             this.r1 = new RadioButtonGroup<>();
             r1.setLabel("学科選択");
             r1.setItems("全体", "応用化学生物学科","電子光工学科", "情報システム工学科");
@@ -98,7 +104,9 @@ public class Seiseki {
 
     public VerticalLayout view(){
         VerticalLayout main = new VerticalLayout();
+        main.add(new H3(str1));
         main.add(r1);
+        main.add(new H3(str2));
         main.add(r2);
         main.add(r3);
         main.add(r4);
