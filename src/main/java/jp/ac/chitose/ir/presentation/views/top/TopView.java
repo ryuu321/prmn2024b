@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.presentation.views.top;
 
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
@@ -23,15 +24,19 @@ public class TopView extends VerticalLayout {
         add(title);
 
         // 成績情報ページ（StudentView）の紹介
-        H2 grade = new H2("成績情報");
-        add(grade, new Paragraph("成績情報を確認できます。"));
+        Anchor grade = new Anchor("/grade/student", "成績情報");
+        grade.getElement().setAttribute("target", "");
+        add(new H2(grade));
+        add(new Paragraph("成績情報を確認できます。"));
 
         // 成績統計ページ（CommissionView）の紹介
-        H2 gradestat = new H2("成績統計");
-        add(gradestat, new Paragraph("成績に関する詳細な統計情報が確認できます。"));
+        Anchor gradestat = new Anchor("commission", "成績情報");
+        add(new H2(gradestat));
+        add(new Paragraph("成績に関する詳細な統計情報が確認できます。"));
 
         // アンケートページ（ClassSelectView?）の紹介
-        H2 questionnaire = new H2("アンケート");
-        add(questionnaire, new Paragraph("各種アンケートの回答結果を確認できます。"));
+        Anchor questionnaire = new Anchor("questionnaire", "アンケート");
+        add(new H2(questionnaire));
+        add(new Paragraph("各種アンケートの回答結果を確認できます。"));
     }
 }
