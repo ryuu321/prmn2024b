@@ -12,6 +12,7 @@ import jp.ac.chitose.ir.application.service.management.SecurityService;
 import jp.ac.chitose.ir.presentation.views.class_select.QPOJFICHKVJBView;
 import jp.ac.chitose.ir.presentation.views.commission.ir.IrQuestionView;
 import jp.ac.chitose.ir.presentation.views.commission.seiseki.CommissionView;
+import jp.ac.chitose.ir.presentation.views.commission.university.UniversityView;
 import jp.ac.chitose.ir.presentation.views.questionnaire.QuestionnaireTopView;
 import jp.ac.chitose.ir.presentation.views.student.StudentView;
 import jp.ac.chitose.ir.presentation.views.top.TopView;
@@ -116,8 +117,9 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("成績情報", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class),//
                 new MenuItemInfo("成績統計",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class),//
                 new MenuItemInfo("アンケート", LineAwesomeIcon.CHART_BAR.create(), QuestionnaireTopView.class),//
-                new MenuItemInfo("IRアンケート",LineAwesomeIcon.ALGOLIA.create(), IrQuestionView.class),//
+                new MenuItemInfo("IRアンケート",LineAwesomeIcon.FILE_ALT.create(), IrQuestionView.class),//
                 new MenuItemInfo("Teacher", LineAwesomeIcon.CHART_AREA_SOLID.create(), QPOJFICHKVJBView.class),//
+                new MenuItemInfo("大学情報",LineAwesomeIcon.CHALKBOARD_TEACHER_SOLID.create(), UniversityView.class),//
         };
     }
 
