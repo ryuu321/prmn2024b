@@ -1,6 +1,7 @@
 package jp.ac.chitose.ir.presentation.views.student;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -16,6 +17,7 @@ import jp.ac.chitose.ir.presentation.component.MainLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 
 @PermitAll
@@ -23,9 +25,9 @@ import java.util.function.BiPredicate;
 @Route(value = "grade/student", layout = MainLayout.class)
 public class StudentView extends VerticalLayout {
     private final StudentService studentService;
-    private final FilteredComboBox<String, StudentGrade> subjectComboBox;
+    private final FilterableComboBox<String, StudentGrade> subjectComboBox;
     private final TextField studentNumberField;
-    private FilteredGrid<Number, StudentSubjectCalc> subjectGrid;
+    private FilterableGrid<Number, StudentSubjectCalc> subjectGrid;
     private SubjectGraph subjectGraph;
     private VerticalLayout gpaLayout;
     private VerticalLayout subjectLayout;
@@ -62,7 +64,7 @@ public class StudentView extends VerticalLayout {
 
     public StudentView(StudentService studentService) {
         this.studentService = studentService;
-        subjectComboBox = new FilteredComboBox<>("科目名", createComboBoxFilters(), FilterPosition.TOP);
+        subjectComboBox = new FilterableComboBox<>("科目名", createComboBoxFilters(), FilterPosition.TOP);
         studentNumberField = new TextField();
 
         initializeComponents();
@@ -82,8 +84,8 @@ public class StudentView extends VerticalLayout {
     }
 
     private void initializeSubjectComboBox() {
-        subjectComboBox.setItemLabelGenerator(StudentGrade::科目名);
         subjectComboBox.setComboBoxWidth("40%");
+        subjectComboBox.setItemLabelGenerator(StudentGrade::科目名);
         subjectComboBox.setPlaceholder("GPAのグラフを表示しています。選んだ科目のグラフに切り替わります。");
         subjectComboBox.setClearButtonVisible(true);
         subjectComboBox.addValueChangeListener(this::updateLayout);
@@ -128,9 +130,11 @@ public class StudentView extends VerticalLayout {
         subjectLayout.add(subjectGrid);
     }
 
-    private FilteredGrid<String, StudentGrade> createGradeGrid(String studentNumber) {
-        FilteredGrid<String, StudentGrade> gradeGrid = new FilteredGrid<>(StudentGrade.class, GRADE_VALUE_PROVIDERS, GRADE_HEADER_NAMES,
-                createGradeGridFilters(), FilterPosition.TOP);
+    private FilterableGrid<String, StudentGrade> createGradeGrid(String studentNumber) {
+        FilterableGrid<String, StudentGrade> gradeGrid = new FilterableGrid<>(StudentGrade.class, false, createGradeGridFilters(), FilterPosition.TOP);
+        for(int i = 0; i < GRADE_HEADER_NAMES.size(); i++) {
+            gradeGrid.addColumn(GRADE_VALUE_PROVIDERS.get(i), GRADE_HEADER_NAMES.get(i));
+        }
         gradeGrid.setAllRowsVisible(true);
         gradeGrid.setItems(studentService.getStudentNumberGrades(studentNumber).data());
         gradeGrid.addItemClickListener(grade -> subjectComboBox.setValue(grade.getItem()));
@@ -145,10 +149,13 @@ public class StudentView extends VerticalLayout {
         return filters;
     }
 
-    private FilteredGrid<Number, StudentSubjectCalc> createSubjectGrid() {
-        FilteredGrid<Number, StudentSubjectCalc> grid = new FilteredGrid<>(StudentSubjectCalc.class, SUBJECT_VALUE_PROVIDERS, SUBJECT_HEADER_NAMES, new ArrayList<>(), FilterPosition.TOP);
-        grid.setAllRowsVisible(true);
-        return grid;
+    private FilterableGrid<Number, StudentSubjectCalc> createSubjectGrid() {
+        FilterableGrid<Number, StudentSubjectCalc> subjectGrid = new FilterableGrid<>(StudentSubjectCalc.class, false, new ArrayList<>(), FilterPosition.TOP);
+        for(int i = 0; i < SUBJECT_HEADER_NAMES.size(); i++) {
+            subjectGrid.addColumn(SUBJECT_VALUE_PROVIDERS.get(i), SUBJECT_HEADER_NAMES.get(i));
+        }
+        subjectGrid.setAllRowsVisible(true);
+        return subjectGrid;
     }
 
     private void updateLayout(AbstractField.ComponentValueChangeEvent<ComboBox<StudentGrade>, StudentGrade> event) {
@@ -175,15 +182,25 @@ public class StudentView extends VerticalLayout {
 
     private void updateSubjectGrid(String subject) {
         subjectGrid.setItems(studentService.getStudentSubjectCalc(subject).data());
-        subjectGrid.clearFilters();
-        NoneComponentFilter<Number, StudentSubjectCalc> filter = new NoneComponentFilter<>((subjectCalc, grade) -> subjectCalc.開講年() == (int)grade,
-                studentService.getStudentNumberGrade(studentNumberField.getValue(), subject).data().get(0).開講年());
-        subjectGrid.addFilter(filter);
-        subjectGrid.filter();
+        Optional<NoneComponentFilter<Number, StudentSubjectCalc>> optionalNoneComponentFilter = subjectGrid.getTypeFilters().stream()
+                .filter(filter -> filter instanceof NoneComponentFilter)
+                .map(filter -> (NoneComponentFilter<Number, StudentSubjectCalc>) filter)
+                .findFirst();
+        if(optionalNoneComponentFilter.isPresent()) {
+            NoneComponentFilter<Number, StudentSubjectCalc> noneComponentFilter = optionalNoneComponentFilter.get();
+            noneComponentFilter.setValue(studentService.getStudentNumberGrade(studentNumberField.getValue(), subject).data().get(0).開講年());
+        }
     }
 
     private void addComponentsToLayout() {
-        add(studentNumberField, new H1("Student"), new Paragraph("説明"));
+        Paragraph p = gyu(new Paragraph("説明\nあいうえお"), 1);
+
+        add(studentNumberField, new H1("Student"), p);
         add(subjectComboBox);
+    }
+
+    private <T extends HasStyle> T gyu(T component, int indent) {
+        component.getStyle().setPadding("0px").set("white-space", "pre-line").set("line-height", "1em").set("margin-left", indent * 30 + "px").set("margin-right", "0px").set("margin-top", "0px").set("margin-bottom", "0px");
+        return component;
     }
 }

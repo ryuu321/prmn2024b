@@ -1,66 +1,47 @@
 package jp.ac.chitose.ir.presentation.views.student;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public enum FilterPosition {
-    TOP((layout, component, filters) -> {
-        filters.stream()
-                .filter(filter -> !(filter instanceof NoneComponentFilter))
-                .forEach(filter -> {
-                    String name = filter.getFilterComponent().getElement().getAttribute("id");
-                    if(name != null && !name.isEmpty()) layout.add(new H3(name));
-                    layout.add(filter.getFilterComponent());
-                });
-        layout.add(component);
+    TOP((component) -> {
+        setLayoutStyle(component);
+        layoutAddFilters(component, component.getFilters());
+        component.add(component.getComponent());
     }),
-    BOTTOM((layout, component, filters) -> {
-        layout.add(component);
-        filters.stream()
-                .filter(filter -> !(filter instanceof NoneComponentFilter))
-                .forEach(filter -> {
-                    String name = filter.getFilterComponent().getElement().getAttribute("id");
-                    if(name != null && !name.isEmpty()) layout.add(new H3(name));
-                    layout.add(filter.getFilterComponent());
-                });
-    }),
-    RIGHT((layout, component, filters) -> {
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.add(component);
-        filters.stream()
-                .filter(filter -> !(filter instanceof NoneComponentFilter))
-                .forEach(filter -> {
-                    String name = filter.getFilterComponent().getElement().getAttribute("id");
-                    if(name != null && !name.isEmpty()) layout.add(new H3(name));
-                    horizontalLayout.add(filter.getFilterComponent());
-                });
-        layout.add(horizontalLayout);
-    }),
-    LEFT((layout, component, filters) -> {
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
-        filters.stream()
-                .filter(filter -> !(filter instanceof NoneComponentFilter))
-                .forEach(filter -> {
-                    String name = filter.getFilterComponent().getElement().getAttribute("id");
-                    if(name != null && !name.isEmpty()) layout.add(new H3(name));
-                    horizontalLayout.add(filter.getFilterComponent());
-                });
-        horizontalLayout.add(component);
-        layout.add(horizontalLayout);
+    BOTTOM((component) -> {
+        setLayoutStyle(component);
+        layoutAddFilters(component, component.getFilters());
+        component.add(component.getComponent());
     });
 
-    private final TriConsumer<VerticalLayout, Component, List<Filter<?, ?>>> layoutFunction;
+    private final Consumer<AbstractFilterableComponent<?, ?, ?>> filterPosition;
 
-    FilterPosition(TriConsumer<VerticalLayout, Component, List<Filter<?, ?>>> layoutFunction) {
-        this.layoutFunction = layoutFunction;
+    FilterPosition(Consumer<AbstractFilterableComponent<?, ?, ?>> filterPosition) {
+        this.filterPosition = filterPosition;
     }
 
-    public void apply(VerticalLayout layout, Component component, List<Filter<?, ?>> filters) {
-        layoutFunction.accept(layout, component, filters);
+    public void setup(AbstractFilterableComponent<?, ?, ?> component) {
+        this.filterPosition.accept(component);
+    }
+
+    private static void setLayoutStyle(HasComponents layout) {
+        layout.getElement().setAttribute("style", "width:100%; height: auto;");
+    }
+
+    private static void layoutAddFilters(HasComponents layout, List<Filter<?, ?>> filters) {
+        for(Filter<?, ?> filter : filters) {
+            Component filterComponent = filter.getFilterComponent();
+            String id = filterComponent.getElement().getAttribute("id");
+            if (id == null) {
+                layout.add(filterComponent);
+            } else {
+                layout.add(new H3(id), filterComponent);
+            }
+        }
     }
 }

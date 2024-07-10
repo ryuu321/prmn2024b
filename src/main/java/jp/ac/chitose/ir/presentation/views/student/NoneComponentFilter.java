@@ -1,12 +1,14 @@
 package jp.ac.chitose.ir.presentation.views.student;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.Div;
 
 import java.util.function.BiPredicate;
 
 public class NoneComponentFilter<FilterType, ItemType> implements Filter<FilterType, ItemType> {
     private FilterType value;
-    private BiPredicate<ItemType, FilterType> filter;
+    private final BiPredicate<ItemType, FilterType> filter;
+    private Runnable valueChangeListener;
 
     public NoneComponentFilter(BiPredicate<ItemType, FilterType> filter, FilterType value) {
         this.filter = filter;
@@ -14,17 +16,13 @@ public class NoneComponentFilter<FilterType, ItemType> implements Filter<FilterT
     }
 
     @Override
-    public Component getFilterComponent() {
-        return null;
+    public void addValueChangeListener(Runnable valueChangeListener) {
+        this.valueChangeListener = valueChangeListener;
     }
 
     @Override
-    public void setFilterPredicate(BiPredicate<ItemType, FilterType> filter) {
-        this.filter = filter;
-    }
-
-    public void setValue(FilterType value) {
-        this.value = value;
+    public Component getFilterComponent() {
+        return new Div(); // 何も起きないダミーコンポーネントを返す
     }
 
     @Override
@@ -32,8 +30,9 @@ public class NoneComponentFilter<FilterType, ItemType> implements Filter<FilterT
         return filter.test(item, value);
     }
 
-    @Override
-    public void registerComponent(FilteredComponent<FilterType, ItemType> filteredComponent) {
-        return;
+    public void setValue(FilterType value) {
+        this.value = value;
+        if(valueChangeListener == null) return;
+        valueChangeListener.run();
     }
 }
