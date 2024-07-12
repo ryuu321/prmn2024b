@@ -41,6 +41,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         i18nErrorMessage.setMessage("ユーザー名とパスワードが正しいことを確認して、再試行してください");
 
         login = new LoginForm(i18n);
+        login.setForgotPasswordButtonVisible(false);
         login.setAction("login");
 
         add(new H1("CIST IR-Web"), login);
