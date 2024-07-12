@@ -43,7 +43,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         login = new LoginForm(i18n);
         login.setAction("login");
 
-        add(new H1("IRポータル(仮)"), login);
+        add(new H1("CIST IR-Web"), login);
         add(login);
     }
 

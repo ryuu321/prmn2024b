@@ -83,11 +83,11 @@ public class MainLayout extends AppLayout {
         Div layout = new Div();
         layout.addClassNames(Display.FLEX, AlignItems.CENTER, Padding.Horizontal.LARGE);
 
-        H1 appName = new H1("IR");
+        H1 appName = new H1("CIST IR-Web");
         appName.addClassNames(Margin.Vertical.MEDIUM, Margin.End.AUTO, FontSize.LARGE);
 
         H5 username = new H5(securityService.getLoginUser().getUsername() + "　");
-        Button logout = new Button("Logout", click -> securityService.logout());
+        Button logout = new Button("ログアウト", click -> securityService.logout());
 
         layout.add(appName,username, logout);
 
