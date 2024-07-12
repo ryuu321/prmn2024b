@@ -12,8 +12,8 @@ import jp.ac.chitose.ir.presentation.component.MainLayout;
 @Route(value = "/questionnaire", layout = MainLayout.class)
 @PermitAll
 public class QuestionnaireTopView extends VerticalLayout {
-    private QuestionnaireService questionnaireService;
-    private QuestionnaireGrid questionnaireGrid;
+    private final QuestionnaireService questionnaireService;
+    private final QuestionnaireGrid questionnaireGrid;
 
     public QuestionnaireTopView(QuestionnaireService questionnaireService) {
         this.questionnaireService = questionnaireService;
