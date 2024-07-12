@@ -1,6 +1,6 @@
 package jp.ac.chitose.ir.application.service.usermanagement;
 
-public record UsersDataGrid(
+public record UsersData(
         int id,
         String user_name,
         boolean is_available,
