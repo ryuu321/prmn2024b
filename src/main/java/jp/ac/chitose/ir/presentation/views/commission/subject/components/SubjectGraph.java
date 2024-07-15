@@ -15,6 +15,7 @@ import jp.ac.chitose.ir.application.service.commission.commission_subject.Subjec
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 public class SubjectGraph {
@@ -44,13 +45,15 @@ public class SubjectGraph {
 
         TableData<Subject> subjects = this.subjectTableData;
         GridListDataView<Subject> dataView = grid.setItems(subjects.data());
-        //SubjectFilter subjectFilter = new SubjectFilter(dataView);
+        int i=0;
         grid.addSelectionListener(selection -> {
-            List list=new ArrayList<>(selection.getAllSelectedItems());
-            Object list_id=list.get(0);
+            //List list=new ArrayList<>(selection.getAllSelectedItems());
+            List list= new ArrayList<>(selection.getAllSelectedItems());
 
 
-            System.out.println(list_id);
+
+
+            System.out.println(selection.getAllSelectedItems());
         });
 
         TextField searchField = new TextField();
@@ -97,6 +100,11 @@ public class SubjectGraph {
         return value.toLowerCase().contains(searchTerm.toLowerCase());
     }
 
+
+    private void getSelectedItem(Set<Subject> selection){
+
+
+    }
 
 }
 

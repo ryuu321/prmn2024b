@@ -12,6 +12,9 @@ import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.SelectButton;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.ActiveLearning;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.NumberOfForeignLanguageClass;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.exam.EnrollmentCapacity;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.people.*;
 
 import java.util.ArrayList;
@@ -70,6 +73,7 @@ public class UniversityView extends VerticalLayout {
         mainLayout.add(buttonLayout);
 
         //各レイアウトのボタン、レイアウトを追加
+        //人数に関するボタン
         //教員数
         VerticalLayout numberOfTeachers = new NumberOfTeachers();
         setLayout(numberOfTeachers,"教員数",people);
@@ -95,6 +99,39 @@ public class UniversityView extends VerticalLayout {
         setLayout(foreignTeacher,"外国人教員数",people);
         add(foreignTeacher);
 
+        //社会人学生数
+        VerticalLayout workingAdultStudent =new WorkingAdultStudent();
+        setLayout(workingAdultStudent,"社会人学生数",people);
+        add(workingAdultStudent);
+
+        //休学者数
+        VerticalLayout leaveOfAbsence = new LeaveOfAbsence();
+        setLayout(leaveOfAbsence,"休学者数",people);
+        add(leaveOfAbsence);
+
+        //退学、除籍者数
+        VerticalLayout dropoutOrExpelled = new DropoutOrExpelled();
+        setLayout(dropoutOrExpelled,"退学、除籍者数",people);
+        add(dropoutOrExpelled);
+
+
+        //入試に関するボタン
+        //入学定員
+        VerticalLayout enrollmentCapacity = new EnrollmentCapacity();
+        setLayout(enrollmentCapacity,"入学定員",exam);
+        add(enrollmentCapacity);
+
+
+        //授業に関するボタン
+        //外国語科目数
+        VerticalLayout numberOFForeignLanguageClass = new NumberOfForeignLanguageClass();
+        setLayout(numberOFForeignLanguageClass,"外国語科目数",classwork);
+        add(numberOFForeignLanguageClass);
+
+        //アクティブラーニング実施率
+        VerticalLayout activeLearning = new ActiveLearning();
+        setLayout(activeLearning,"アクティブラーニング実施率",classwork);
+        add(activeLearning);
 
         backButton.addClickListener(e -> {
             for (VerticalLayout layout : layouts) {
