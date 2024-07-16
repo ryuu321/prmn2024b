@@ -24,7 +24,7 @@ public interface ClassSelect {
     TableData<ReviewQPOJFICHKVJBDescription> getReviewQPOJFICHKVJBDescription();
 
     @GetExchange("/ReviewTitle")
-    TableData<ReviewTitle> getReviewTitle();
+    TableData<ReviewTitle> getReviewTitle();//質問事項
 
 }
 
