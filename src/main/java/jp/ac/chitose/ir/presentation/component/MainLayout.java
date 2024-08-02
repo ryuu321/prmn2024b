@@ -12,8 +12,9 @@ import jp.ac.chitose.ir.application.service.management.SecurityService;
 import jp.ac.chitose.ir.presentation.views.class_select.QPOJFICHKVJBView;
 import jp.ac.chitose.ir.presentation.views.commission.ir.IrQuestionView;
 import jp.ac.chitose.ir.presentation.views.commission.seiseki.CommissionView;
-import jp.ac.chitose.ir.presentation.views.helloworld.HelloWorldView;
+import jp.ac.chitose.ir.presentation.views.questionnaire.QuestionnaireTopView;
 import jp.ac.chitose.ir.presentation.views.student.StudentView;
+import jp.ac.chitose.ir.presentation.views.top.TopView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
@@ -111,11 +112,12 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
-                new MenuItemInfo("Top", LineAwesomeIcon.GLOBE_SOLID.create(), HelloWorldView.class), //
-                new MenuItemInfo("Student", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class),//
-                new MenuItemInfo("成績情報(GPA)",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class),//
+                new MenuItemInfo("Top", LineAwesomeIcon.GLOBE_SOLID.create(), TopView.class), //
+                new MenuItemInfo("成績情報", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class),//
+                new MenuItemInfo("成績統計",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class),//
+                new MenuItemInfo("アンケート", LineAwesomeIcon.CHART_BAR.create(), QuestionnaireTopView.class),//
                 new MenuItemInfo("IRアンケート",LineAwesomeIcon.ALGOLIA.create(), IrQuestionView.class),//
-                new MenuItemInfo("Teacher", LineAwesomeIcon.CHART_AREA_SOLID.create(), QPOJFICHKVJBView.class)//
+                new MenuItemInfo("Teacher", LineAwesomeIcon.CHART_AREA_SOLID.create(), QPOJFICHKVJBView.class),//
         };
     }
 
