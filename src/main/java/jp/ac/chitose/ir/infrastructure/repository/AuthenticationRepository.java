@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public class AuthenticationRepository {
@@ -24,8 +24,8 @@ public class AuthenticationRepository {
     }
 
     // JDBC Clientを使ったデータ取得のメソッド
-    public Optional<User> getUserInformation(String name, String password){
-        Optional<User> userOp = jdbcClient.sql("""
+    public List<User> getUserInformation(String name, String password){
+        List<User> userOp = jdbcClient.sql("""
                 SELECT
                   A.id, A.user_name AS name, A.password, A.is_available, C.role_name AS role
                 FROM
@@ -40,7 +40,7 @@ public class AuthenticationRepository {
                 """)
                 .params(name, password)
                 .query(new DataClassRowMapper<>(User.class))
-                .optional();
+                .list();
         return userOp;
     }
 }
