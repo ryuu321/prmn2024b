@@ -6,15 +6,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 public class LoginUser implements UserDetails {
 
     private User user;
 
+    private HashSet<String> roles;
+
     private Collection<GrantedAuthority> authorities;
 
-    public LoginUser(User user) {
+    public LoginUser(User user, HashSet<String> roles) {
         this.user = user;
+        this.roles = roles;
     }
 
     @Override
@@ -23,9 +27,12 @@ public class LoginUser implements UserDetails {
             return authorities;
         }
 
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.role());
         authorities = new ArrayList<>();
-        authorities.add(authority);
+
+        for(String role : roles) {
+            GrantedAuthority authority = new SimpleGrantedAuthority(role);
+            authorities.add(authority);
+        }
         return authorities;
     }
 
@@ -63,20 +70,12 @@ public class LoginUser implements UserDetails {
         return user.id();
     }
 
-    public boolean isTeacher() {
-        return user.role().equals("ROLE_teacher");
-    }
+    public boolean isTeacher() { return roles.contains("ROLE_teacher"); }
 
-    public boolean isStudent() {
-        return user.role().equals("ROLE_student");
-    }
+    public boolean isStudent() { return roles.contains("ROLE_student"); }
 
-    public boolean isCommission() { return user.role().equals("ROLE_commission"); }
+    public boolean isCommission() { return roles.contains("ROLE_commission"); }
 
-    public boolean isAdmin() { return user.role().equals("ROLE_administrator"); }
-
-    public void print() {
-        System.out.println(user.role());
-    }
+    public boolean isAdmin() { return roles.contains("ROLE_administrator"); }
 
 }
