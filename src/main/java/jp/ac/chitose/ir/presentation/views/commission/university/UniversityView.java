@@ -50,7 +50,7 @@ public class UniversityView extends VerticalLayout {
         category.setItems("授業","進路","入試","人数");
         mainLayout.add(category);
         selectRadio();
-
+        
         buttons = new ArrayList<>();
         classwork = new ArrayList<>();
         buttons.add(classwork);

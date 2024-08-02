@@ -260,7 +260,7 @@ public class SeisekiGraph {
         for(int data : a){
             dataList.add((double)data);
         }
-        Double[] datalist = new Double[8];
+        Double[] datalist = new Double[9];
         for(int i = 0; i < datalist.length;i++){
             datalist[i] = dataList.get(i);
         }
@@ -272,7 +272,7 @@ public class SeisekiGraph {
                 .height("450px")
                 .width("450px")
                 .animationsEnabled(false)
-                .colors("#1676F3","#4795F5","#71B0F7","#A0CEF9","#BCE0FA","#A8D8ED","#7FC3DD","#54ADCC")
+                .colors("#1676F3","#4795F5","#71B0F7","#A0CEF9","#BCE0FA","#A8D8ED","#7FC3DD","#54ADCC","#2B99BC")
                 .build()
                 .getGraph();
     }
