@@ -5,6 +5,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.application.service.commission.CommissionService;
+import jp.ac.chitose.ir.application.service.commission.GradeService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 
 @PageTitle("Commission")
@@ -12,11 +13,13 @@ import jp.ac.chitose.ir.presentation.component.MainLayout;
 @PermitAll
 public class CommissionView extends VerticalLayout {
     private CommissionService commissionService;
+    private GradeService gradeService;
 
-    public CommissionView(CommissionService commissionService){
+    public CommissionView(GradeService gradeService,CommissionService commissionService){
         this.commissionService = commissionService;
+        this.gradeService = gradeService;
 
-        SeisekiView seisekiView = new SeisekiView(commissionService);
+        SeisekiView seisekiView = new SeisekiView(commissionService,gradeService);
         VerticalLayout seiseki = seisekiView.view();
         add(seiseki);
 

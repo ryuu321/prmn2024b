@@ -5,15 +5,18 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import jp.ac.chitose.ir.application.service.commission.CommissionService;
+import jp.ac.chitose.ir.application.service.commission.GradeService;
 
 public class SeisekiView implements View {
     private CommissionService commissionService;
     private VerticalLayout yearFirstLayout;
     private VerticalLayout subjectFirstLayout;
+    private GradeService gradeService;
 
 
-    public SeisekiView(CommissionService commissionService){
+    public SeisekiView(CommissionService commissionService, GradeService gradeService){
         this.commissionService = commissionService;
+        this.gradeService = gradeService;
     }
     public VerticalLayout view(){
         VerticalLayout main = new VerticalLayout();
@@ -47,7 +50,7 @@ public class SeisekiView implements View {
         VerticalLayout seisekiYearFirstLayout = new VerticalLayout();
         Seiseki seiseki = new Seiseki(0);
         seisekiYearFirstLayout.add(seiseki.view());
-        SeisekiGraphView seisekiGraphView=new SeisekiGraphView(commissionService,seiseki);
+        SeisekiGraphView seisekiGraphView=new SeisekiGraphView(commissionService,seiseki,gradeService);
         seisekiYearFirstLayout.add(seisekiGraphView.view());
         return seisekiYearFirstLayout;
 
@@ -57,7 +60,7 @@ public class SeisekiView implements View {
         VerticalLayout seisekiSubjectFirstLayout = new VerticalLayout();
         Seiseki seiseki = new Seiseki(1);
         seisekiSubjectFirstLayout.add(seiseki.view());
-        SeisekiGraphView seisekiGraphView =  new SeisekiGraphView(commissionService,seiseki);
+        SeisekiGraphView seisekiGraphView =  new SeisekiGraphView(commissionService,seiseki,gradeService);
         seisekiSubjectFirstLayout.add(seisekiGraphView.view());
         return seisekiSubjectFirstLayout;
     }

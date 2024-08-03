@@ -15,17 +15,21 @@ import java.util.ArrayList;
 
 public class SeisekiGraph {
     private TableData<CommissionGpa> tableAll;
-    private TableData<CommissionGpaFirst> tableFirst;
+    private TableData<GradeGpaGraph> tableFirst;
+//    private TableData<CommissionGpaFirst> tableFirst;
     private TableData<CommissionGpaSecond> tableSecond;
     private TableData<CommissionGpaThird> tableThird;
     private TableData<CommissionGpaFourth> tableFourth;
 
 
     private CommissionService commissionService;
-    public SeisekiGraph(CommissionService com){
+    private GradeService gradeService;
+    public SeisekiGraph(CommissionService com, GradeService gradeService){
         this.commissionService=com;
+        this.gradeService=gradeService;
         tableAll = commissionService.getCommissionGpa();
-        tableFirst = commissionService.getCommissionGpaFirst();
+        tableFirst = this.gradeService.getGradeGpaGraph("B1");
+//        tableFirst = commissionService.getCommissionGpaFirst();
         tableSecond = commissionService.getCommissionGpaSecond();
         tableThird = commissionService.getCommissionGpaThird();
         tableFourth = commissionService.getCommissionGpaFourth();
