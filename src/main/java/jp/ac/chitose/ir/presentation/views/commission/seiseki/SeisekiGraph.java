@@ -14,25 +14,21 @@ import jp.ac.chitose.ir.presentation.component.graph.GraphSeries;
 import java.util.ArrayList;
 
 public class SeisekiGraph {
-    private TableData<CommissionGpa> tableAll;
+    private TableData<GradeGpaGraph> tableAll;
     private TableData<GradeGpaGraph> tableFirst;
-//    private TableData<CommissionGpaFirst> tableFirst;
-    private TableData<CommissionGpaSecond> tableSecond;
-    private TableData<CommissionGpaThird> tableThird;
-    private TableData<CommissionGpaFourth> tableFourth;
+    private TableData<GradeGpaGraph> tableSecond;
+    private TableData<GradeGpaGraph> tableThird;
+    private TableData<GradeGpaGraph> tableFourth;
 
-
-    private CommissionService commissionService;
     private GradeService gradeService;
-    public SeisekiGraph(CommissionService com, GradeService gradeService){
-        this.commissionService=com;
+    public SeisekiGraph(GradeService gradeService){
+
         this.gradeService=gradeService;
-        tableAll = commissionService.getCommissionGpa();
+        tableAll = this.gradeService.getGradeGpaGraph("B");
         tableFirst = this.gradeService.getGradeGpaGraph("B1");
-//        tableFirst = commissionService.getCommissionGpaFirst();
-        tableSecond = commissionService.getCommissionGpaSecond();
-        tableThird = commissionService.getCommissionGpaThird();
-        tableFourth = commissionService.getCommissionGpaFourth();
+        tableSecond = this.gradeService.getGradeGpaGraph("B2");
+        tableThird = this.gradeService.getGradeGpaGraph("B3");
+        tableFourth = this.gradeService.getGradeGpaGraph("B4");
     }
 
     //mode = 0

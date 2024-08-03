@@ -19,7 +19,7 @@ public class CommissionView extends VerticalLayout {
         this.commissionService = commissionService;
         this.gradeService = gradeService;
 
-        SeisekiView seisekiView = new SeisekiView(commissionService,gradeService);
+        SeisekiView seisekiView = new SeisekiView(gradeService);
         VerticalLayout seiseki = seisekiView.view();
         add(seiseki);
 
