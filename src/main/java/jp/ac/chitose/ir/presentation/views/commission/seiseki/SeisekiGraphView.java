@@ -13,12 +13,14 @@ public class SeisekiGraphView {
     SeisekiGraph seisekiGraph;
     Seiseki seiseki;
     CommissionService commissionService;
+    private GradeService gradeService;
 
 
-    public SeisekiGraphView(CommissionService com,Seiseki seiseki){
+    public SeisekiGraphView(CommissionService com,Seiseki seiseki, GradeService gradeService){
         this.commissionService=com;
-        this.seisekiGraph=new SeisekiGraph(this.commissionService);
+        this.seisekiGraph=new SeisekiGraph(this.commissionService,gradeService);
         this.seiseki=seiseki;
+        this.gradeService=gradeService;
     }
 
     public VerticalLayout view(){
