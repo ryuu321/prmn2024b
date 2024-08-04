@@ -1,7 +1,6 @@
 package jp.ac.chitose.ir.presentation.views.student;
 
 import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -73,8 +72,9 @@ public class StudentView extends VerticalLayout {
 
     private List<Filter<String, StudentGrade>> createComboBoxFilters() {
         List<Filter<String, StudentGrade>> filters = new ArrayList<>();
-        filters.add(new RadioButtonFilter<>(RadioButtonValues.SCHOOL_YEARS.getValues(), FILTER_FUNCTIONS.get(0), FILTER_NAMES.get(0)));
-        filters.add(new RadioButtonFilter<>(RadioButtonValues.DEPARTMENTS.getValues(), FILTER_FUNCTIONS.get(1), FILTER_NAMES.get(1)));
+        for(int i = 0; i < 2; i++) {
+            filters.add(new RadioButtonFilter<>(FILTER_VALUES.get(i).getValues(), FILTER_FUNCTIONS.get(i), FILTER_NAMES.get(i)));
+        }
         return filters;
     }
 
@@ -111,7 +111,7 @@ public class StudentView extends VerticalLayout {
 
         subjectComboBox.setItems(studentService.getStudentNumberGrades(studentNumber).data());
         initializeGPALayout(studentNumber);
-        initializeSubjectLayout(studentNumber);
+        initializeSubjectLayout();
         add(gpaLayout);
     }
 
@@ -122,7 +122,7 @@ public class StudentView extends VerticalLayout {
         gpaLayout.add(createGradeGrid(studentNumber));
     }
 
-    private void initializeSubjectLayout(String studentNumber) {
+    private void initializeSubjectLayout() {
         subjectLayout = new VerticalLayout();
         subjectGraph = new SubjectGraph();
         subjectLayout.add(subjectGraph);
@@ -193,14 +193,7 @@ public class StudentView extends VerticalLayout {
     }
 
     private void addComponentsToLayout() {
-        Paragraph p = gyu(new Paragraph("説明\nあいうえお"), 1);
-
-        add(studentNumberField, new H1("Student"), p);
+        add(studentNumberField, new H1("Student"), new Paragraph("説明"));
         add(subjectComboBox);
-    }
-
-    private <T extends HasStyle> T gyu(T component, int indent) {
-        component.getStyle().setPadding("0px").set("white-space", "pre-line").set("line-height", "1em").set("margin-left", indent * 30 + "px").set("margin-right", "0px").set("margin-top", "0px").set("margin-bottom", "0px");
-        return component;
     }
 }
