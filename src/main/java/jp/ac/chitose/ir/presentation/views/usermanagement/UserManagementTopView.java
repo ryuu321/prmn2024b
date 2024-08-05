@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.presentation.views.usermanagement;
 
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -16,6 +17,7 @@ public class UserManagementTopView extends VerticalLayout {
     private final UsersDataGrid usersDataGrid;
 
     public UserManagementTopView(UserManagementService userManagementService) {
+        add(new H1("ユーザー管理画面"));
         this.userManagementService = userManagementService;
         usersDataGrid = new UsersDataGrid(userManagementService);
         add(usersDataGrid);
