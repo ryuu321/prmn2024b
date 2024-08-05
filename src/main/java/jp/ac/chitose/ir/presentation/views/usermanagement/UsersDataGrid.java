@@ -15,7 +15,7 @@ public class UsersDataGrid extends VerticalLayout {
         addComponentsToLayout(grid);
     }
 
-    // 各種湖コンポーネントを画面に追加
+    // 各種コンポーネントを画面に追加
     private void addComponentsToLayout(Grid<UsersData> grid) {
         add(grid);
     }
@@ -30,12 +30,17 @@ public class UsersDataGrid extends VerticalLayout {
         return grid;
     }
 
+    // 状態の表示を有効か無効に変更するメソッド
+    private String changeIsAvailableValue(boolean isAvailable) {
+        if (isAvailable) return "有効";
+        return "無効";
+    }
+
     // グリッドにカラムを追加
     private void addColumnsToGrid(Grid<UsersData> grid) {
+        grid.addColumn(data -> changeIsAvailableValue(data.is_available())).setHeader("状態").setSortable(true);
         grid.addColumn(UsersData::id).setHeader("アカウントID").setSortable(true);
         grid.addColumn(UsersData::user_name).setHeader("ユーザーネーム");
         grid.addColumn(UsersData::display_name).setHeader("ロール");
-        grid.addColumn(UsersData::is_available).setHeader("状態").setSortable(true);
-
     }
 }
