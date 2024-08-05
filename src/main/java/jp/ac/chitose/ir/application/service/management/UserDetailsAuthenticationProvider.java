@@ -6,7 +6,8 @@ import org.springframework.security.authentication.dao.AbstractUserDetailsAuthen
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.List;
 
 public class UserDetailsAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
@@ -28,16 +29,28 @@ public class UserDetailsAuthenticationProvider extends AbstractUserDetailsAuthen
 
         String password = (String) authentication.getCredentials(); // authenticationからpasswordを取得
 
-        Optional<User> optionalLoginUser = authenticationService.authenticate(username, password);
+        List<User> loginUserList = authenticationService.authenticate(username, password);
         System.out.print("認証結果: ");
-        if (optionalLoginUser.isEmpty()) {
+        if (loginUserList.isEmpty()) {
             System.out.println("認証に失敗しました. username=" + username);
             // 上手くいかなかったらかえる
             throw new BadCredentialsException("認証に失敗しました。");
         }
         System.out.println("認証に成功しました.username=" + username);
 
-        LoginUser loginUser = new LoginUser(optionalLoginUser.get());
+        User user = loginUserList.get(0);
+        HashSet<String> roles = new HashSet<>();
+
+        for(User u : loginUserList){
+            roles.add(u.role());
+        }
+
+        LoginUser loginUser = new LoginUser(user, roles);
+        System.out.println("isAdmin : " + loginUser.isAdmin());
+        System.out.println("isTeacher : " + loginUser.isTeacher());
+        System.out.println("isStudent : " + loginUser.isStudent());
+        System.out.println("isCommission : " + loginUser.isCommission());
+
         return loginUser;
     }
 }

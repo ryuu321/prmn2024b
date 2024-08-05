@@ -14,21 +14,21 @@ import jp.ac.chitose.ir.presentation.component.graph.GraphSeries;
 import java.util.ArrayList;
 
 public class SeisekiGraph {
-    private TableData<CommissionGpa> tableAll;
-    private TableData<CommissionGpaFirst> tableFirst;
-    private TableData<CommissionGpaSecond> tableSecond;
-    private TableData<CommissionGpaThird> tableThird;
-    private TableData<CommissionGpaFourth> tableFourth;
+    private TableData<GradeGpaGraph> tableAll;
+    private TableData<GradeGpaGraph> tableFirst;
+    private TableData<GradeGpaGraph> tableSecond;
+    private TableData<GradeGpaGraph> tableThird;
+    private TableData<GradeGpaGraph> tableFourth;
 
+    private GradeService gradeService;
+    public SeisekiGraph(GradeService gradeService){
 
-    private CommissionService commissionService;
-    public SeisekiGraph(CommissionService com){
-        this.commissionService=com;
-        tableAll = commissionService.getCommissionGpa();
-        tableFirst = commissionService.getCommissionGpaFirst();
-        tableSecond = commissionService.getCommissionGpaSecond();
-        tableThird = commissionService.getCommissionGpaThird();
-        tableFourth = commissionService.getCommissionGpaFourth();
+        this.gradeService=gradeService;
+        tableAll = this.gradeService.getGradeGpaGraph("B");
+        tableFirst = this.gradeService.getGradeGpaGraph("B1");
+        tableSecond = this.gradeService.getGradeGpaGraph("B2");
+        tableThird = this.gradeService.getGradeGpaGraph("B3");
+        tableFourth = this.gradeService.getGradeGpaGraph("B4");
     }
 
     //mode = 0
@@ -260,7 +260,7 @@ public class SeisekiGraph {
         for(int data : a){
             dataList.add((double)data);
         }
-        Double[] datalist = new Double[8];
+        Double[] datalist = new Double[9];
         for(int i = 0; i < datalist.length;i++){
             datalist[i] = dataList.get(i);
         }
@@ -272,7 +272,7 @@ public class SeisekiGraph {
                 .height("450px")
                 .width("450px")
                 .animationsEnabled(false)
-                .colors("#1676F3","#4795F5","#71B0F7","#A0CEF9","#BCE0FA","#A8D8ED","#7FC3DD","#54ADCC")
+                .colors("#1676F3","#4795F5","#71B0F7","#A0CEF9","#BCE0FA","#A8D8ED","#7FC3DD","#54ADCC","#2B99BC")
                 .build()
                 .getGraph();
     }
