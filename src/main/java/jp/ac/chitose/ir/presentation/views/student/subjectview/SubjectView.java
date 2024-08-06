@@ -52,25 +52,25 @@ public class SubjectView extends VerticalLayout {
     }
 
     public void update(String subject, String studentNumber) {
-        updateSubjectGraph(subject, studentNumber);
-        updateSubjectGrid(subject, studentNumber);
-    }
-
-    private void updateSubjectGraph(String subject, String studentNumber) {
-        List<StudentSubjectCalc> histData = studentService.getStudentSubjectCalc(subject).data();
+        List<StudentSubjectCalc> data = studentService.getStudentSubjectCalc(subject).data();
         StudentGrade studentGrade = studentService.getStudentNumberGrade(studentNumber, subject).data().get(0);
-        graph.updateGraphs(histData, studentGrade);
+        updateSubjectGraph(data, studentGrade);
+        updateSubjectGrid(data, studentGrade);
     }
 
-    private void updateSubjectGrid(String subject, String studentNumber) {
-        grid.setItems(studentService.getStudentSubjectCalc(subject).data());
+    private void updateSubjectGraph(List<StudentSubjectCalc> data, StudentGrade studentGrade) {
+        graph.updateGraphs(data, studentGrade);
+    }
+
+    private void updateSubjectGrid(List<StudentSubjectCalc> data, StudentGrade studentGrade) {
+        grid.setItems(data);
         Optional<NoneComponentFilter<Number, StudentSubjectCalc>> optionalNoneComponentFilter = grid.getTypeFilters().stream()
                 .filter(filter -> !filter.hasComponent())
                 .map(filter -> (NoneComponentFilter<Number, StudentSubjectCalc>) filter)
                 .findFirst();
         if(optionalNoneComponentFilter.isPresent()) {
             NoneComponentFilter<Number, StudentSubjectCalc> noneComponentFilter = optionalNoneComponentFilter.get();
-            noneComponentFilter.setValue(studentService.getStudentNumberGrade(studentNumber, subject).data().get(0).開講年());
+            noneComponentFilter.setValue(studentGrade.開講年());
         }
     }
 }
