@@ -41,7 +41,7 @@ public class TopView extends VerticalLayout {
 
         // 管理者向け画面
         H3 admin = new H3("管理者向けメニュー");
-        Anchor users = new Anchor("", "ユーザー管理");
+        Anchor users = new Anchor("/user_management", "ユーザー管理");
         add(admin, users);
         add(new Paragraph("ユーザー管理を行う画面です。"));
         // IR委員会向けメニュー（CommissionView）の紹介
