@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.presentation.views.student;
+package jp.ac.chitose.ir.presentation.views.student.filter;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -41,6 +41,11 @@ public class RadioButtonFilter<FilterType, ItemType> implements Filter<FilterTyp
     @Override
     public void addValueChangeListener(Runnable valueChangeListener) {
         radioButton.addValueChangeListener(value -> valueChangeListener.run());
+    }
+
+    @Override
+    public boolean hasComponent() {
+        return true;
     }
 
     @Override

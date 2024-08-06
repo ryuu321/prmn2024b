@@ -1,9 +1,10 @@
-package jp.ac.chitose.ir.presentation.views.student;
+package jp.ac.chitose.ir.presentation.views.student.filterablecomponent;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.HasListDataView;
 import com.vaadin.flow.data.provider.ListDataView;
+import jp.ac.chitose.ir.presentation.views.student.filter.Filter;
 
 import java.util.Collections;
 import java.util.List;

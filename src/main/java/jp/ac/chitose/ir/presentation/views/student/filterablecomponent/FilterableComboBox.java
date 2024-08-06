@@ -1,7 +1,8 @@
-package jp.ac.chitose.ir.presentation.views.student;
+package jp.ac.chitose.ir.presentation.views.student.filterablecomponent;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.combobox.ComboBox;
+import jp.ac.chitose.ir.presentation.views.student.filter.Filter;
 
 import java.util.Collection;
 import java.util.List;

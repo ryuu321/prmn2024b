@@ -1,10 +1,11 @@
-package jp.ac.chitose.ir.presentation.views.student;
+package jp.ac.chitose.ir.presentation.views.student.filterablecomponent;
 
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.ItemClickEvent;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.function.ValueProvider;
+import jp.ac.chitose.ir.presentation.views.student.filter.Filter;
 
 import java.util.Collection;
 import java.util.List;

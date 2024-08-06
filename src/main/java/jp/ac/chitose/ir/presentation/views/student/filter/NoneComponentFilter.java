@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.presentation.views.student;
+package jp.ac.chitose.ir.presentation.views.student.filter;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;
@@ -10,14 +10,23 @@ public class NoneComponentFilter<FilterType, ItemType> implements Filter<FilterT
     private final BiPredicate<ItemType, FilterType> filter;
     private Runnable valueChangeListener;
 
-    public NoneComponentFilter(BiPredicate<ItemType, FilterType> filter, FilterType value) {
+    public NoneComponentFilter(BiPredicate<ItemType, FilterType> filter) {
         this.filter = filter;
+    }
+
+    public NoneComponentFilter(BiPredicate<ItemType, FilterType> filter, FilterType value) {
+        this(filter);
         this.value = value;
     }
 
     @Override
     public void addValueChangeListener(Runnable valueChangeListener) {
         this.valueChangeListener = valueChangeListener;
+    }
+
+    @Override
+    public boolean hasComponent() {
+        return false;
     }
 
     @Override

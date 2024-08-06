@@ -1,8 +1,9 @@
-package jp.ac.chitose.ir.presentation.views.student;
+package jp.ac.chitose.ir.presentation.views.student.filterablecomponent;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.html.H3;
+import jp.ac.chitose.ir.presentation.views.student.filter.Filter;
 
 import java.util.List;
 import java.util.function.Consumer;

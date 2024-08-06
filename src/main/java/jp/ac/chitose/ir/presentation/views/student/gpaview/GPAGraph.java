@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.presentation.views.student;
+package jp.ac.chitose.ir.presentation.views.student.gpaview;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jp.ac.chitose.ir.application.service.student.StudentGPA;
@@ -16,9 +16,9 @@ public class GPAGraph extends VerticalLayout {
     private static final String[] GPA_CATEGORY = {"0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0"};
     private static final String[] GPA_CATEGORY_LABEL = {"0.0 ~ 0.5", "0.5 ~ 1.0", "1.0 ~ 1.5", "1.5 ~ 2.0", "2.0 ~ 2.5", "2.5 ~ 3.0", "3.0 ~ 3.5", "3.5 ~ 4.0", "4.0"};
 
-    public GPAGraph(List<StudentGPA> GPAData, String schoolYear) {
+    public GPAGraph(List<StudentGPA> gpaData, String schoolYear) {
         this.setHeight(HEIGHT);
-        GraphSeries<Data<String, Integer>> series = createSeries(GPAData, schoolYear);
+        GraphSeries<Data<String, Integer>> series = createSeries(gpaData, schoolYear);
         Graph graph = createGraph(series);
         add(graph.getGraph());
     }
@@ -28,9 +28,9 @@ public class GPAGraph extends VerticalLayout {
         return new GraphSeries<>(data);
     }
 
-    private Data<String, Integer>[] createData(List<StudentGPA> GPAData, String schoolYear) {
+    private Data<String, Integer>[] createData(List<StudentGPA> gpaData, String schoolYear) {
         Data<String, Integer>[] data = new Data[GPA_CATEGORY_NUM];
-        GPAData.forEach(gpa -> categorizeGPAData(gpa, schoolYear, data));;
+        gpaData.forEach(gpa -> categorizeGPAData(gpa, schoolYear, data));;
         fillNullData(data);
         return data;
     }
