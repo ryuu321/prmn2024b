@@ -17,7 +17,7 @@ import java.util.function.BiPredicate;
 
 public class GPAView extends VerticalLayout {
     private final StudentService studentService;
-    private final GPAGraph graph;
+    //private final GPAGraph graph;
     private final GradeGrid grid;
     private final static List<String> FILTER_NAMES = List.of("学年", "学科", "必選別", "成績評価");
     private final static List<RadioButtonValues> FILTER_VALUES = List.of(
@@ -41,9 +41,9 @@ public class GPAView extends VerticalLayout {
 
     public GPAView(StudentService studentService, String studentNumber, FilterableComboBox<String, StudentGrade> subjectComboBox) {
         this.studentService = studentService;
-        String schoolYear = studentService.getStudentSchoolYear(studentNumber).data().get(0).学年();
+        /*String schoolYear = studentService.getStudentSchoolYear(studentNumber).data().get(0).学年();
         List<StudentGPA> gpaData = studentService.getStudentGPA().data();
-        graph = new GPAGraph(gpaData, schoolYear);
+        graph = new GPAGraph(gpaData, schoolYear);*/
         grid = createGradeGrid(studentNumber, subjectComboBox);
         addComponentToLayout();
     }
@@ -68,7 +68,7 @@ public class GPAView extends VerticalLayout {
     }
 
     private void addComponentToLayout() {
-        add(graph);
+        //add(graph);
         add(grid);
     }
 
