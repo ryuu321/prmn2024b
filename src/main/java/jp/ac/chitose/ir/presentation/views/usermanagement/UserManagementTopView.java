@@ -14,12 +14,15 @@ import jp.ac.chitose.ir.presentation.component.MainLayout;
 @RolesAllowed({"administrator"})
 public class UserManagementTopView extends VerticalLayout {
     private final UserManagementService userManagementService;
+    private final UserManagementButtons userManagementButtons;
     private final UsersDataGrid usersDataGrid;
+
 
     public UserManagementTopView(UserManagementService userManagementService) {
         add(new H1("ユーザー管理画面"));
         this.userManagementService = userManagementService;
+        userManagementButtons = new UserManagementButtons();
         usersDataGrid = new UsersDataGrid(userManagementService);
-        add(usersDataGrid);
+        add(userManagementButtons, usersDataGrid);
     }
 }
