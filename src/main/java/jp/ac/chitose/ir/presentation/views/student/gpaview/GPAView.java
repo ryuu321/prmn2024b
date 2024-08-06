@@ -2,9 +2,9 @@ package jp.ac.chitose.ir.presentation.views.student.gpaview;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.function.ValueProvider;
-import jp.ac.chitose.ir.application.service.student.StudentGPA;
+import jp.ac.chitose.ir.application.service.commission.GradeService;
 import jp.ac.chitose.ir.application.service.student.StudentGrade;
-import jp.ac.chitose.ir.application.service.student.StudentService;
+import jp.ac.chitose.ir.application.service.student.StudentGradeService;
 import jp.ac.chitose.ir.presentation.views.student.RadioButtonValues;
 import jp.ac.chitose.ir.presentation.views.student.filter.Filter;
 import jp.ac.chitose.ir.presentation.views.student.filter.RadioButtonFilter;
@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.function.BiPredicate;
 
 public class GPAView extends VerticalLayout {
-    private final StudentService studentService;
+    private final GradeService gradeService;
+    private final StudentGradeService studentGradeService;
     //private final GPAGraph graph;
     private final GradeGrid grid;
     private final static List<String> FILTER_NAMES = List.of("学年", "学科", "必選別", "成績評価");
@@ -28,19 +29,20 @@ public class GPAView extends VerticalLayout {
     private final static List<BiPredicate<StudentGrade, String>> FILTER_FUNCTIONS = List.of(
             (grade, str) -> matchesFilter(str, grade.schoolYear()),
             (grade, str) -> matchesFilter(str, grade.department()),
-            (grade, str) -> matchesFilter(str, grade.必選別()),
-            (grade, str) -> matchesFilter(str, grade.成績評価()));
+            (grade, str) -> matchesFilter(str, grade.compulsory_subjects()),
+            (grade, str) -> matchesFilter(str, grade.grading()));
     private final static List<String> GRADE_HEADER_NAMES = List.of("科目名", "対象学年", "対象学科", "必選別", "単位数", "成績評価");
     private final static List<ValueProvider<StudentGrade, String>> GRADE_VALUE_PROVIDERS = List.of(
-            StudentGrade::科目名,
+            StudentGrade::lecture_name,
             StudentGrade::schoolYear,
             StudentGrade::department,
-            StudentGrade::必選別,
-            grade -> String.valueOf(grade.科目の単位数()),
-            StudentGrade::成績評価);
+            StudentGrade::compulsory_subjects,
+            grade -> String.valueOf(grade.number_credits_course()),
+            StudentGrade::grading);
 
-    public GPAView(StudentService studentService, String studentNumber, FilterableComboBox<String, StudentGrade> subjectComboBox) {
-        this.studentService = studentService;
+    public GPAView(GradeService gradeService, StudentGradeService studentGradeService, String studentNumber, FilterableComboBox<String, StudentGrade> subjectComboBox) {
+        this.gradeService = gradeService;
+        this.studentGradeService = studentGradeService;
         /*String schoolYear = studentService.getStudentSchoolYear(studentNumber).data().get(0).学年();
         List<StudentGPA> gpaData = studentService.getStudentGPA().data();
         graph = new GPAGraph(gpaData, schoolYear);*/
@@ -54,7 +56,7 @@ public class GPAView extends VerticalLayout {
             grid.addColumn(GRADE_VALUE_PROVIDERS.get(i), GRADE_HEADER_NAMES.get(i));
         }
         grid.setAllRowsVisible(true);
-        grid.setItems(studentService.getStudentNumberGrades(studentNumber).data());
+        grid.setItems(studentGradeService.getStudentNumberSubjects(studentNumber).data());
         grid.addItemClickListener(grade -> subjectComboBox.setValue(grade.getItem()));
         return grid;
     }

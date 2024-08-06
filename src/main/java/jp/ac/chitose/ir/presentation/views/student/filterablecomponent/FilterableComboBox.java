@@ -6,6 +6,7 @@ import jp.ac.chitose.ir.presentation.views.student.filter.Filter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class FilterableComboBox<FilterType, ItemType> extends AbstractFilterableComponent<FilterType, ItemType, ComboBox<ItemType>> {
     public FilterableComboBox(List<Filter<FilterType, ItemType>> filters, FilterPosition position) {
@@ -46,6 +47,10 @@ public class FilterableComboBox<FilterType, ItemType> extends AbstractFilterable
 
     public void addValueChangeListener(HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<ComboBox<ItemType>, ItemType>> listener) {
         component.addValueChangeListener(listener);
+    }
+
+    public Stream<ItemType> getItems() {
+        return dataView.getItems();
     }
 
     public void setItems(List<ItemType> data) {
