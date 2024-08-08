@@ -18,12 +18,12 @@ public interface ClassSelect {
     @GetExchange("/7hXWV")
     TableData<Class7hXWV> getClass7hXWV();
 
-    @GetExchange("/QPOJFICHKVJB")
+    @GetExchange("/review/graph/{subject_id}")
     TableData<ClassQPOJFICHKVJB> getClassQPOJFICHKVJB();
-    @GetExchange("/QPOJFICHKVJB_description")
+    @GetExchange("/review/description/{subject_id}")
     TableData<ReviewQPOJFICHKVJBDescription> getReviewQPOJFICHKVJBDescription();
 
-    @GetExchange("/ReviewTitle")
+    @GetExchange("/review/title/{subject_id}")
     TableData<ReviewTitle> getReviewTitle();//質問事項
 
 }
