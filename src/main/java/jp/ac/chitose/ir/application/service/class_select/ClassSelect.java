@@ -20,6 +20,7 @@ public interface ClassSelect {
 
     @GetExchange("/review/graph/{subject_id}")
     TableData<ClassQPOJFICHKVJB> getClassQPOJFICHKVJB();
+
     @GetExchange("/review/description/{subject_id}")
     TableData<ReviewQPOJFICHKVJBDescription> getReviewQPOJFICHKVJBDescription();
 
