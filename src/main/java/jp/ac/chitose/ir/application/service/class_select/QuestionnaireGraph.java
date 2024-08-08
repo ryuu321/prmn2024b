@@ -11,8 +11,8 @@ public class QuestionnaireGraph {
     public QuestionnaireGraph(ClassSelect classSelect){
         this.classSelect = classSelect;
     }
-    private Graph band(int Question_num) {
-        var ClassTest = classSelect.getClassQPOJFICHKVJB().data();
+    private Graph band(int Question_num, String subject_id) {
+        var ClassTest = classSelect.getClassQPOJFICHKVJB(subject_id).data();
 
         if (Question_num == 4) {
             return Graph.Builder.get().band()
@@ -74,7 +74,7 @@ public class QuestionnaireGraph {
         return null;
     }
 
-    public Graph generateQuestionnaireGraph(int i){
-        return band(i);
+    public Graph generateQuestionnaireGraph(int i, String subject_id){
+        return band(i, subject_id);
     }
 }
