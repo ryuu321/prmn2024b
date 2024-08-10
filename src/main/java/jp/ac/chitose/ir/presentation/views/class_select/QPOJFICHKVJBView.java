@@ -9,14 +9,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
-import jp.ac.chitose.ir.application.service.class_select.ClassSelect;
-import jp.ac.chitose.ir.application.service.class_select.QuestionMatters;
-import jp.ac.chitose.ir.application.service.class_select.QuestionnaireGraph;
-import jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription;
+import jp.ac.chitose.ir.application.service.class_select.*;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.component.scroll.ScrollManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -30,8 +25,7 @@ public class QPOJFICHKVJBView extends VerticalLayout {
     private QuestionnaireGraph questionnaireGraph;
     private QuestionMatters questionMatters;
 
-    @Autowired
-    public QPOJFICHKVJBView(ClassSelect classSelect, @Value("${subject.id}") String subject_id) {
+    public QPOJFICHKVJBView(ClassSelect classSelect) {
         this.classSelect = classSelect;
         this.scrollManager = new ScrollManager();
         this.questionnaireGraph=new QuestionnaireGraph(classSelect);
@@ -40,7 +34,7 @@ public class QPOJFICHKVJBView extends VerticalLayout {
 
 
 
-        init1(subject_id);
+        init1();
         index();
         for (int i = 0; i < 11; i++) {
 
@@ -51,15 +45,20 @@ public class QPOJFICHKVJBView extends VerticalLayout {
             layout.add(scrollToTitleButton);
         }
 
+        ReviewQPOJFICHKVJBDescription reviewQPOJFICHKVJBDescription = classSelect.getReviewQPOJFICHKVJBDescription("O135xW").data().get(0);
+        ClassQPOJFICHKVJB qpojfichkvjb = classSelect.getClassQPOJFICHKVJB("O135xW").data().get(0);
+        ReviewTitle reviewTitle = classSelect.getReviewTitle("O135xW").data().get(0);
+
+
         layout.getStyle().set("padding", "40px");
         for (int i = 0; i < 11; i++) {
             if(i == 3 || i == 6){
-                questionMatters.generateQuestionMatters(3 ,subject_id);
-                layout.add(grid(subject_id));//自由記述
+                questionMatters.generateQuestionMatters(3,reviewTitle);
+                layout.add(grid(reviewQPOJFICHKVJBDescription));;//自由記述
                 continue;}
 
-            layout.add(questionMatters.generateQuestionMatters(i,subject_id));//example
-            layout.add(questionnaireGraph.generateQuestionnaireGraph(i+4, subject_id).getGraph());
+            layout.add(questionMatters.generateQuestionMatters(i,reviewTitle));//example
+            layout.add(questionnaireGraph.generateQuestionnaireGraph(i+4,qpojfichkvjb).getGraph());
             add(layout);
 
 
@@ -68,8 +67,8 @@ public class QPOJFICHKVJBView extends VerticalLayout {
     }
 
 
-    private void init1(String subject_id) {
-        List<jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription> review_data = classSelect.getReviewQPOJFICHKVJBDescription(subject_id).data();
+    private void init1() {
+        List<jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription> review_data = classSelect.getReviewQPOJFICHKVJBDescription("O135xW").data();
         String subject_Title = String.valueOf(review_data.get(0).科目名());
         String subject_teacher = String.valueOf(review_data.get(0).担当者());
         add(new H1("科目名:"+ subject_Title));
@@ -91,12 +90,12 @@ public class QPOJFICHKVJBView extends VerticalLayout {
     /**
      * 自由記述解答の表示example
      */
-    private Component grid(String subject_id) {
+    private Component grid(ReviewQPOJFICHKVJBDescription reviewQPOJFICHKVJBDescription) {
 
 
         Grid<jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription> grid = new Grid<>(jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription.class, false);
         grid.addColumn(ReviewQPOJFICHKVJBDescription::q19).setHeader("Q7");
-        List<jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription> people = classSelect.getReviewQPOJFICHKVJBDescription(subject_id).data();
+        List<jp.ac.chitose.ir.application.service.class_select.ReviewQPOJFICHKVJBDescription> people = classSelect.getReviewQPOJFICHKVJBDescription(reviewQPOJFICHKVJBDescription.q7()).data();
         grid.setItems(people);
 
         return grid;
