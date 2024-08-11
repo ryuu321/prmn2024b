@@ -13,10 +13,10 @@ public class AuthenticationService {
         this.authenticationRepository = authenticationRepository;
     }
 
-    public List<User> authenticate(String username, String password) {
+    public List<User> authenticate(String loginId, String password) {
         // DBと接続して情報を取ってくる処理。AuthenticationRepositoryで実際の処理をかく
 
-        List<User> userList = authenticationRepository.getUserInformation(username, password);
+        List<User> userList = authenticationRepository.getUserInformation(loginId, password);
         System.out.println("認証処理");
 
         return userList;

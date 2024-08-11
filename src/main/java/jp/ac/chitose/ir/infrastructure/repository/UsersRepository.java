@@ -31,7 +31,7 @@ public class UsersRepository {
 
     // ユーザ追加
     // デフォルトのパスワードを固定にするかusernameに合わせるかなどの確認
-    public void addUser(String username){
+    public void addUser(String loginId,String username){
         //日付の取得・yyyy/MM/dd の形にフォーマット
         LocalDateTime date = LocalDateTime.now();
         String formatDate = dateTimeFormatter.format(date);
@@ -39,10 +39,10 @@ public class UsersRepository {
 
         // users テーブルへの追加
         int inserted = jdbcClient.sql("""
-                        INSERT into users(user_name, password, is_available, created_at) 
-                        values (?, ?, TRUE, ?)
+                        INSERT into users(login_id, user_name, password, is_available, created_at) 
+                        values (?, ?, ?, TRUE, ?)
                         """)
-                .params(username, defaultPassword, formatDate)
+                .params(loginId, username, defaultPassword, formatDate)
                 .update();
         System.out.println("inserted : " + inserted);
     }
@@ -58,11 +58,11 @@ public class UsersRepository {
     }
 
     // ユーザidの取得(主にユーザ追加で使用)
-    public long getUserId(String username){
+    public long getUserId(String loginId){
         long id = jdbcClient.sql("""
-                SELECT id FROM users WHERE user_name = ?
+                SELECT id FROM users WHERE login_id = ?
                 """)
-                .params(username)
+                .params(loginId)
                 .query(new DataClassRowMapper<>(Integer.class))
                 .single();
         return id;
@@ -71,29 +71,41 @@ public class UsersRepository {
     // ユーザ情報変更
     // 変更内容どう受け取ってくるか要検討
     // serviceでfor文？sql文を順々に結合？->一旦後者で実装
-    public void updateUser(long id, List<String> columns, List<String> params){
+    public void updateUser(String loginId, List<String> columns, List<String> params){
         StringBuilder sql = new StringBuilder("update users SET ");
         for(int i=0;i<columns.size();i++){
             if(i>0) sql.append(", ");
             sql.append(columns.get(i) + " = ?");
         }
-        sql.append(" WHERE id = ?");
+        sql.append(" WHERE login_id = ?");
         int updated = jdbcClient.sql(sql.toString())
                 .params(params)
-                .param(id)
+                .param(loginId)
+                .update();
+        System.out.println("updated : " + updated);
+    }
+
+    public void updatePassword(String loginId, String password){
+        int updated = jdbcClient.sql("""
+                update users 
+                SET password = ?
+                WHERE login_id = ?
+                """)
+                .params(password, loginId)
                 .update();
         System.out.println("updated : " + updated);
     }
 
     // ユーザ削除(無効化)
-    public int deleteUser(long id, String username, LocalDateTime deleteAt){
+    public int deleteUser(String loginId, String username, LocalDateTime deleteAt){
         String formatDate = dateTimeFormatter.format(deleteAt);
         int deleted = jdbcClient.sql("""
                 update users 
                 SET is_available = FALSE, deleted_at = ?
-                WHERE id = ?
+                WHERE login_id = ?
+                AND user_name = ?
                 """)
-                .params(formatDate, id)
+                .params(formatDate, loginId, username)
                 .update();
         System.out.println("deleted : " + deleted);
         return deleted;
