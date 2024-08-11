@@ -12,13 +12,14 @@ import java.util.ArrayList;
 public class SeisekiGraphView {
     SeisekiGraph seisekiGraph;
     Seiseki seiseki;
-    CommissionService commissionService;
+    private GradeService gradeService;
 
 
-    public SeisekiGraphView(CommissionService com,Seiseki seiseki){
-        this.commissionService=com;
-        this.seisekiGraph=new SeisekiGraph(this.commissionService);
+    public SeisekiGraphView(Seiseki seiseki, GradeService gradeService){
+        this.gradeService=gradeService;
+        this.seisekiGraph=new SeisekiGraph(this.gradeService);
         this.seiseki=seiseki;
+
     }
 
     public VerticalLayout view(){
@@ -303,12 +304,12 @@ public class SeisekiGraphView {
         //ここまでfourth
 
         //ここから基本統計量
-        SeisekiTable table = new SeisekiTable(commissionService);
-        Grid<CommissionGpa2> gridAll = table.getTableYearFirstAll();
-        Grid<CommissionGpa2First> gridFirst = table.getTableFirst();
-        Grid<CommissionGpa2Second> gridSecond = table.getTableSecond();
-        Grid<CommissionGpa2Third> gridThird = table.getTableThird();
-        Grid<CommissionGpa2Fourth> gridFourth = table.getTableFourth();
+        SeisekiTable table = new SeisekiTable(gradeService);
+        Grid<GradeGpaStat> gridAll = table.getTableYearFirstAll();
+        Grid<GradeGpaStat> gridFirst = table.getTableFirst();
+        Grid<GradeGpaStat> gridSecond = table.getTableSecond();
+        Grid<GradeGpaStat> gridThird = table.getTableThird();
+        Grid<GradeGpaStat> gridFourth = table.getTableFourth();
 
         H3 str = new H3("基本統計量");
         H3 str1 = new H3("基本統計量");
@@ -537,7 +538,7 @@ public class SeisekiGraphView {
         //ここまでinformation
 
         //ここから基本統計量
-        SeisekiTable table = new SeisekiTable(commissionService);
+        SeisekiTable table = new SeisekiTable(gradeService);
         Grid<GetTableData> gridAll = table.getTableSubjectFirst();
         Grid<GetTableData> gridScience = table.getTableSubjectFirstScience();
         Grid<GetTableData> gridElectronic = table.getTableSubjectFirstElectronic();
