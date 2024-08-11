@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SeisekiTableSubjectFirst {
-    private TableData<CommissionGpa2> tableAll;
-    private TableData<CommissionGpa2First> tableFirst;
-    private TableData<CommissionGpa2Second> tableSecond;
-    private TableData<CommissionGpa2Third> tableThird;
-    private TableData<CommissionGpa2Fourth> tableFourth;
+    private TableData<GradeGpaStat> tableAll;
+    private TableData<GradeGpaStat> tableFirst;
+    private TableData<GradeGpaStat> tableSecond;
+    private TableData<GradeGpaStat> tableThird;
+    private TableData<GradeGpaStat> tableFourth;
 
-    public SeisekiTableSubjectFirst(TableData<CommissionGpa2> tableAll,
-                                    TableData<CommissionGpa2First> tableFirst,
-                                    TableData<CommissionGpa2Second> tableSecond,
-                                    TableData<CommissionGpa2Third> tableThird,
-                                    TableData<CommissionGpa2Fourth> tableFourth
+    public SeisekiTableSubjectFirst(TableData<GradeGpaStat> tableAll,
+                                    TableData<GradeGpaStat> tableFirst,
+                                    TableData<GradeGpaStat> tableSecond,
+                                    TableData<GradeGpaStat> tableThird,
+                                    TableData<GradeGpaStat> tableFourth
                                     ){
         this.tableAll = tableAll;
         this.tableFirst = tableFirst;
@@ -29,11 +29,11 @@ public class SeisekiTableSubjectFirst {
     public List<GetTableData> getTable(int i) {
 
         List<GetTableData> list = new ArrayList<>();
-        CommissionGpa2 all = tableAll.data().get(i);
-        CommissionGpa2First first = tableFirst.data().get(i);
-        CommissionGpa2Second second = tableSecond.data().get(i);
-        CommissionGpa2Third third = tableThird.data().get(i);
-        CommissionGpa2Fourth fourth = tableFourth.data().get(i);
+        GradeGpaStat all = tableAll.data().get(i);
+        GradeGpaStat first = tableFirst.data().get(i);
+        GradeGpaStat second = tableSecond.data().get(i);
+        GradeGpaStat third = tableThird.data().get(i);
+        GradeGpaStat fourth = tableFourth.data().get(i);
         list.add(new GetTableData("全体", all.human(), all.average(), all.mid(), all.min(), all.max(), all.std()));
         list.add(new GetTableData("1年生", first.human(), first.average(), first.mid(), first.min(), first.max(), first.std()));
         list.add(new GetTableData("２年生", second.human(), second.average(), second.mid(), second.min(), second.max(), second.std()));
