@@ -11,8 +11,8 @@ public class QuestionMatters {
         this.scrollManager = scrollManager;
     }
 
-    private H3 title(int i, ReviewTitle reviewTitle) {
-        var Classtitle = classSelect.getReviewTitle(reviewTitle.title()).data();
+    private H3 title(int i, String subject_id) {
+        var Classtitle = classSelect.getReviewTitle(subject_id).data();
         String Title = String.valueOf(Classtitle.get(i));
 
         if (Title != null && Title.length() > 0) {
@@ -29,9 +29,9 @@ public class QuestionMatters {
         return null;
     }
 
-    public H3 generateQuestionMatters(int i,ReviewTitle reviewTitle){
+    public H3 generateQuestionMatters(int i,String subject_id){
 
-        return title(i,reviewTitle);
+        return title(i,subject_id);
     }
 }
 
