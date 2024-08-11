@@ -20,8 +20,8 @@ public class UsersService {
     // ユーザ追加(単体)
     // ロールが1つもない場合は例外を起こしてロールバックする(想定)
     @Transactional
-    public void addUser(String username, boolean[] role, LocalDateTime createAt) throws RuntimeException{
-        usersRepository.addUser(username);
+    public void addUser(String loginId, String username, boolean[] role, LocalDateTime createAt) throws RuntimeException{
+        usersRepository.addUser(loginId, username);
         long userId = usersRepository.getUserId(username);
         boolean hasRole = false;
         for(int i=0;i<role.length;i++){
@@ -49,23 +49,16 @@ public class UsersService {
     // ユーザ削除
     // アノテーションは要らないと思うけど念のためつけた
     @Transactional
-    public int deleteUser(String userId, String username, LocalDateTime deleteAt){
+    public int deleteUser(String loginId, String username, LocalDateTime deleteAt){
         // ログイン中のユーザと同じ場合は1を返す
         if(username.equals(securityService.getLoginUser().getUsername())) {
             return 1;
         }
 
-        // userIdが数値に変換できる場合は削除
         // 成功 → 0, 失敗 → 2 を返す
-        if(isNumber(userId)){
-            long id = Integer.parseInt(userId);
-            int deleted = usersRepository.deleteUser(id, username, deleteAt);
-            if(deleted == 1) return 0;
-            return 2;
-        }
-
-        // userIdが数値に変換できない場合は3を返す
-        return 3;
+        int deleted = usersRepository.deleteUser(loginId, username, deleteAt);
+        if(deleted == 1) return 0;
+        return 2;
     }
 
     // csvによるユーザ一括削除

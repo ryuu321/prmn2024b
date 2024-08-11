@@ -24,10 +24,10 @@ public class AuthenticationRepository {
     }
 
     // JDBC Clientを使ったデータ取得のメソッド
-    public List<User> getUserInformation(String name, String password){
+    public List<User> getUserInformation(String loginId, String password){
         List<User> userOp = jdbcClient.sql("""
                 SELECT
-                  A.id, A.user_name AS name, A.password, A.is_available, C.role_name AS role
+                  A.id, A.login_id, A.user_name AS name, A.password, A.is_available, C.role_name AS role
                 FROM
                   users A,
                   user_role B,
@@ -35,10 +35,10 @@ public class AuthenticationRepository {
                 WHERE A.id = B.user_id
                 AND B.role_id = C.id
                 AND A.is_available
-                AND A.user_name = ?
+                AND A.login_id = ?
                 AND A.password = ?
                 """)
-                .params(name, password)
+                .params(loginId, password)
                 .query(new DataClassRowMapper<>(User.class))
                 .list();
         return userOp;
