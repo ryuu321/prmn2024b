@@ -9,6 +9,7 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
+import jp.ac.chitose.ir.application.service.commission.GradeService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.SelectButton;
@@ -17,6 +18,7 @@ import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwo
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.NumberOfForeignLanguageClass;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.exam.EnrollmentCapacity;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.people.*;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.people.numberOfStudents.NumberOfStudents;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 @Route(value = "university", layout = MainLayout.class)
 @PermitAll
 public class UniversityView extends VerticalLayout {
+    private GradeService gradeService;
     private BackButton backButton;
     private VerticalLayout mainLayout;
     private RadioButtonGroup<String> category;
@@ -34,7 +37,10 @@ public class UniversityView extends VerticalLayout {
     private ArrayList<Button> people;
     private ArrayList<VerticalLayout> layouts;
     private FormLayout buttonLayout;
-    public UniversityView() {
+    public UniversityView(GradeService gradeService) {
+
+        this.gradeService = gradeService;
+
         mainLayout = new VerticalLayout();
         add(mainLayout);
 
@@ -81,7 +87,7 @@ public class UniversityView extends VerticalLayout {
         add(numberOfTeachers);
 
         //学生数
-        VerticalLayout numberOfStudents = new NumberOfStudents();
+        VerticalLayout numberOfStudents = new NumberOfStudents(gradeService);
         setLayout(numberOfStudents,"学生数",people);
         add(numberOfStudents);
 
