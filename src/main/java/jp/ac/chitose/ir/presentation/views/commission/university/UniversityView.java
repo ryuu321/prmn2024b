@@ -13,6 +13,7 @@ import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.SelectButton;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.ActiveLearning;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.GraduationCredits;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.NumberOfForeignLanguageClass;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.exam.EnrollmentCapacity;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.people.*;
@@ -132,6 +133,11 @@ public class UniversityView extends VerticalLayout {
         VerticalLayout activeLearning = new ActiveLearning();
         setLayout(activeLearning,"アクティブラーニング実施率",classwork);
         add(activeLearning);
+
+        //卒業単位数
+        VerticalLayout graduationCredits = new GraduationCredits();
+        setLayout(graduationCredits,"卒業単位数",classwork);
+        add(graduationCredits);
 
         backButton.addClickListener(e -> {
             for (VerticalLayout layout : layouts) {
