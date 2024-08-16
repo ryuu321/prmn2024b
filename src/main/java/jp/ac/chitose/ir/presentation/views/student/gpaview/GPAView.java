@@ -44,8 +44,7 @@ public class GPAView extends VerticalLayout {
         this.gradeService = gradeService;
         this.studentGradeService = studentGradeService;
         /*String schoolYear = studentService.getStudentSchoolYear(studentNumber).data().get(0).学年();
-        List<StudentGPA> gpaData = studentService.getStudentGPA().data();
-        graph = new GPAGraph(gpaData, schoolYear);*/
+        graph = new GPAGraph(gradeService, schoolYear);*/
         grid = createGradeGrid(studentNumber, subjectComboBox);
         addComponentToLayout();
     }

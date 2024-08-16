@@ -3,11 +3,10 @@ package jp.ac.chitose.ir.presentation.views.student.subjectview;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jp.ac.chitose.ir.application.service.student.StudentGrade;
-import jp.ac.chitose.ir.application.service.student.StudentSubjectCalc;
+import jp.ac.chitose.ir.application.service.student.GradeCount;
 import jp.ac.chitose.ir.presentation.component.graph.*;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class SubjectGraph extends VerticalLayout {
     private Graph mainGraph;
@@ -15,7 +14,6 @@ public class SubjectGraph extends VerticalLayout {
     private final HorizontalLayout mainGraphLayout;
     private final HorizontalLayout subGraphsLayout;
     private static final String[] GRADE_LABELS = {"不可", "可", "良", "優", "秀"};
-    private static final double[] GRADE_THRESHOLDS = {0.5, 1.5, 2.5, 3.5, 4.5};
     private static final String RED = "#FF0000";
     private static final String BLUE = "#0000FF";
     private static final String LAYOUT_HEIGHT = "40vh";
@@ -70,41 +68,15 @@ public class SubjectGraph extends VerticalLayout {
         add(mainGraphLayout, subGraphsLayout);
     }
 
-    public void updateGraphs(List<StudentSubjectCalc> histData, List<StudentSubjectCalc> preYearHistData, StudentGrade studentGrade) {
+    public void updateGraphs(GradeCount histData, GradeCount preYearHistData, StudentGrade studentGrade) {
         // メイングラフの更新
         final String[] colors = createColors(studentGrade.grading());
         final String[] labels = createLabels(studentGrade.grading());
-        final GraphSeries<Data<String, Integer>> mainGraphSeries = createSelectYearSeries(histData, studentGrade.lecture_name());
-        updateMainGraph(studentGrade.grading(), findTargetGrade(histData), colors, labels, mainGraphSeries);
+        final GraphSeries<Data<String, Integer>> mainGraphSeries = createSeries(histData, studentGrade.lecture_name());
+        updateMainGraph(studentGrade.grading(), targetGradeLabel(histData), colors, labels, mainGraphSeries);
 
         // サブグラフの更新
         updateSubGraphs(preYearHistData, studentGrade);
-    }
-
-    private String findTargetGrade(List<StudentSubjectCalc> histData) {
-        return histData.stream()
-                .map(StudentSubjectCalc::平均)
-                .map(average -> {
-                    for (int i = 0; i < GRADE_THRESHOLDS.length; i++)
-                        if (average < GRADE_THRESHOLDS[i]) return GRADE_LABELS[i];
-                    return GRADE_LABELS[0];
-                })
-                .findFirst()
-                .orElse("");
-    }
-
-    private void updateSubGraphs(List<StudentSubjectCalc> preYearHistData, StudentGrade studentGrade) {
-        if (studentGrade.pre_year_course_id() == null) {
-            hidePreYearGraph();
-        } else {
-            GraphSeries<Data<String, Integer>> preYearSeries = createSelectYearSeries(preYearHistData, studentGrade.lecture_name());
-            updatePreYearGraph(preYearSeries);
-        }
-    }
-
-    private void hidePreYearGraph() {
-        subGraphsLayout.remove(preYearGraph.getGraph());
-        subGraphsLayout.setHeight(NO_DATA_LAYOUT_HEIGHT);
     }
 
     private String[] createColors(String grade) {
@@ -117,6 +89,25 @@ public class SubjectGraph extends VerticalLayout {
         return Arrays.stream(GRADE_LABELS)
                 .map(label -> label.equals(grade) ? grade + "(あなたの成績位置)" : label)
                 .toArray(String[]::new);
+    }
+
+    private GraphSeries<Data<String, Integer>> createSeries(GradeCount histData, String subject) {
+        Data<String, Integer>[] selectYearData = createDataArray(histData);
+        return new GraphSeries<>(subject, selectYearData);
+    }
+
+    private Data<String, Integer>[] createDataArray(GradeCount data) {
+        Data<String, Integer>[] dataArray = new Data[5];
+        dataArray[0] = new Data<>(GRADE_LABELS[0], data.不可());
+        dataArray[1] = new Data<>(GRADE_LABELS[1], data.可());
+        dataArray[2] = new Data<>(GRADE_LABELS[2], data.良());
+        dataArray[3] = new Data<>(GRADE_LABELS[3], data.優());
+        dataArray[4] = new Data<>(GRADE_LABELS[4], data.秀());
+        return dataArray;
+    }
+
+    private String targetGradeLabel(GradeCount histData) {
+        return GRADE_LABELS[Math.round(histData.平均())];
     }
 
     private void updateMainGraph(String grade, String target, String[] colors, String[] labels, GraphSeries<Data<String, Integer>> series) {
@@ -132,21 +123,18 @@ public class SubjectGraph extends VerticalLayout {
         mainGraphLayout.add(mainGraph.getGraph());
     }
 
-    private GraphSeries<Data<String, Integer>> createSelectYearSeries(List<StudentSubjectCalc> histData, String subject) {
-        Data<String, Integer>[] selectYearData = createDataArray(histData);
-        return new GraphSeries<>(subject, selectYearData);
+    private void updateSubGraphs(GradeCount preYearHistData, StudentGrade studentGrade) {
+        if (studentGrade.pre_year_course_id() == null) {
+            hidePreYearGraph();
+        } else {
+            GraphSeries<Data<String, Integer>> preYearSeries = createSeries(preYearHistData, studentGrade.lecture_name());
+            updatePreYearGraph(preYearSeries);
+        }
     }
 
-    private Data<String, Integer>[] createDataArray(List<StudentSubjectCalc> dataList) {
-        Data<String, Integer>[] dataArray = new Data[5];
-        dataList.forEach(data -> {
-            dataArray[0] = new Data<>(GRADE_LABELS[0], data.不可());
-            dataArray[1] = new Data<>(GRADE_LABELS[1], data.可());
-            dataArray[2] = new Data<>(GRADE_LABELS[2], data.良());
-            dataArray[3] = new Data<>(GRADE_LABELS[3], data.優());
-            dataArray[4] = new Data<>(GRADE_LABELS[4], data.秀());
-        });
-        return dataArray;
+    private void hidePreYearGraph() {
+        subGraphsLayout.remove(preYearGraph.getGraph());
+        subGraphsLayout.setHeight(NO_DATA_LAYOUT_HEIGHT);
     }
 
     private void updatePreYearGraph(GraphSeries<Data<String, Integer>> preYearSeries) {

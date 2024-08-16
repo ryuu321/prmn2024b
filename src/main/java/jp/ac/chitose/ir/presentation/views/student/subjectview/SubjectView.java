@@ -4,7 +4,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.function.ValueProvider;
 import jp.ac.chitose.ir.application.service.student.StudentGrade;
 import jp.ac.chitose.ir.application.service.student.StudentGradeService;
-import jp.ac.chitose.ir.application.service.student.StudentSubjectCalc;
+import jp.ac.chitose.ir.application.service.student.GradeCount;
 import jp.ac.chitose.ir.presentation.views.student.filterablecomponent.FilterPosition;
 
 import java.util.Collections;
@@ -15,15 +15,15 @@ public class SubjectView extends VerticalLayout {
     private final SubjectGraph graph;
     private final  SubjectGrid grid;
     private final static List<String> SUBJECT_HEADER_NAMES = List.of("受講人数", "不可", "可", "良", "優", "秀", "平均", "分散");
-    private final static List<ValueProvider<StudentSubjectCalc, Number>> SUBJECT_VALUE_PROVIDERS = List.of(
-            StudentSubjectCalc::合計の人数,
-            StudentSubjectCalc::不可,
-            StudentSubjectCalc::可,
-            StudentSubjectCalc::良,
-            StudentSubjectCalc::優,
-            StudentSubjectCalc::秀,
-            StudentSubjectCalc::平均,
-            StudentSubjectCalc::分散);
+    private final static List<ValueProvider<GradeCount, Number>> SUBJECT_VALUE_PROVIDERS = List.of(
+            GradeCount::合計の人数,
+            GradeCount::不可,
+            GradeCount::可,
+            GradeCount::良,
+            GradeCount::優,
+            GradeCount::秀,
+            GradeCount::平均,
+            GradeCount::分散);
 
 
     public SubjectView(StudentGradeService studentGradeService) {
@@ -48,18 +48,18 @@ public class SubjectView extends VerticalLayout {
     }
 
     public void update(StudentGrade grade) {
-        List<StudentSubjectCalc> data = studentGradeService.getGradeGraph(grade.course_id()).data();
-        List<StudentSubjectCalc> preYearData = null;
-        if(grade.pre_year_course_id() != null) preYearData = studentGradeService.getGradeGraph(grade.pre_year_course_id()).data();
+        GradeCount data = studentGradeService.getGradeGraph(grade.course_id()).data().get(0);
+        GradeCount preYearData = null;
+        if(grade.pre_year_course_id() != null) preYearData = studentGradeService.getGradeGraph(grade.pre_year_course_id()).data().get(0);
         updateSubjectGraph(data, preYearData, grade);
         updateSubjectGrid(data);
     }
 
-    private void updateSubjectGraph(List<StudentSubjectCalc> data, List<StudentSubjectCalc> preYearData, StudentGrade studentGrade) {
+    private void updateSubjectGraph(GradeCount data, GradeCount preYearData, StudentGrade studentGrade) {
         graph.updateGraphs(data, preYearData, studentGrade);
     }
 
-    private void updateSubjectGrid(List<StudentSubjectCalc> data) {
-        grid.setItems(data);
+    private void updateSubjectGrid(GradeCount data) {
+        grid.setItems(List.of(data));
     }
 }

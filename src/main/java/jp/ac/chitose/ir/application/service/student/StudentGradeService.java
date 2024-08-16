@@ -8,7 +8,7 @@ import org.springframework.web.service.annotation.HttpExchange;
 @HttpExchange(value = "/grade", accept = "application/json", contentType = "application/json")
 public interface StudentGradeService {
     @GetExchange("/grade_graph/{courseId}")
-    TableData<StudentSubjectCalc> getGradeGraph(@PathVariable String courseId);
+    TableData<GradeCount> getGradeGraph(@PathVariable String courseId);
 
     @GetExchange("/subject/{studentNumber}")
     TableData<StudentGrade> getStudentNumberSubjects(@PathVariable String studentNumber);

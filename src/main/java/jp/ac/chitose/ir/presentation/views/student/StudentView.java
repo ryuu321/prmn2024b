@@ -8,6 +8,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.application.service.commission.GradeService;
+import jp.ac.chitose.ir.application.service.management.SecurityService;
 import jp.ac.chitose.ir.application.service.student.StudentGrade;
 import jp.ac.chitose.ir.application.service.student.StudentGradeService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
@@ -29,6 +30,7 @@ import java.util.function.BiPredicate;
 public class StudentView extends VerticalLayout {
     private final GradeService gradeService;
     private final StudentGradeService studentGradeService;
+    private final SecurityService securityService;
     private final FilterableComboBox<String, StudentGrade> subjectComboBox;
     private final TextField studentNumberField;
     private GPAView gpaView;
@@ -39,9 +41,10 @@ public class StudentView extends VerticalLayout {
             (grade, str) -> matchesFilter(str, grade.schoolYear()),
             (grade, str) -> matchesFilter(str, grade.department()));
 
-    public StudentView(StudentGradeService studentGradeService, GradeService gradeService) {
+    public StudentView(StudentGradeService studentGradeService, GradeService gradeService, SecurityService securityService) {
         this.gradeService = gradeService;
         this.studentGradeService = studentGradeService;
+        this.securityService = securityService;
         subjectComboBox = new FilterableComboBox<>("科目名", createComboBoxFilters(), FilterPosition.TOP);
         subjectView = new SubjectView(studentGradeService);
         studentNumberField = new TextField();
@@ -72,7 +75,7 @@ public class StudentView extends VerticalLayout {
         subjectComboBox.setItemLabelGenerator(StudentGrade::lecture_name);
         subjectComboBox.setPlaceholder("GPAのグラフを表示しています。選んだ科目のグラフに切り替わります。");
         subjectComboBox.setClearButtonVisible(true);
-        subjectComboBox.addValueChangeListener(this::updateLayout);
+        subjectComboBox.addValueChangeListener(this::updateView);
     }
 
     private void initializeStudentNumberField() {
@@ -95,7 +98,7 @@ public class StudentView extends VerticalLayout {
         gpaView = new GPAView(gradeService, studentGradeService, studentNumber, subjectComboBox);
     }
 
-    private void updateLayout(AbstractField.ComponentValueChangeEvent<ComboBox<StudentGrade>, StudentGrade> event) {
+    private void updateView(AbstractField.ComponentValueChangeEvent<ComboBox<StudentGrade>, StudentGrade> event) {
         if (event.getValue() == null) {
             remove(subjectComboBox);
             remove(subjectView);
@@ -108,7 +111,9 @@ public class StudentView extends VerticalLayout {
     }
 
     private StudentGrade findByCourseId(String courseId) {
-        Optional<StudentGrade> gradeOptional = subjectComboBox.getItems().filter(item -> item.course_id().equals(courseId)).findFirst();
+        Optional<StudentGrade> gradeOptional = subjectComboBox.getItems()
+                .filter(item -> item.course_id().equals(courseId))
+                .findFirst();
         return gradeOptional.orElse(subjectComboBox.getItems().findFirst().get());
     }
 

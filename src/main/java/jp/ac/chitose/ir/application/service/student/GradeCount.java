@@ -1,6 +1,6 @@
 package jp.ac.chitose.ir.application.service.student;
 
-public record StudentSubjectCalc(
+public record GradeCount(
         int 不可,
         int 可,
         int 良,
