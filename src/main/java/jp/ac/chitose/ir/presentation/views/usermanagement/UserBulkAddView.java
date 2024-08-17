@@ -42,7 +42,7 @@ public class UserBulkAddView extends VerticalLayout {
     }
     // 各種コンポーネントの追加
     private void addComponents() {
-        add(new H1("ユーザーの削除"), new Paragraph("ユーザーを削除することができます。削除したいユーザーのユーザIDとユーザーネームを入力してください。"));
+        add(new H1("ユーザーの一括追加"), new Paragraph("ユーザーを一括で追加できます。追加したいユーザーの情報を入力してください。"));
         HorizontalLayout buttonLayout = new HorizontalLayout(addAccount, cancelButton);
         buttonLayout.getStyle().set("flex-wrap", "wrap");
         add(buttonLayout);
