@@ -20,7 +20,9 @@ public class UserManagementButtons extends VerticalLayout {
 
     private void initializeButtons() {
         // ユーザーの一括追加ボタン
-        this.userBulkAddButton = new Button("一括追加", new Icon(VaadinIcon.PLUS));
+        this.userBulkAddButton = new Button("一括追加", new Icon(VaadinIcon.PLUS), buttonClickEvent -> {
+            UI.getCurrent().navigate("/user_management/bulk_add");
+        });
         userBulkAddButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         userBulkAddButton.setAutofocus(true);
 
