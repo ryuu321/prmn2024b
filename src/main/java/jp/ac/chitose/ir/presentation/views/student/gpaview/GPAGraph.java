@@ -17,9 +17,6 @@ import java.util.Optional;
 public class GPAGraph extends VerticalLayout {
     private final GradeService gradeService;
     private static final String HEIGHT = "60vh";
-    private static final int GPA_CATEGORY_NUM = 9;
-    private static final int DEFAULT_DATA = 0;
-    private static final String[] GPA_CATEGORY = {"0.0", "0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0"};
     private static final String[] GPA_CATEGORY_LABEL = {"0.0~0.5","0.5~1.0","1.0~1.5","1.5~2.0","2.0~2.5","2.5~3.0","3.0~3.5","3.5~4.0","4.0"};
 
     public GPAGraph(GradeService gradeService, String schoolYear) {

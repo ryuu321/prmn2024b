@@ -30,7 +30,6 @@ import java.util.function.BiPredicate;
 public class StudentView extends VerticalLayout {
     private final GradeService gradeService;
     private final StudentGradeService studentGradeService;
-    private final SecurityService securityService;
     private final FilterableComboBox<String, StudentGrade> subjectComboBox;
     private final TextField studentNumberField;
     private GPAView gpaView;
@@ -44,7 +43,6 @@ public class StudentView extends VerticalLayout {
     public StudentView(StudentGradeService studentGradeService, GradeService gradeService, SecurityService securityService) {
         this.gradeService = gradeService;
         this.studentGradeService = studentGradeService;
-        this.securityService = securityService;
         subjectComboBox = new FilterableComboBox<>("科目名", createComboBoxFilters(), FilterPosition.TOP);
         subjectView = new SubjectView(studentGradeService);
         studentNumberField = new TextField();
