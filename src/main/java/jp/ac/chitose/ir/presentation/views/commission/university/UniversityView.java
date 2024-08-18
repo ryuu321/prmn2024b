@@ -16,6 +16,7 @@ import jp.ac.chitose.ir.presentation.views.commission.university.components.Sele
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.teacherTraining.TeacherTraining;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.GraduationCredits.GraduationCredits;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.people.numberOfStudents.NumberOfStudents;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.studentsupport.Scholarship;
 
 import java.util.ArrayList;
 
@@ -149,6 +150,11 @@ public class UniversityView extends VerticalLayout {
         VerticalLayout teacherTraining = new TeacherTraining();
         setLayout(teacherTraining,"教職課程",annualReport);
         add(teacherTraining);
+
+        //大学年報の奨学金
+        VerticalLayout schalarship= new Scholarship();
+        setLayout(schalarship,"奨学金",annualReport);
+        add(schalarship);
 
         backButton.addClickListener(e -> {
             for (VerticalLayout layout : layouts) {
