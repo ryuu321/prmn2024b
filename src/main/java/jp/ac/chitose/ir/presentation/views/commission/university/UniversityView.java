@@ -13,11 +13,8 @@ import jp.ac.chitose.ir.application.service.commission.GradeService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.SelectButton;
-import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.ActiveLearning;
-import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.GraduationCredits;
-import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.NumberOfForeignLanguageClass;
-import jp.ac.chitose.ir.presentation.views.commission.university.layouts.exam.EnrollmentCapacity;
-import jp.ac.chitose.ir.presentation.views.commission.university.layouts.people.*;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.teacherTraining.TeacherTraining;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.GraduationCredits.GraduationCredits;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.people.numberOfStudents.NumberOfStudents;
 
 import java.util.ArrayList;
@@ -35,6 +32,7 @@ public class UniversityView extends VerticalLayout {
     private  ArrayList<Button> course;
     private ArrayList<Button> exam;
     private ArrayList<Button> people;
+    private ArrayList<Button> annualReport;
     private ArrayList<VerticalLayout> layouts;
     private FormLayout buttonLayout;
     public UniversityView(GradeService gradeService) {
@@ -54,7 +52,7 @@ public class UniversityView extends VerticalLayout {
 
         //カテゴリ別ラジオボタンを追加
         category = new RadioButtonGroup<>();
-        category.setItems("授業","進路","入試","人数");
+        category.setItems("授業","進路","入試","人数","年報");
         mainLayout.add(category);
         selectRadio();
         
@@ -67,6 +65,8 @@ public class UniversityView extends VerticalLayout {
         buttons.add(exam);
         people = new ArrayList<>();
         buttons.add(people);
+        annualReport = new ArrayList<>();
+        buttons.add(annualReport);
 
         layouts = new ArrayList<>();
 
@@ -82,9 +82,9 @@ public class UniversityView extends VerticalLayout {
         //各レイアウトのボタン、レイアウトを追加
         //人数に関するボタン
         //教員数
-        VerticalLayout numberOfTeachers = new NumberOfTeachers();
-        setLayout(numberOfTeachers,"教員数",people);
-        add(numberOfTeachers);
+//        VerticalLayout numberOfTeachers = new NumberOfTeachers();
+//        setLayout(numberOfTeachers,"教員数",people);
+//        add(numberOfTeachers);
 
         //学生数
         VerticalLayout numberOfStudents = new NumberOfStudents(gradeService);
@@ -92,58 +92,63 @@ public class UniversityView extends VerticalLayout {
         add(numberOfStudents);
 
         //学部生と大学院生の比率
-        VerticalLayout studentRatio = new StudentRatio();
-        setLayout(studentRatio,"学部生と大学院生の比率",people);
-        add(studentRatio);
+//        VerticalLayout studentRatio = new StudentRatio();
+//        setLayout(studentRatio,"学部生と大学院生の比率",people);
+//        add(studentRatio);
 
         //教員と学生の比率
-        VerticalLayout teacherStudentRatio = new TeacherStudentRatio();
-        setLayout(teacherStudentRatio,"教員と学生の比率",people);
-        add(teacherStudentRatio);
+//        VerticalLayout teacherStudentRatio = new TeacherStudentRatio();
+//        setLayout(teacherStudentRatio,"教員と学生の比率",people);
+//        add(teacherStudentRatio);
 
         //外国人教員数
-        VerticalLayout foreignTeacher = new ForeignTeacher();
-        setLayout(foreignTeacher,"外国人教員数",people);
-        add(foreignTeacher);
+//        VerticalLayout foreignTeacher = new ForeignTeacher();
+//        setLayout(foreignTeacher,"外国人教員数",people);
+//        add(foreignTeacher);
 
         //社会人学生数
-        VerticalLayout workingAdultStudent =new WorkingAdultStudent();
-        setLayout(workingAdultStudent,"社会人学生数",people);
-        add(workingAdultStudent);
+//        VerticalLayout workingAdultStudent =new WorkingAdultStudent();
+//        setLayout(workingAdultStudent,"社会人学生数",people);
+//        add(workingAdultStudent);
 
         //休学者数
-        VerticalLayout leaveOfAbsence = new LeaveOfAbsence();
-        setLayout(leaveOfAbsence,"休学者数",people);
-        add(leaveOfAbsence);
+//        VerticalLayout leaveOfAbsence = new LeaveOfAbsence();
+//        setLayout(leaveOfAbsence,"休学者数",people);
+//        add(leaveOfAbsence);
 
         //退学、除籍者数
-        VerticalLayout dropoutOrExpelled = new DropoutOrExpelled();
-        setLayout(dropoutOrExpelled,"退学、除籍者数",people);
-        add(dropoutOrExpelled);
+//        VerticalLayout dropoutOrExpelled = new DropoutOrExpelled();
+//        setLayout(dropoutOrExpelled,"退学、除籍者数",people);
+//        add(dropoutOrExpelled);
 
 
         //入試に関するボタン
         //入学定員
-        VerticalLayout enrollmentCapacity = new EnrollmentCapacity();
-        setLayout(enrollmentCapacity,"入学定員",exam);
-        add(enrollmentCapacity);
+//        VerticalLayout enrollmentCapacity = new EnrollmentCapacity();
+//        setLayout(enrollmentCapacity,"入学定員",exam);
+//        add(enrollmentCapacity);
 
 
         //授業に関するボタン
         //外国語科目数
-        VerticalLayout numberOFForeignLanguageClass = new NumberOfForeignLanguageClass();
-        setLayout(numberOFForeignLanguageClass,"外国語科目数",classwork);
-        add(numberOFForeignLanguageClass);
+//        VerticalLayout numberOFForeignLanguageClass = new NumberOfForeignLanguageClass();
+//        setLayout(numberOFForeignLanguageClass,"外国語科目数",classwork);
+//        add(numberOFForeignLanguageClass);
 
         //アクティブラーニング実施率
-        VerticalLayout activeLearning = new ActiveLearning();
-        setLayout(activeLearning,"アクティブラーニング実施率",classwork);
-        add(activeLearning);
+//        VerticalLayout activeLearning = new ActiveLearning();
+//        setLayout(activeLearning,"アクティブラーニング実施率",classwork);
+//        add(activeLearning);
 
         //卒業単位数
         VerticalLayout graduationCredits = new GraduationCredits();
         setLayout(graduationCredits,"卒業単位数",classwork);
         add(graduationCredits);
+
+        //大学年報
+        VerticalLayout teacherTraining = new TeacherTraining();
+        setLayout(teacherTraining,"教職課程",annualReport);
+        add(teacherTraining);
 
         backButton.addClickListener(e -> {
             for (VerticalLayout layout : layouts) {
@@ -185,6 +190,12 @@ public class UniversityView extends VerticalLayout {
             } else if(e.getValue().equals("人数")) {
                 deleteAll();
                 for(Button button : people) {
+                    button.setVisible(true);
+                }
+            }
+            else if(e.getValue().equals("年報")){
+                deleteAll();
+                for(Button button : annualReport) {
                     button.setVisible(true);
                 }
             }
