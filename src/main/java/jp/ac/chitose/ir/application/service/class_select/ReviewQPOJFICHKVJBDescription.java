@@ -1,11 +1,13 @@
 package jp.ac.chitose.ir.application.service.class_select;
 
+import java.util.Map;
+
 public record ReviewQPOJFICHKVJBDescription(
-        String 科目名,
-        String 担当者,
-        String q7,
-        String q17,
-        String q18,
-        String q19
+        Map<String, String> 科目名,
+        Map<String, String> 担当者,
+        Map<String, String> q7,
+        Map<String, String> q17,
+        Map<String, String> q18,
+        Map<String, String> q19
 ) {
 }
