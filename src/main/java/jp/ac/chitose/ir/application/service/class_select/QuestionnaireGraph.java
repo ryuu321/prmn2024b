@@ -12,7 +12,8 @@ public class QuestionnaireGraph {
         this.classSelect = classSelect;
     }
     private Graph band(int Question_num,String subject_id) {
-        var ClassTest = classSelect.getClassQPOJFICHKVJB(subject_id).data();//q4_項目を項目()に変えて
+        var ClassTest = classSelect.getClassQPOJFICHKVJB(subject_id).data();
+        System.out.println(ClassTest.get(0));
 
         if (Question_num == 4) {
             return Graph.Builder.get().band()
