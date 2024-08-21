@@ -70,6 +70,8 @@ public class LoginUser implements UserDetails {
         return user.id();
     }
 
+    public String getLoginId() {return user.login_id(); }
+
     public boolean isTeacher() { return roles.contains("ROLE_teacher"); }
 
     public boolean isStudent() { return roles.contains("ROLE_student"); }
