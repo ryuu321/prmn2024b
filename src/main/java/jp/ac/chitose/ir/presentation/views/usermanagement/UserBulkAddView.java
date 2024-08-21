@@ -15,7 +15,11 @@ import jakarta.annotation.security.RolesAllowed;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.component.UploadButton;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 
 @PageTitle("UserBulkAdd")
 @Route(value = "/user_management/bulk_add", layout = MainLayout.class)
@@ -30,8 +34,6 @@ public class UserBulkAddView extends VerticalLayout {
         addComponents();
     }
 
-
-
     // ボタン
     private void initializeButton() {
         cancelButton = new Button("戻る", buttonClickEvent -> {
@@ -43,10 +45,13 @@ public class UserBulkAddView extends VerticalLayout {
     private void initializeUploadButton() {
         MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
         upload = new Upload(buffer);
+        upload.setDropAllowed(true);
         upload.setAutoUpload(false);
 
         // csv形式のファイルのみ受付
         upload.setAcceptedFileTypes("text/csv", ".csv");
+        // 1度にアップロードできるファイルを1つに設定
+        upload.setMaxFiles(1);
 
         Button uploadButton = new Button("追加");
         uploadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -60,6 +65,29 @@ public class UserBulkAddView extends VerticalLayout {
         upload.addSucceededListener(event -> {
             String filename = event.getFileName();
             InputStream inputStream = buffer.getInputStream(filename);
+
+//            csvの読み込み
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] data = line.split(",");
+
+                    // csvの情報を取得
+                    String login_id = data[0];
+                    String userName = data[1];
+                    boolean ROLEAdministrator = Boolean.parseBoolean(data[2]);
+                    boolean ROLECommission = Boolean.parseBoolean(data[3]);
+                    boolean ROLETeacher = Boolean.parseBoolean(data[4]);
+                    boolean ROLEStudent = Boolean.parseBoolean(data[5]);
+                    LocalDateTime createdAt = LocalDateTime.now();
+
+                    // 取得した情報をServiceに引き渡すなど
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                // エラーハンドリングをここで行う
+            }
         });
     }
 
@@ -70,10 +98,5 @@ public class UserBulkAddView extends VerticalLayout {
         buttonLayout.getStyle().set("flex-wrap", "wrap");
         add(buttonLayout);
         add(upload);
-    }
-
-    // データアップロード用のボタン追加
-    private void addUploadButton() {
-
     }
 }
