@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.application.config;
 
+import jp.ac.chitose.ir.application.exception.APIClientErrorException;
 import jp.ac.chitose.ir.application.exception.APIServerErrorException;
 import jp.ac.chitose.ir.application.service.HelloService;
 import jp.ac.chitose.ir.application.service.class_select.ClassSelect;
@@ -25,7 +26,8 @@ public class HttpClientConfiguration {
     @Bean
     public HttpServiceProxyFactory httpServiceProxyFactory(WebClient.Builder builder) {
         final WebClient webClient = builder.baseUrl(baseUrl).
-                defaultStatusHandler(HttpStatusCode::is5xxServerError, clientResponse -> Mono.just(new APIServerErrorException("API側で内部エラーが発生しました。"))).build();
+                defaultStatusHandler(HttpStatusCode::is5xxServerError, clientResponse -> Mono.just(new APIServerErrorException("API側で内部エラーが発生しました。"))).
+                defaultStatusHandler(HttpStatusCode::is4xxClientError, clientResponse -> Mono.just(new APIClientErrorException("エラーが発生しました。"))).build();
         return HttpServiceProxyFactory.builder(WebClientAdapter.forClient(webClient)).build();
     }
 
