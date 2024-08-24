@@ -6,6 +6,6 @@ import org.springframework.web.service.annotation.HttpExchange;
 
 @HttpExchange(value = "/users", accept = "application/json", contentType = "application/json")
 public interface UserManagementService {
-    @GetExchange("/info")
+    @GetExchange("/grid")
     TableData<UsersData> getUsersData();
 }
