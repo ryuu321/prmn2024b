@@ -12,7 +12,10 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import jp.ac.chitose.ir.application.service.usermanagement.UserManagementService;
+import jp.ac.chitose.ir.application.service.usermanagement.UsersData;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
+
+import java.util.Set;
 
 @PageTitle("UserDelete")
 @Route(value = "/user_management/delete", layout = MainLayout.class)
@@ -35,7 +38,11 @@ public class UserDeleteView extends VerticalLayout {
     // ボタンの初期設定
     private void initializeButton() {
         deleteAccount = new Button("削除", new Icon(VaadinIcon.MINUS), buttonClickEvent -> {
+            // 選択されているユーザーの情報を取得
+            Set<UsersData> selectedUsers = usersDataGrid.getGrid().getSelectedItems();
+
             // ここでDBとやりとりするための情報を取得している(サービスが出来たらデータを引き渡す)
+
 
         });
         deleteAccount.addThemeVariants(ButtonVariant.LUMO_ERROR);

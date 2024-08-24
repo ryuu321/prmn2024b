@@ -12,6 +12,7 @@ import jp.ac.chitose.ir.application.service.usermanagement.UsersData;
 public class UsersDataGrid extends VerticalLayout {
     private RadioButtonGroup<String> rolesRadioButton;
     private GridListDataView<UsersData> gridListDataView;
+    private Grid<UsersData> grid;
 
     // グリッドにマルチセレクトモードを付けるかどうか判定する
     public enum SelectionMode {
@@ -21,7 +22,7 @@ public class UsersDataGrid extends VerticalLayout {
     // コンストラクタ
     public UsersDataGrid(UserManagementService userManagementService, SelectionMode selectionMode) {
         initializeRadioButtons();
-        Grid<UsersData> grid = initializeGrid(userManagementService, selectionMode);
+        grid = initializeGrid(userManagementService, selectionMode);
         addComponentsToLayout(grid);
     }
 
@@ -53,6 +54,11 @@ public class UsersDataGrid extends VerticalLayout {
         }
 
         gridListDataView = grid.setItems(userManagementService.getUsersData().data());
+        return grid;
+    }
+
+    // グリッドの情報を得るメソッド
+    public Grid<UsersData> getGrid() {
         return grid;
     }
 
