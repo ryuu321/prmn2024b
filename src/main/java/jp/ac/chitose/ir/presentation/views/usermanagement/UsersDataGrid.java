@@ -6,8 +6,8 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.function.SerializablePredicate;
-import jp.ac.chitose.ir.application.service.usermanagement.UserManagementService;
-import jp.ac.chitose.ir.application.service.usermanagement.UsersData;
+import jp.ac.chitose.ir.application.service.management.UserManagementService;
+import jp.ac.chitose.ir.application.service.management.UsersData;
 
 public class UsersDataGrid extends VerticalLayout {
     private RadioButtonGroup<String> rolesRadioButton;

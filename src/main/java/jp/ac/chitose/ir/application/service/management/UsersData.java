@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.application.service.usermanagement;
+package jp.ac.chitose.ir.application.service.management;
 
 public record UsersData(
         int id,
