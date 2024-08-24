@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.presentation.component.graph;
+package jp.ac.chitose.ir.presentation.component.notification;
 
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;

@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.time.LocalDateTime;
 
 @PageTitle("UserBulkAdd")
 @Route(value = "/user_management/bulk_add", layout = MainLayout.class)
@@ -69,17 +68,24 @@ public class UserBulkAddView extends VerticalLayout {
 //            csvの読み込み
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
+
+                //todo csvが空の場合のエラー処理（flag==0とかで管理）
+
+
                 while ((line = reader.readLine()) != null) {
                     String[] data = line.split(",");
 
+                    if(data.length < 3) {
+                        //todo 処理を中断し、画面にエラーメッセ―ジを表示
+                    }
                     // csvの情報を取得
                     String login_id = data[0];
                     String userName = data[1];
+                    // ロールを可変長配列に格納する
                     boolean ROLEAdministrator = Boolean.parseBoolean(data[2]);
                     boolean ROLECommission = Boolean.parseBoolean(data[3]);
                     boolean ROLETeacher = Boolean.parseBoolean(data[4]);
                     boolean ROLEStudent = Boolean.parseBoolean(data[5]);
-                    LocalDateTime createdAt = LocalDateTime.now();
 
                     // 取得した情報をServiceに引き渡すなど
 
