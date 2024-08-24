@@ -13,10 +13,15 @@ public class UsersDataGrid extends VerticalLayout {
     private RadioButtonGroup<String> rolesRadioButton;
     private GridListDataView<UsersData> gridListDataView;
 
+    // グリッドにマルチセレクトモードを付けるかどうか判定する
+    public enum SelectionMode {
+        SINGLE, MULTI
+    }
+
     // コンストラクタ
-    public UsersDataGrid(UserManagementService userManagementService) {
+    public UsersDataGrid(UserManagementService userManagementService, SelectionMode selectionMode) {
         initializeRadioButtons();
-        Grid<UsersData> grid = initializeGrid(userManagementService);
+        Grid<UsersData> grid = initializeGrid(userManagementService, selectionMode);
         addComponentsToLayout(grid);
     }
 
@@ -34,11 +39,19 @@ public class UsersDataGrid extends VerticalLayout {
     }
 
     // グリッドの初期化
-    private Grid<UsersData> initializeGrid(UserManagementService userManagementService) {
+    private Grid<UsersData> initializeGrid(UserManagementService userManagementService, SelectionMode selectionMode) {
         Grid<UsersData> grid = new Grid<>(UsersData.class, false);
         addColumnsToGrid(grid);
         grid.setWidthFull();
         grid.setAllRowsVisible(true);
+
+        // コンストラクタで渡された選択モードに基づいてグリッドを設定
+        if (selectionMode == SelectionMode.MULTI) {
+            grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        } else {
+            grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        }
+
         gridListDataView = grid.setItems(userManagementService.getUsersData().data());
         return grid;
     }
