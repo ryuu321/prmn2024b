@@ -11,24 +11,20 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
-import jp.ac.chitose.ir.application.service.management.SecurityService;
+import jp.ac.chitose.ir.application.exception.UserManagementException;
 import jp.ac.chitose.ir.application.service.management.UserManagementService;
 import jp.ac.chitose.ir.application.service.management.UsersData;
 import jp.ac.chitose.ir.application.service.management.UsersService;
-import jp.ac.chitose.ir.infrastructure.repository.UsersRepository;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.component.notification.ErrorNotification;
 import jp.ac.chitose.ir.presentation.component.notification.SuccessNotification;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @PageTitle("UserDelete")
 @Route(value = "/user_management/delete", layout = MainLayout.class)
 @RolesAllowed({"administrator"})
 public class UserDeleteView extends VerticalLayout {
-    private final UsersRepository usersRepository;
-    private final SecurityService securityService;
     private final UserManagementService userManagementService;
     private final UsersService usersService;
     private Button deleteAccount;
@@ -36,11 +32,9 @@ public class UserDeleteView extends VerticalLayout {
     private final UsersDataGrid usersDataGrid;
 
     // コンストラクタ
-    public UserDeleteView(UserManagementService userManagementService, UsersRepository usersRepository, SecurityService securityService) {
+    public UserDeleteView(UserManagementService userManagementService, UsersService usersService) {
         this.userManagementService = userManagementService;
-        this.usersRepository = usersRepository;
-        this.securityService = securityService;
-        this.usersService = new UsersService(this.usersRepository, this.securityService);
+        this.usersService = usersService;
         initializeButton();
         usersDataGrid = new UsersDataGrid(this.userManagementService, UsersDataGrid.SelectionMode.MULTI);
         addComponents();
@@ -52,19 +46,15 @@ public class UserDeleteView extends VerticalLayout {
         deleteAccount = new Button("削除", new Icon(VaadinIcon.MINUS), buttonClickEvent -> {
             // 選択されているユーザーの情報を取得
             Set<UsersData> selectedUsers = usersDataGrid.getGrid().getSelectedItems();
-
-            // 1件ずつユーザー情報を取り出して操作する
-            for (UsersData user : selectedUsers) {
-                String loginId = user.login_id();
-                String username = user.user_name();
-                LocalDateTime deleteAt = LocalDateTime.now();
-                //todo ここでDBとやりとりするための情報を取得している(サービスが出来たらデータを引き渡す)
-                int result = usersService.deleteUser(loginId, username, deleteAt);
-                if (result == 2) {
-                    new ErrorNotification(user.user_name() + "の削除に失敗");
-                } else if (result == 0) {
-                    new SuccessNotification(user.user_name() + "の削除に成功");
-                }
+            try {
+                usersService.deleteUsers(selectedUsers);
+                new SuccessNotification(selectedUsers.size() + " 件のユーザの削除に成功");
+            } catch (UserManagementException e){
+                if(e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
+                else new ErrorNotification(e.getMessage());
+            } catch (RuntimeException e){
+                e.printStackTrace();
+                new ErrorNotification("エラーが発生しました");
             }
         });
         deleteAccount.addThemeVariants(ButtonVariant.LUMO_ERROR);

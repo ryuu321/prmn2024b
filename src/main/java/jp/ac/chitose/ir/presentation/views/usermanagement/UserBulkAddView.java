@@ -12,13 +12,14 @@ import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import jp.ac.chitose.ir.application.exception.UserManagementException;
+import jp.ac.chitose.ir.application.service.management.UsersService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.component.UploadButton;
+import jp.ac.chitose.ir.presentation.component.notification.ErrorNotification;
+import jp.ac.chitose.ir.presentation.component.notification.SuccessNotification;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 @PageTitle("UserBulkAdd")
 @Route(value = "/user_management/bulk_add", layout = MainLayout.class)
@@ -26,8 +27,10 @@ import java.io.InputStreamReader;
 public class UserBulkAddView extends VerticalLayout {
     private Button cancelButton;
     private Upload upload;
+    private final UsersService usersService;
 
-    public UserBulkAddView() {
+    public UserBulkAddView(UsersService usersService) {
+        this.usersService = usersService;
         initializeButton();
         initializeUploadButton();
         addComponents();
@@ -64,35 +67,15 @@ public class UserBulkAddView extends VerticalLayout {
         upload.addSucceededListener(event -> {
             String filename = event.getFileName();
             InputStream inputStream = buffer.getInputStream(filename);
-
-//            csvの読み込み
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-                String line;
-
-                //todo csvが空の場合のエラー処理（flag==0とかで管理）
-
-
-                while ((line = reader.readLine()) != null) {
-                    String[] data = line.split(",");
-
-                    if(data.length < 3) {
-                        //todo 処理を中断し、画面にエラーメッセ―ジを表示
-                    }
-                    // csvの情報を取得
-                    String login_id = data[0];
-                    String userName = data[1];
-                    // ロールを可変長配列に格納する
-                    boolean ROLEAdministrator = Boolean.parseBoolean(data[2]);
-                    boolean ROLECommission = Boolean.parseBoolean(data[3]);
-                    boolean ROLETeacher = Boolean.parseBoolean(data[4]);
-                    boolean ROLEStudent = Boolean.parseBoolean(data[5]);
-
-                    // 取得した情報をServiceに引き渡すなど
-
-                }
-            } catch (IOException e) {
+            try {
+                long inserted = usersService.addUsers(inputStream);
+                new SuccessNotification(inserted + " 件のユーザ追加に成功");
+            } catch (UserManagementException e){
+                if(e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
+                else new ErrorNotification(e.getMessage());
+            } catch (RuntimeException e){
                 e.printStackTrace();
-                // エラーハンドリングをここで行う
+                new ErrorNotification("エラーが発生しました");
             }
         });
     }
