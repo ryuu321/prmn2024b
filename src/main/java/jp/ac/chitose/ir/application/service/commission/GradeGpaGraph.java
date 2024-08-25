@@ -2,18 +2,18 @@ package jp.ac.chitose.ir.application.service.commission;
 
 import java.util.ArrayList;
 
-public record CommissionGpa(String name,
-                            int a,
-                            int b,
-                            int c,
-                            int d,
-                            int e,
-                            int f,
-                            int g,
-                            int h,
-                            int i
-
-){
+public record GradeGpaGraph(
+        String name,
+        int a,
+        int b,
+        int c,
+        int d,
+        int e,
+        int f,
+        int g,
+        int h,
+        int i
+) {
     public ArrayList<Integer> getData(){
         ArrayList<Integer> aa = new ArrayList<>();
         aa.add(a);
@@ -27,7 +27,6 @@ public record CommissionGpa(String name,
         aa.add(i);
         return aa;
     }
-
     public String getName() {
         return name();
     }
