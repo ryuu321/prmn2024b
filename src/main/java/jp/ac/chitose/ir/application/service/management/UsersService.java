@@ -69,13 +69,14 @@ public class UsersService {
                     throw new UserManagementException(rowNumber + " 行目のデータが不足しています");
                 }
                 // csvのユーザ情報を取得
-                String login_id = data[0];
+                String loginId = data[0];
                 String userName = data[1];
                 String password = data[2];
 
-                // ユーザ情報を追加
                 try {
-                    long userId = usersRepository.addUser(login_id, userName, password);
+                    // 既にログインIDが登録されていなければユーザ情報を追加
+                    if(usersRepository.getUsersCount(loginId) > 0) throw new UserManagementException(rowNumber + " 行目のユーザのログインID " + loginId + " は既に存在します");
+                    long userId = usersRepository.addUser(loginId, userName, password);
                     // ロールを追加する
                     for(int i=3;i<data.length;i++){
                         Optional<Integer> roleIdOp = roleRepository.getRoleId(data[i]);
