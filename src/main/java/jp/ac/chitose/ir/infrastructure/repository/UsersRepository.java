@@ -7,7 +7,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Repository
 public class UsersRepository {
@@ -35,7 +35,7 @@ public class UsersRepository {
     // returning id
     public long addUser(String loginId,String username, String password){
         // 日付の取得
-        LocalDateTime date = LocalDateTime.now();
+        Timestamp createdAt = new Timestamp(System.currentTimeMillis());
 
         // user_idを取得するための変数
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -45,7 +45,7 @@ public class UsersRepository {
                         INSERT into users(login_id, user_name, password, is_available, created_at) 
                         values (?, ?, ?, TRUE, ?)
                         """)
-                .params(loginId, username, password, date)
+                .params(loginId, username, password, createdAt)
                 .update(keyHolder, "id");
         System.out.println("inserted : " + inserted);
 
@@ -103,14 +103,14 @@ public class UsersRepository {
     // ユーザ削除(無効化)
     public int deleteUser(long userId){
         // 日付の取得
-        LocalDateTime date = LocalDateTime.now();
+        Timestamp deletedAt = new Timestamp(System.currentTimeMillis());
 
         int deleted = jdbcClient.sql("""
                 update users
                 SET is_available = FALSE, deleted_at = ?
                 WHERE id = ?
                 """)
-                .params(date, userId)
+                .params(deletedAt, userId)
                 .update();
         System.out.println("deleted : " + deleted);
         return deleted;
