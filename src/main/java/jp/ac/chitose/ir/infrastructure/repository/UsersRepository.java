@@ -3,54 +3,60 @@ package jp.ac.chitose.ir.infrastructure.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.sql.Timestamp;
 
 @Repository
 public class UsersRepository {
     // フィールド；JDBC Client
     @Autowired
     private JdbcClient jdbcClient;
-    private final DateTimeFormatter dateTimeFormatter;
-    // とりあえずここに書いたけどserviceに書いた方がよさそう
-    private final String defaultPassword;
-    // 場合によっては消す
 
     // コンストラクタ
     public UsersRepository(JdbcClient jdbcClient){
         this.jdbcClient = jdbcClient;
-        // yyyy-MM-ddの方が良いかも
-        // 両方違ったら後で考える
-        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        // めちゃくちゃ仮
-        defaultPassword = "password";
+    }
+
+    // login_id からユーザを取得する(既にいるか確認)
+    public long getUsersCount(String loginId){
+        Long usersCount = jdbcClient.sql("""
+                SELECT count(*) FROM users WHERE login_id = ?
+                """)
+                .params(loginId)
+                .query(Long.class)
+                .single();
+        return usersCount;
     }
 
     // ユーザ追加
-    // デフォルトのパスワードを固定にするかusernameに合わせるかなどの確認
-    public void addUser(String loginId,String username){
-        //日付の取得・yyyy/MM/dd の形にフォーマット
-        LocalDateTime date = LocalDateTime.now();
-        String formatDate = dateTimeFormatter.format(date);
-        //Timestamp date = new Timestamp(System.currentTimeMillis());
+    // returning id
+    public long addUser(String loginId,String username, String password){
+        // 日付の取得
+        Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+
+        // user_idを取得するための変数
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
         // users テーブルへの追加
         int inserted = jdbcClient.sql("""
                         INSERT into users(login_id, user_name, password, is_available, created_at) 
                         values (?, ?, ?, TRUE, ?)
                         """)
-                .params(loginId, username, defaultPassword, formatDate)
-                .update();
+                .params(loginId, username, password, createdAt)
+                .update(keyHolder, "id");
         System.out.println("inserted : " + inserted);
+
+        long userId = keyHolder.getKey().longValue();
+        return userId;
     }
 
     // ロール追加
     public void addRole(long userId, int roleId){
         int inserted = jdbcClient.sql("""
-                        INSERT INTO user_role VALUES (?, ?)
+                        INSERT INTO user_role(user_id, role_id) VALUES (?, ?)
                         """)
                 .params(userId, roleId)
                 .update();
@@ -63,7 +69,7 @@ public class UsersRepository {
                 SELECT id FROM users WHERE login_id = ?
                 """)
                 .params(loginId)
-                .query(new DataClassRowMapper<>(Integer.class))
+                .query(new DataClassRowMapper<>(Long.class))
                 .single();
         return id;
     }
@@ -71,20 +77,18 @@ public class UsersRepository {
     // ユーザ情報変更
     // 変更内容どう受け取ってくるか要検討
     // serviceでfor文？sql文を順々に結合？->一旦後者で実装
-    public void updateUser(String loginId, List<String> columns, List<String> params){
-        StringBuilder sql = new StringBuilder("update users SET ");
-        for(int i=0;i<columns.size();i++){
-            if(i>0) sql.append(", ");
-            sql.append(columns.get(i) + " = ?");
-        }
-        sql.append(" WHERE login_id = ?");
-        int updated = jdbcClient.sql(sql.toString())
-                .params(params)
-                .param(loginId)
+    public void updateUser(long id, String loginId, String username, String password){
+        int updated = jdbcClient.sql("""
+                update users
+                SET login_id = ?, user_name = ?, password = ?
+                WHERE id = ?
+                """)
+                .params(loginId, username, password, id)
                 .update();
         System.out.println("updated : " + updated);
     }
 
+    // パスワード変更
     public void updatePassword(String loginId, String password){
         int updated = jdbcClient.sql("""
                 update users 
@@ -97,15 +101,29 @@ public class UsersRepository {
     }
 
     // ユーザ削除(無効化)
-    public int deleteUser(String loginId, String username, LocalDateTime deleteAt){
-        String formatDate = dateTimeFormatter.format(deleteAt);
+    public int deleteUser(long userId){
+        // 日付の取得
+        Timestamp deletedAt = new Timestamp(System.currentTimeMillis());
+
         int deleted = jdbcClient.sql("""
-                update users 
+                update users
                 SET is_available = FALSE, deleted_at = ?
-                WHERE login_id = ?
-                AND user_name = ?
+                WHERE id = ?
                 """)
-                .params(formatDate, loginId, username)
+                .params(deletedAt, userId)
+                .update();
+        System.out.println("deleted : " + deleted);
+        return deleted;
+    }
+
+    // 削除したユーザを有効化
+    public int reviveUser(long userId){
+        int deleted = jdbcClient.sql("""
+                update users
+                SET is_available = TRUE, deleted_at = NULL
+                WHERE id = ?
+                """)
+                .params(userId)
                 .update();
         System.out.println("deleted : " + deleted);
         return deleted;
