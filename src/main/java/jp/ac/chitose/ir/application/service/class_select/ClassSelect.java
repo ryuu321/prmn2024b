@@ -28,5 +28,8 @@ public interface ClassSelect {
     @GetExchange("/title/{subject_id}")
     TableData<ReviewTitle> getReviewTitle(@PathVariable String subject_id);//質問事項
 
+    @GetExchange("/describe/{subject_id}")
+    TableData<ReviewDescribe> getReviewDescribe(@PathVariable String subject_id);
+
 }
 

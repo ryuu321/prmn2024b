@@ -13,6 +13,8 @@ public record ClassQPOJFICHKVJB(
         List<Double> q8_割合,
         List<String> q9_項目,
         List<Double> q9_割合,
+        List<String> q10_項目,
+        List<Double> q10_割合,
         List<String> q11_項目,
         List<Double> q11_割合,
         List<String> q12_項目,
@@ -24,4 +26,6 @@ public record ClassQPOJFICHKVJB(
         List<String> q15_項目,
         List<Double> q15_割合
 ) {
+
+
 }

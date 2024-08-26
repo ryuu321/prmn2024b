@@ -13,6 +13,7 @@ import jp.ac.chitose.ir.application.service.class_select.*;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.component.scroll.ScrollManager;
 
+import java.io.IOException;
 import java.util.List;
 
 @PageTitle("class_QPOJFICHKVJB")
@@ -25,20 +26,19 @@ public class QPOJFICHKVJBView extends VerticalLayout implements AfterNavigationO
     private QuestionnaireGraph questionnaireGraph;
     private QuestionMatters questionMatters;
     private QuestionnaireGrid questionnaireGrid;
+    private QuestionDescribe questionDescribe;
 
-    public QPOJFICHKVJBView(ClassSelect classSelect) {
+    public QPOJFICHKVJBView(ClassSelect classSelect) throws IOException {
         this.classSelect = classSelect;
         this.scrollManager = new ScrollManager();
         this.questionnaireGraph=new QuestionnaireGraph(classSelect);
         this.questionMatters = new QuestionMatters(classSelect, scrollManager);
         this.questionnaireGrid = new QuestionnaireGrid(classSelect);
+        this.questionDescribe = new QuestionDescribe(classSelect);
         VerticalLayout layout = new VerticalLayout();
 
         String subject_id = "170Fg";  // 実際のsubject_idに置き換えてください
         init1(subject_id);
-
-        index();
-
 
         for (int i = 0; i < 11; i++) {
 
@@ -52,13 +52,14 @@ public class QPOJFICHKVJBView extends VerticalLayout implements AfterNavigationO
 
         layout.getStyle().set("padding", "40px");
         for (int i = 0; i < 11; i++) {
-            if(i == 3 || i == 6){
+            if(i == 3){
                 layout.add(questionMatters.generateQuestionMatters(3,subject_id));
                 layout.add(questionnaireGrid.generateGrid(i,subject_id));;//自由記述
                 continue;}
 
             layout.add(questionMatters.generateQuestionMatters(i,subject_id));//example
             layout.add(questionnaireGraph.generateQuestionnaireGraph(i+4,subject_id).getGraph());
+            layout.add(questionDescribe.getStatics(i+4,subject_id));
 
 
 
@@ -101,8 +102,8 @@ public class QPOJFICHKVJBView extends VerticalLayout implements AfterNavigationO
         add(new H3("科目担当:"+ subject_teacher));
     }
 
-    private void index() {
+    /*private void index() {
         add(new H3("質問項目一覧(未実装)"));
 
-    }
+    }*/
 }
