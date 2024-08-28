@@ -11,6 +11,7 @@ import jp.ac.chitose.ir.application.service.management.UsersData;
 
 public class UsersDataGrid extends VerticalLayout {
     private RadioButtonGroup<String> rolesRadioButton;
+    private RadioButtonGroup<String> availableFilterRadioButton;
     private GridListDataView<UsersData> gridListDataView;
     private Grid<UsersData> grid;
 
@@ -36,7 +37,11 @@ public class UsersDataGrid extends VerticalLayout {
         rolesRadioButton = new RadioButtonGroup<>();
         rolesRadioButton.setItems("全て", "システム管理者", "IR委員会メンバー", "教員", "学生");
         rolesRadioButton.setValue("全て");
+        availableFilterRadioButton = new RadioButtonGroup<>();
+        availableFilterRadioButton.setItems("有効のみ表示", "無効も表示する");
+        availableFilterRadioButton.setValue("有効のみ表示");
         rolesRadioButton.addValueChangeListener(event -> applyFilters());
+        availableFilterRadioButton.addValueChangeListener(event -> applyFilters());
     }
 
     // グリッドの初期化
@@ -79,6 +84,7 @@ public class UsersDataGrid extends VerticalLayout {
     // 各種コンポーネントを画面に追加
     private void addComponentsToLayout(Grid<UsersData> grid) {
         add(new H3("ロール"), rolesRadioButton);
+        add(availableFilterRadioButton);
         add(grid);
     }
 
@@ -91,8 +97,13 @@ public class UsersDataGrid extends VerticalLayout {
     private class Filter implements SerializablePredicate<UsersData> {
         @Override
         public boolean test(UsersData usersData) {
-            boolean roleMatches = "全体".equals(rolesRadioButton.getValue()) || usersData.display_name().equals(rolesRadioButton.getValue());
-            return roleMatches;
+            boolean roleMatches = "全て".equals(rolesRadioButton.getValue()) || usersData.display_name().equals(rolesRadioButton.getValue());
+            boolean availableMatches;
+            if ("有効のみ表示".equals(availableFilterRadioButton.getValue())) {
+                availableMatches = usersData.is_available();
+            } else {
+                availableMatches = true;
+            }return roleMatches && availableMatches;
         }
     }
 }
