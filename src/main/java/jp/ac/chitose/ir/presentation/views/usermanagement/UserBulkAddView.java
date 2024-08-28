@@ -54,8 +54,6 @@ public class UserBulkAddView extends VerticalLayout {
 
         Button uploadButton = new Button("追加");
         uploadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-
         UploadButton i18n = new UploadButton();
         upload.setI18n(i18n);
 
@@ -65,7 +63,7 @@ public class UserBulkAddView extends VerticalLayout {
             String filename = event.getFileName();
             InputStream inputStream = buffer.getInputStream(filename);
 
-//            csvの読み込み
+//            Serviceに移す
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
 
