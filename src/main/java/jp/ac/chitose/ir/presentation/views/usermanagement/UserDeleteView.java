@@ -65,8 +65,8 @@ public class UserDeleteView extends VerticalLayout {
 
     // 各種コンポーネントの追加
     private void addComponents() {
+        add(new H1("ユーザーの削除"), new Paragraph("ユーザーを削除することができます。削除したいユーザーを選んで削除ボタンを押してください。"));
         add(cancelButton);
-        add(new H1("ユーザーの削除"), new Paragraph("ユーザーを削除することができます。削除したいユーザーのユーザIDとユーザーネームを入力してください。"));
         add(usersDataGrid);
         add(deleteAccount);
     }
