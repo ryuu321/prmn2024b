@@ -116,6 +116,19 @@ public class UsersRepository {
         return deleted;
     }
 
+    // 削除したユーザを有効化
+    public int reviveUser(long userId){
+        int deleted = jdbcClient.sql("""
+                update users
+                SET is_available = TRUE, deleted_at = NULL
+                WHERE id = ?
+                """)
+                .params(userId)
+                .update();
+        System.out.println("deleted : " + deleted);
+        return deleted;
+    }
+
     // テスト用に使うかもしれないので一応作った痕跡を残さない削除 後々消す
     public void deleteData(long id){
         int deleted = jdbcClient.sql("""
