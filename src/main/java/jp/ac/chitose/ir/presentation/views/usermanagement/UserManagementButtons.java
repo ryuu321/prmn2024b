@@ -35,8 +35,6 @@ public class UserManagementButtons extends VerticalLayout {
             UI.getCurrent().navigate("/user_management/delete");
         });
         userDeleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-
-
     }
 
     // 各種コンポーネントを画面に追加

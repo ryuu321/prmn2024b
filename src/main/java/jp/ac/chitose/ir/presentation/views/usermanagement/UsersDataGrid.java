@@ -1,5 +1,7 @@
 package jp.ac.chitose.ir.presentation.views.usermanagement;
 
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.H3;
@@ -79,6 +81,15 @@ public class UsersDataGrid extends VerticalLayout {
         grid.addColumn(UsersData::id).setHeader("アカウントID").setSortable(true);
         grid.addColumn(UsersData::user_name).setHeader("ユーザーネーム");
         grid.addColumn(UsersData::display_name).setHeader("ロール");
+
+        // ユーザー情報変更のためのボタン
+        grid.addComponentColumn(usersData -> {
+            Button detailButton = new Button("変更");
+            detailButton.addClickListener(e -> {
+                UI.getCurrent().navigate("/user_management/update");
+            });
+            return detailButton;
+        }).setHeader("ユーザーの情報変更");
     }
 
     // 各種コンポーネントを画面に追加
