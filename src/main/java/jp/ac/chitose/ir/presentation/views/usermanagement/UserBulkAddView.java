@@ -67,6 +67,9 @@ public class UserBulkAddView extends VerticalLayout {
         upload.addSucceededListener(event -> {
             String filename = event.getFileName();
             InputStream inputStream = buffer.getInputStream(filename);
+
+            // ユーザ一括追加処理
+            // 正常終了→成功メッセージ 異常終了→エラーメッセージ
             try {
                 long inserted = usersService.addUsers(inputStream);
                 new SuccessNotification(inserted + " 件のユーザ追加に成功");

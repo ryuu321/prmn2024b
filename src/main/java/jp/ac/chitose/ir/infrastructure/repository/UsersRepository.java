@@ -130,7 +130,13 @@ public class UsersRepository {
     }
 
     // テスト用に使うかもしれないので一応作った痕跡を残さない削除 後々消す
-    public void deleteData(long id){
+    public int deleteData(long id){
+        jdbcClient.sql("""
+                delete from user_role
+                WHERE user_id = ?
+                """)
+                .param(id)
+                .update();
         int deleted = jdbcClient.sql("""
                 delete from users 
                 WHERE id = ?
@@ -138,6 +144,7 @@ public class UsersRepository {
                 .param(id)
                 .update();
         System.out.println("deleted : " + deleted);
+        return deleted;
     }
 
 }
