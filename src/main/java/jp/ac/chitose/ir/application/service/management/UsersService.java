@@ -77,9 +77,13 @@ public class UsersService {
                     throw new UserManagementException(rowNumber + " 行目のデータが不足しています");
                 }
                 // csvのユーザ情報を取得
-                String loginId = data[0];
-                String username = data[1];
-                String password = data[2];
+                //todo 現状BOMだけ取り除いている→他に取り除いた方が良いものがあるか確認
+                // 正規表現の導入の検討？
+                String loginId = data[0].replace(String.valueOf((char)65279), "");
+                String username = data[1].replace(String.valueOf((char)65279), "");
+                String password = data[2].replace(String.valueOf((char)65279), "");
+
+                for(char c : loginId.toCharArray()) System.out.println(c + ":" + (int)c);
 
                 // 既にログインIDが登録されているか判定→登録されていればエラーを返す
                 if(usersRepository.getUsersCount(loginId) > 0) throw new UserManagementException(rowNumber + " 行目のユーザのログインID " + loginId + " は既に存在します");
@@ -144,7 +148,7 @@ public class UsersService {
 
             int deleted = usersRepository.deleteUser(id);
             // deleted = usersRepository.reviveUser(id);
-            //int deleted = usersRepository.deleteData(id);
+            // int deleted = usersRepository.deleteData(id);
             if(deleted == 0) throw new UserManagementException(user.user_name() + "の削除に失敗");
         }
     }
