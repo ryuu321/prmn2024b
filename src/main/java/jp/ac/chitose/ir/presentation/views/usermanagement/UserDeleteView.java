@@ -46,6 +46,9 @@ public class UserDeleteView extends VerticalLayout {
         deleteAccount = new Button("削除", new Icon(VaadinIcon.MINUS), buttonClickEvent -> {
             // 選択されているユーザーの情報を取得
             Set<UsersData> selectedUsers = usersDataGrid.getGrid().getSelectedItems();
+
+            // ユーザ削除処理
+            // 正常終了→成功メッセージ 異常終了→エラーメッセージ
             try {
                 usersService.deleteUsers(selectedUsers);
                 new SuccessNotification(selectedUsers.size() + " 件のユーザの削除に成功");
