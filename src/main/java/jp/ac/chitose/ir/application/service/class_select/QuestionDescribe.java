@@ -17,7 +17,7 @@ public class QuestionDescribe {
             case 4-> resultList = statics.q4();
             case 5-> resultList = statics.q5();
             case 6-> resultList = statics.q6();
-
+            case 7-> resultList = statics.q7();
             case 8-> resultList = statics.q8();
             case 9-> resultList = statics.q9();
             case 10-> resultList = statics.q10();

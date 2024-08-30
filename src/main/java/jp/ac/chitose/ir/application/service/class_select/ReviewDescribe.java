@@ -6,6 +6,7 @@ public record ReviewDescribe(
         List<Double> q4,
         List<Double> q5,
         List<Double> q6,
+        List<Double> q7,
         List<Double> q8,
         List<Double> q9,
         List<Double> q10,
