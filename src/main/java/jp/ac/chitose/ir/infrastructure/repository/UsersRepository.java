@@ -1,7 +1,6 @@
 package jp.ac.chitose.ir.infrastructure.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -42,8 +41,8 @@ public class UsersRepository {
 
         // users テーブルへの追加
         int inserted = jdbcClient.sql("""
-                        INSERT into users(login_id, user_name, password, is_available, created_at) 
-                        values (?, ?, ?, TRUE, ?)
+                        INSERT INTO users(login_id, user_name, password, is_available, created_at)
+                        VALUES (?, ?, ?, TRUE, ?)
                         """)
                 .params(loginId, username, password, createdAt)
                 .update(keyHolder, "id");
@@ -63,23 +62,10 @@ public class UsersRepository {
         System.out.println("inserted : " + inserted);
     }
 
-    // ユーザidの取得(主にユーザ追加で使用)
-    public long getUserId(String loginId){
-        long id = jdbcClient.sql("""
-                SELECT id FROM users WHERE login_id = ?
-                """)
-                .params(loginId)
-                .query(new DataClassRowMapper<>(Long.class))
-                .single();
-        return id;
-    }
-
     // ユーザ情報変更
-    // 変更内容どう受け取ってくるか要検討
-    // serviceでfor文？sql文を順々に結合？->一旦後者で実装
     public void updateUser(long id, String loginId, String username, String password){
         int updated = jdbcClient.sql("""
-                update users
+                UPDATE users
                 SET login_id = ?, user_name = ?, password = ?
                 WHERE id = ?
                 """)
@@ -88,10 +74,22 @@ public class UsersRepository {
         System.out.println("updated : " + updated);
     }
 
+    // ロールを全て削除
+    // 全削除→チェックされたロールを追加 という形でロール変更に用いる
+    public void deleteRoles(long userId){
+        int deleted = jdbcClient.sql("""
+                DELETE FROM user_role
+                WHERE user_id = ?
+                """)
+                .param(userId)
+                .update();
+        System.out.println("deleted : " + deleted);
+    }
+
     // パスワード変更
     public void updatePassword(String loginId, String password){
         int updated = jdbcClient.sql("""
-                update users 
+                UPDATE users
                 SET password = ?
                 WHERE login_id = ?
                 """)
@@ -106,7 +104,7 @@ public class UsersRepository {
         Timestamp deletedAt = new Timestamp(System.currentTimeMillis());
 
         int deleted = jdbcClient.sql("""
-                update users
+                UPDATE users
                 SET is_available = FALSE, deleted_at = ?
                 WHERE id = ?
                 """)
@@ -119,7 +117,7 @@ public class UsersRepository {
     // 削除したユーザを有効化
     public int reviveUser(long userId){
         int deleted = jdbcClient.sql("""
-                update users
+                UPDATE users
                 SET is_available = TRUE, deleted_at = NULL
                 WHERE id = ?
                 """)
@@ -131,14 +129,9 @@ public class UsersRepository {
 
     // テスト用に使うかもしれないので一応作った痕跡を残さない削除 後々消す
     public int deleteData(long id){
-        jdbcClient.sql("""
-                delete from user_role
-                WHERE user_id = ?
-                """)
-                .param(id)
-                .update();
+        this.deleteRoles(id);
         int deleted = jdbcClient.sql("""
-                delete from users 
+                DELETE FROM users
                 WHERE id = ?
                 """)
                 .param(id)
