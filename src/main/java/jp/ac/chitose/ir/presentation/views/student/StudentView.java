@@ -42,8 +42,8 @@ public class StudentView extends VerticalLayout {
         this.studentGradeService = studentGradeService;
         this.securityService = securityService;
         subjectComboBox = new FilterableComboBox<>("科目名", createComboBoxFilters(), FilterPosition.TOP);
-        subjectView = new SubjectView(studentGradeService);
         String studentNumber = securityService.getLoginUser().getLoginId();
+        subjectView = new SubjectView(studentGradeService, studentGradeService.getStudentNumberSubjects(studentNumber).data().get(0).account_id());
         gpaView = new GPAView(gradeService, studentGradeService, studentNumber, subjectComboBox);
 
         initializeSubjectComboBox();

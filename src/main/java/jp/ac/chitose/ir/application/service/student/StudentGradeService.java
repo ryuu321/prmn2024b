@@ -12,4 +12,7 @@ public interface StudentGradeService {
 
     @GetExchange("/subject/{studentNumber}")
     TableData<StudentGrade> getStudentNumberSubjects(@PathVariable String studentNumber);
+
+    @GetExchange("/target/{accountId}/{courseId}")
+    TableData<Target> getSubjectTarget(@PathVariable String accountId, @PathVariable String courseId);
 }

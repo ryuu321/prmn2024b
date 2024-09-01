@@ -13,7 +13,8 @@ import java.util.List;
 public class SubjectView extends VerticalLayout {
     private final StudentGradeService studentGradeService;
     private final SubjectGraph graph;
-    private final  SubjectGrid grid;
+    private final SubjectGrid grid;
+    private final SubjectTarget target;
     private final static List<String> SUBJECT_HEADER_NAMES = List.of("受講人数", "不可", "可", "良", "優", "秀", "平均", "分散");
     private final static List<ValueProvider<GradeCount, Number>> SUBJECT_VALUE_PROVIDERS = List.of(
             GradeCount::合計の人数,
@@ -26,10 +27,11 @@ public class SubjectView extends VerticalLayout {
             GradeCount::分散);
 
 
-    public SubjectView(StudentGradeService studentGradeService) {
+    public SubjectView(StudentGradeService studentGradeService, String accountId) {
         this.studentGradeService = studentGradeService;
         this.graph = new SubjectGraph();
         this.grid = createSubjectGrid();
+        this.target = new SubjectTarget(studentGradeService, accountId);
         addComponentToLayout();
     }
 
@@ -43,6 +45,7 @@ public class SubjectView extends VerticalLayout {
     }
 
     private void addComponentToLayout() {
+        add(target);
         add(graph);
         add(grid);
     }
@@ -53,6 +56,7 @@ public class SubjectView extends VerticalLayout {
         if(grade.pre_year_course_id() != null) preYearData = studentGradeService.getGradeGraph(grade.pre_year_course_id()).data().get(0);
         updateSubjectGraph(data, preYearData, grade);
         updateSubjectGrid(data);
+        updateSubjectTarget(grade.course_id());
     }
 
     private void updateSubjectGraph(GradeCount data, GradeCount preYearData, StudentGrade studentGrade) {
@@ -61,5 +65,9 @@ public class SubjectView extends VerticalLayout {
 
     private void updateSubjectGrid(GradeCount data) {
         grid.setItems(List.of(data));
+    }
+
+    private void updateSubjectTarget(String courseId) {
+        target.update(courseId);
     }
 }

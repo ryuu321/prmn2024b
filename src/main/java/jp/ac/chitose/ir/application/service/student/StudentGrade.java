@@ -2,6 +2,7 @@ package jp.ac.chitose.ir.application.service.student;
 
 public record StudentGrade(
         String course_id,
+        String account_id,
         String pre_year_course_id,
         String lecture_name,
         String grading,
