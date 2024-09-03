@@ -114,7 +114,6 @@ public class Heisei22 extends VerticalLayout {
                 }
                 else{
                     int raito = (int)((double)years.get(j) / (double)pyear.get(j)*100);
-                    System.out.println(raito);
                     raitos.add(raito + "%");
                 }
             }
