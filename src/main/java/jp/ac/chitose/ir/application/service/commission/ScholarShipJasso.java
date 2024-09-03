@@ -1,17 +1,11 @@
 package jp.ac.chitose.ir.application.service.commission;
 
-public record ScholarShipJasso(String academictype,
-                               String type,
-                               int reserve,
+public record ScholarShipJasso(String academic_category,
+                               String loan_type,
+                               int reservation,
                                int enrollment,
-                               int emergency,
-                               int all
+                               int emergency_support,
+                               int total
 ) {
-    public String academictype() {return academictype;}
-    public String type() {return type;}
-    public int reserve() {return reserve;}
-    public int enrollment() {return enrollment;}
-    public int emergency() {return emergency;}
-    public int all() {return all;}
 
 }
