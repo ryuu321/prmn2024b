@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.application.config;
 
+import jp.ac.chitose.ir.application.exception.APIClientErrorException;
 import jp.ac.chitose.ir.application.exception.APIServerErrorException;
 import jp.ac.chitose.ir.application.service.HelloService;
 import jp.ac.chitose.ir.application.service.class_select.ClassSelect;
@@ -7,6 +8,7 @@ import jp.ac.chitose.ir.application.service.commission.GradeService;
 import jp.ac.chitose.ir.application.service.questionnaire.QuestionnaireService;
 import jp.ac.chitose.ir.application.service.sample.SampleService;
 import jp.ac.chitose.ir.application.service.student.StudentService;
+import jp.ac.chitose.ir.application.service.management.UserManagementService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +27,8 @@ public class HttpClientConfiguration {
     @Bean
     public HttpServiceProxyFactory httpServiceProxyFactory(WebClient.Builder builder) {
         final WebClient webClient = builder.baseUrl(baseUrl).
-                defaultStatusHandler(HttpStatusCode::is5xxServerError, clientResponse -> Mono.just(new APIServerErrorException("API側で内部エラーが発生しました。"))).build();
+                defaultStatusHandler(HttpStatusCode::is5xxServerError, clientResponse -> Mono.just(new APIServerErrorException("API側で内部エラーが発生しました。"))).
+                defaultStatusHandler(HttpStatusCode::is4xxClientError, clientResponse -> Mono.just(new APIClientErrorException("エラーが発生しました。"))).build();
         return HttpServiceProxyFactory.builder(WebClientAdapter.forClient(webClient)).build();
     }
 
@@ -50,12 +53,17 @@ public class HttpClientConfiguration {
     }
 
     @Bean
+    public GradeService gradeService(HttpServiceProxyFactory factory){
+        return factory.createClient(GradeService.class);
+    }
+
+    @Bean
     public QuestionnaireService questionnaireService(HttpServiceProxyFactory factory){
         return factory.createClient(QuestionnaireService.class);
     }
 
     @Bean
-    public GradeService gradeService(HttpServiceProxyFactory factory){
-        return factory.createClient(GradeService.class);
+    public UserManagementService userManagementService(HttpServiceProxyFactory factory) {
+        return factory.createClient(UserManagementService.class);
     }
 }
