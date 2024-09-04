@@ -33,7 +33,7 @@ public class UsersService {
 
     // ユーザ追加(単体)
     public int addUser(String loginId, String username, String password, Set<String> selectedRoles){
-        //入力情報が空の場所があった場合1を返す
+        // 入力情報が空の場所があった場合1を返す
         if(StringUtils.isEmpty(loginId) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || selectedRoles.isEmpty())
             return 1;
 
@@ -175,7 +175,7 @@ public class UsersService {
         // 1件ずつユーザー情報を取り出して操作する
         for (UsersData user : selectedUsers) {
             long id = user.id();
-            if(id == securityService.getLoginUser().getId()) {
+            if(id == securityService.getLoginUser().getAccountId()) {
                 throw new UserManagementException("現在ログイン中のユーザが含まれています");
             }
 
@@ -185,6 +185,29 @@ public class UsersService {
 
             if(deleted == 0) throw new UserManagementException(user.user_name() + "の削除に失敗");
         }
+    }
+
+    public int updateLoginUserPassword(String prePassword, String newPassword, String confirmPassword){
+        // 入力情報が空の場所があった場合1を返す
+        if(StringUtils.isEmpty(prePassword) || StringUtils.isEmpty(newPassword) || StringUtils.isEmpty(confirmPassword))
+            return 1;
+
+        // 現在のパスワードの入力が異なっている場合2を返す
+        if(!passwordEncoder.matches(prePassword, securityService.getLoginUser().getPassword()))
+            return 2;
+
+        // 新しいパスワードが異なっている場合3を返す
+        if(!newPassword.equals(confirmPassword))
+            return 3;
+
+        // 新しいパスワードと現在のパスワードが一致していた場合4を返す
+        if(newPassword.equals(prePassword))
+            return 4;
+
+        // 正常な場合パスワードを変更して0を返す
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        usersRepository.updatePassword(securityService.getLoginUser().getAccountId(), encodedPassword);
+        return 0;
     }
 
     // チェックボックスを用いたロール追加

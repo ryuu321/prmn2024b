@@ -87,13 +87,13 @@ public class UsersRepository {
     }
 
     // パスワード変更
-    public void updatePassword(String loginId, String password){
+    public void updatePassword(long userId, String password){
         int updated = jdbcClient.sql("""
                 UPDATE users
                 SET password = ?
-                WHERE login_id = ?
+                WHERE id = ?
                 """)
-                .params(password, loginId)
+                .params(password, userId)
                 .update();
         System.out.println("updated : " + updated);
     }
