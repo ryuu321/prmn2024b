@@ -24,19 +24,19 @@ public class UserDetailsAuthenticationProvider extends AbstractUserDetailsAuthen
     }
 
     @Override
-    protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
+    protected UserDetails retrieveUser(String loginId, UsernamePasswordAuthenticationToken authentication)
             throws AuthenticationException {
 
         String password = (String) authentication.getCredentials(); // authenticationからpasswordを取得
 
-        List<User> loginUserList = authenticationService.authenticate(username, password);
+        List<User> loginUserList = authenticationService.authenticate(loginId, password);
         System.out.print("認証結果: ");
         if (loginUserList.isEmpty()) {
-            System.out.println("認証に失敗しました. username=" + username);
+            System.out.println("認証に失敗しました. login_id=" + loginId);
             // 上手くいかなかったらかえる
             throw new BadCredentialsException("認証に失敗しました。");
         }
-        System.out.println("認証に成功しました.username=" + username);
+        System.out.println("認証に成功しました. login_id=" + loginId);
 
         User user = loginUserList.get(0);
         HashSet<String> roles = new HashSet<>();
