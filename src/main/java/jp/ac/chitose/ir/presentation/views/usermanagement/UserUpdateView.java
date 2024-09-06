@@ -7,8 +7,6 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
@@ -20,6 +18,7 @@ import jp.ac.chitose.ir.application.service.management.UsersData;
 import jp.ac.chitose.ir.application.service.management.UsersService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.component.notification.ErrorNotification;
+import jp.ac.chitose.ir.presentation.component.notification.SuccessNotification;
 
 import java.util.Set;
 
@@ -65,27 +64,28 @@ public class UserUpdateView extends VerticalLayout {
 
     // ボタンの初期設定
     private void initializeButton() {
-        updateAccount = new Button("変更", new Icon(VaadinIcon.MINUS), buttonClickEvent -> {
+        updateAccount = new Button("変更", buttonClickEvent -> {
 
             String newLoginID = loginIDTextField.getValue();
             String newUserName = userNameTextField.getValue();
             String newPassword = userPasswordTextField.getValue();
             Set<String> newRoles = rolesCheckboxGroup.getValue();
-            // レコードが混在しているのでキャストしている。そのうち統一したい。
+
+            // レコードが混在している（UsersDataとUser）のでキャストしている。統一したい。
             User castedtargetUser = new User(targetUser.id(), targetUser.login_id(), targetUser.user_name(), targetUser.password(), targetUser.is_available(), targetUser.display_name());
-            try{
+            try {
                 usersService.updateUser(castedtargetUser, newLoginID, newUserName, newPassword, newRoles);
-            }catch (UserManagementException e){
-                if(e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
+                new SuccessNotification(targetUser.user_name() + "さんの情報を変更しました");
+                UI.getCurrent().navigate("/user_management");
+            } catch (UserManagementException e) {
+                if (e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
                 else new ErrorNotification(e.getMessage());
-            } catch (RuntimeException e){
+            } catch (RuntimeException e) {
                 e.printStackTrace();
                 new ErrorNotification("エラーが発生しました");
             }
-
-
         });
-        updateAccount.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        updateAccount.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         cancelButton = new Button("戻る", buttonClickEvent -> {
             UI.getCurrent().navigate("/user_management");
         });
@@ -93,8 +93,8 @@ public class UserUpdateView extends VerticalLayout {
 
     // 各種コンポーネントの追加
     private void addComponents() {
-        add(cancelButton);
         add(new H1("ユーザーの情報変更"), new Paragraph("ユーザーの情報を変更することができます。変更したい情報を入力してください。"));
+        add(cancelButton);
         FormLayout formLayout = new FormLayout(loginIDTextField, userNameTextField, userPasswordTextField, rolesCheckboxGroup);
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
         add(formLayout);
