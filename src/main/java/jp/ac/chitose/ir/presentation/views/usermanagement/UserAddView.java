@@ -16,7 +16,6 @@ import jakarta.annotation.security.RolesAllowed;
 import jp.ac.chitose.ir.application.service.management.SecurityService;
 import jp.ac.chitose.ir.application.service.management.UsersService;
 import jp.ac.chitose.ir.infrastructure.repository.RoleRepository;
-import jp.ac.chitose.ir.infrastructure.repository.UsersRepository;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.component.notification.ErrorNotification;
 import jp.ac.chitose.ir.presentation.component.notification.SuccessNotification;
@@ -28,11 +27,7 @@ import java.util.Set;
 @Route(value = "/user_management/add", layout = MainLayout.class)
 @RolesAllowed({"administrator"})
 public class UserAddView extends VerticalLayout {
-    private final UsersRepository usersRepository;
-    private final SecurityService securityService;
     private final UsersService usersService;
-    private final RoleRepository rorleRepository;
-    private final PasswordEncoder passwordEncoder;
     private TextField userIDTextField;
     private TextField userNameTextField;
     private TextField userPasswordTextField;
@@ -40,24 +35,17 @@ public class UserAddView extends VerticalLayout {
     private Button cancelButton;
     CheckboxGroup<String> checkboxGroup;
 
-
-    public UserAddView(UsersRepository usersRepository, RoleRepository roleRepository, SecurityService securityService, PasswordEncoder passwordEncoder) {
-        this.usersRepository = usersRepository;
-        this.securityService = securityService;
-        this.rorleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
+    public UserAddView(UsersService usersService, SecurityService securityService, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         initializeTextField();
         initializeButton();
         addComponents();
-        this.usersService = new UsersService(this.usersRepository, this.rorleRepository, this.securityService, this.passwordEncoder);
+        this.usersService = usersService;
     }
 
     // テキストフィールドの初期設定
     private void initializeTextField() {
         userIDTextField = new TextField("ユーザーID");
         userNameTextField = new TextField("ユーザーネーム");
-        //todo ここにパスワードも入力させるとこを作るかも
-        System.out.println("passwordTextFieldが下の行にあるよ");
         userPasswordTextField = new TextField("パスワード");
         checkboxGroup = new CheckboxGroup<>();
         checkboxGroup.setItems("システム管理者", "IR委員会メンバー","教員", "学生");
@@ -75,7 +63,7 @@ public class UserAddView extends VerticalLayout {
 
             int result = usersService.addUser(userId, username, password, selectedRoles);
             if (result == 2) {
-                new ErrorNotification(username + "の追加に失敗");
+                new ErrorNotification(username + "ログインIDが既に存在しています");
             } else if (result == 0) {
                 new SuccessNotification(username + "の追加に成功");
             } else if (result == 1) {
@@ -91,9 +79,8 @@ public class UserAddView extends VerticalLayout {
     // 各種コンポーネントの追加
     private void addComponents() {
         add(cancelButton);
-        add(new H1("ユーザーの追加"), new Paragraph("ユーザーを追加することができます。追加したいユーザーのユーザIDとユーザーネームを入力し、ロールを選択してください。"));
+        add(new H1("ユーザーの追加"), new Paragraph("ユーザーを追加することができます。追加したいユーザーのユーザID,ユーザーネーム,12文字以上のパスワードを入力し、ロールを選択してください。"));
         FormLayout formLayout = new FormLayout(userIDTextField, userNameTextField, userPasswordTextField);
-//        FormLayout formLayoutPassword = new FormLayout(userPasswordTextField);
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
         add(formLayout);
         add(checkboxGroup);
