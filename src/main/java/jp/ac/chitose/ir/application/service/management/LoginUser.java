@@ -41,10 +41,6 @@ public class LoginUser implements UserDetails {
         return user.name();
     }
 
-    public long getId() {
-        return user.id();
-    }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -67,7 +63,7 @@ public class LoginUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "";
+        return user.password();
     }
 
     public long getAccountId(){

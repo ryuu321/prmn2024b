@@ -3,6 +3,7 @@ package jp.ac.chitose.ir.application.service.management;
 import jp.ac.chitose.ir.application.exception.UserManagementException;
 import jp.ac.chitose.ir.infrastructure.repository.RoleRepository;
 import jp.ac.chitose.ir.infrastructure.repository.UsersRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,12 +32,14 @@ public class UsersService {
     }
 
     // ユーザ追加(単体)
-    // ロールが1つもない場合は例外を起こしてロールバックする(想定)
-    // todo ロールの所在確認をViewにお願いする？
     public int addUser(String loginId, String username, String password, Set<String> selectedRoles){
+        // 入力情報が空の場所があった場合1を返す
+        if(StringUtils.isEmpty(loginId) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || selectedRoles.isEmpty())
+            return 1;
+
         // loginidでユーザが取得できるか判断
-        // 既に登録されてたら1を返す
-        if(usersRepository.getUsersCount(loginId) > 0) return 1;
+        // 既に登録されてたら2を返す
+        if(usersRepository.getUsersCount(loginId) > 0) return 2;
 
         // パスワードのハッシュ化
         String encodedPassword = passwordEncoder.encode(password);
@@ -49,10 +52,7 @@ public class UsersService {
         // long userId = usersRepository.addUser(loginId, username, password);
 
         // user_roleテーブルに追加
-        for(String role : selectedRoles){
-            int roleId = roleRepository.getRoleId(role).get();
-            usersRepository.addRole(userId, roleId);
-        }
+        this.addRolesFromCheckBox(userId, selectedRoles);
         return 0;
     }
 
@@ -77,13 +77,12 @@ public class UsersService {
                     throw new UserManagementException(rowNumber + " 行目のデータが不足しています");
                 }
                 // csvのユーザ情報を取得
-                //todo 現状BOMだけ取り除いている→他に取り除いた方が良いものがあるか確認
-                // 正規表現の導入の検討？
+                //todo 以下の事項の確認
+                // ・現状BOMだけ取り除いている→他に取り除いた方が良いものがあるか確認
+                // ・正規表現の導入の検討(期間内にできる？後継に投げる？一旦考えない？)
                 String loginId = data[0].replace(String.valueOf((char)65279), "");
                 String username = data[1].replace(String.valueOf((char)65279), "");
                 String password = data[2].replace(String.valueOf((char)65279), "");
-
-                for(char c : loginId.toCharArray()) System.out.println(c + ":" + (int)c);
 
                 // 既にログインIDが登録されているか判定→登録されていればエラーを返す
                 if(usersRepository.getUsersCount(loginId) > 0) throw new UserManagementException(rowNumber + " 行目のユーザのログインID " + loginId + " は既に存在します");
@@ -129,27 +128,93 @@ public class UsersService {
     }
 
     // ユーザ更新
-    public void updateUser(){
+    public void updateUser(User targetUser, String loginId, String username, String password, Set<String> selectedRoles) throws UserManagementException{
+        // 変更の有無を判定する変数
+        boolean existUpdateData = false;
 
+        // 各項目の値が空ならば現在のデータを設定する
+        // 空でない項目があれば existUpdateData を true に変更
+        if(StringUtils.isEmpty(loginId)) loginId = targetUser.login_id();
+        else {
+            // 変更があった場合既にログインIDが登録されているか判定→登録されていればエラーを返す
+            if(usersRepository.getUsersCount(loginId) > 0) throw new UserManagementException("ログインID " + loginId + " は既に存在します");
+            existUpdateData = true;
+        }
+
+        if(StringUtils.isEmpty(username)) username = targetUser.name();
+        else existUpdateData = true;
+
+        if(StringUtils.isEmpty(password)) password = targetUser.password();
+        else{
+            //todo パスワードに正規表現を用いるならその判定・エラー処理
+            // それ以外の項目も正規表現を用いるならelseに処理を記述
+
+            // パスワードのハッシュ化
+            password = passwordEncoder.encode(password);
+            existUpdateData = true;
+        }
+
+        // ユーザ情報を変更
+        if(existUpdateData) usersRepository.updateUser(targetUser.id(), loginId, username, password);
+
+        // ロールの変更がある場合ロールを全て消してから追加する
+        if(!selectedRoles.isEmpty()){
+            usersRepository.deleteRoles(targetUser.id());
+            this.addRolesFromCheckBox(targetUser.id(), selectedRoles);
+        }
+        // ユーザ・ロールともに全て空欄だった場合エラーを返す
+        else if(!existUpdateData) throw new UserManagementException("変更内容を入力してください");
     }
 
     // ユーザ削除
     // 途中でおかしくなったら例外を投げてロールバック
     // todo 以下の事項を確認する
     //  ・例外の投げ方はこれで良いか
-    //  ・呼び出す前にログイン中のユーザが含まれるか確認すべきか
+    //  ・Repository を呼び出す前にログイン中のユーザが含まれるか確認すべきか
     public void deleteUsers(Set<UsersData> selectedUsers) throws UserManagementException{
         // 1件ずつユーザー情報を取り出して操作する
         for (UsersData user : selectedUsers) {
             long id = user.id();
-            if(id == securityService.getLoginUser().getId()) {
+            if(id == securityService.getLoginUser().getAccountId()) {
                 throw new UserManagementException("現在ログイン中のユーザが含まれています");
             }
 
             int deleted = usersRepository.deleteUser(id);
             // deleted = usersRepository.reviveUser(id);
             // int deleted = usersRepository.deleteData(id);
+
             if(deleted == 0) throw new UserManagementException(user.user_name() + "の削除に失敗");
+        }
+    }
+
+    public int updateLoginUserPassword(String prePassword, String newPassword, String confirmPassword){
+        // 入力情報が空の場所があった場合1を返す
+        if(StringUtils.isEmpty(prePassword) || StringUtils.isEmpty(newPassword) || StringUtils.isEmpty(confirmPassword))
+            return 1;
+
+        // 現在のパスワードの入力が異なっている場合2を返す
+        if(!passwordEncoder.matches(prePassword, securityService.getLoginUser().getPassword()))
+            return 2;
+
+        // 新しいパスワードが異なっている場合3を返す
+        if(!newPassword.equals(confirmPassword))
+            return 3;
+
+        // 新しいパスワードと現在のパスワードが一致していた場合4を返す
+        if(newPassword.equals(prePassword))
+            return 4;
+
+        // 正常な場合パスワードを変更して0を返す
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        usersRepository.updatePassword(securityService.getLoginUser().getAccountId(), encodedPassword);
+        return 0;
+    }
+
+    // チェックボックスを用いたロール追加
+    private void addRolesFromCheckBox(long userId, Set<String> selectedRoles){
+        for(String role : selectedRoles){
+            int roleId = roleRepository.getRoleId(role).get();
+            usersRepository.addRole(userId, roleId);
         }
     }
 
