@@ -86,7 +86,7 @@ public class UsersDataGrid extends VerticalLayout {
         grid.addComponentColumn(usersData -> {
             Button detailButton = new Button("変更");
             detailButton.addClickListener(e -> {
-                // 選択したユーザー情報を
+                // 選択したユーザー情報を変更画面に引き渡す
                 UI.getCurrent().getSession().setAttribute(UsersData.class, usersData);
                 UI.getCurrent().navigate(UserUpdateView.class);
             });

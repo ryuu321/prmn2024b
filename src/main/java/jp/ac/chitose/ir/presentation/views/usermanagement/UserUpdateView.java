@@ -14,8 +14,12 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import jp.ac.chitose.ir.application.exception.UserManagementException;
+import jp.ac.chitose.ir.application.service.management.User;
 import jp.ac.chitose.ir.application.service.management.UsersData;
+import jp.ac.chitose.ir.application.service.management.UsersService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
+import jp.ac.chitose.ir.presentation.component.notification.ErrorNotification;
 
 import java.util.Set;
 
@@ -23,26 +27,26 @@ import java.util.Set;
 @Route(value = "/user_management/update", layout = MainLayout.class)
 @RolesAllowed({"administrator"})
 public class UserUpdateView extends VerticalLayout {
+    private final UsersService usersService;
     private TextField loginIDTextField;
     private TextField userNameTextField;
     private TextField userPasswordTextField;
     private CheckboxGroup<String> rolesCheckboxGroup;
     private Button updateAccount;
     private Button cancelButton;
+    private final UsersData targetUser;
 
-    public UserUpdateView() {
+    public UserUpdateView(UsersService usersService) {
+        this.usersService = usersService;
+
+        // 選択したユーザーの情報を取得
+        this.targetUser = (UsersData) UI.getCurrent().getSession().getAttribute(UsersData.class);
+
         initializeTextField();
         initializeButton();
         initializeCheckBox();
         addComponents();
 
-        // 選択したユーザーの情報を取得し、テキストフィールドに格納
-        UsersData usersData = (UsersData) UI.getCurrent().getSession().getAttribute(UsersData.class);
-        if (usersData != null) {
-            loginIDTextField.setValue(usersData.login_id());
-            userNameTextField.setValue(usersData.user_name());
-            userPasswordTextField.setValue(usersData.password());
-        }
     }
 
     // テキストフィールドの初期化
@@ -62,11 +66,23 @@ public class UserUpdateView extends VerticalLayout {
     // ボタンの初期設定
     private void initializeButton() {
         updateAccount = new Button("変更", new Icon(VaadinIcon.MINUS), buttonClickEvent -> {
-            // ここでDBとやりとりするための情報を取得している(サービスが出来たらデータを引き渡す)
-            String loginID = loginIDTextField.getValue();
-            String userName = userNameTextField.getValue();
-            String password = userPasswordTextField.getValue();
-            Set<String> selectedRoles = rolesCheckboxGroup.getValue();
+
+            String newLoginID = loginIDTextField.getValue();
+            String newUserName = userNameTextField.getValue();
+            String newPassword = userPasswordTextField.getValue();
+            Set<String> newRoles = rolesCheckboxGroup.getValue();
+            // レコードが混在しているのでキャストしている。そのうち統一したい。
+            User castedtargetUser = new User(targetUser.id(), targetUser.login_id(), targetUser.user_name(), targetUser.password(), targetUser.is_available(), targetUser.display_name());
+            try{
+                usersService.updateUser(castedtargetUser, newLoginID, newUserName, newPassword, newRoles);
+            }catch (UserManagementException e){
+                if(e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
+                else new ErrorNotification(e.getMessage());
+            } catch (RuntimeException e){
+                e.printStackTrace();
+                new ErrorNotification("エラーが発生しました");
+            }
+
 
         });
         updateAccount.addThemeVariants(ButtonVariant.LUMO_ERROR);
