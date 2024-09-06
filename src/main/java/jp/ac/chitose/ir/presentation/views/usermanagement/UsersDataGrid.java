@@ -1,5 +1,7 @@
 package jp.ac.chitose.ir.presentation.views.usermanagement;
 
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.H3;
@@ -11,8 +13,9 @@ import jp.ac.chitose.ir.application.service.management.UsersData;
 
 public class UsersDataGrid extends VerticalLayout {
     private RadioButtonGroup<String> rolesRadioButton;
+    private RadioButtonGroup<String> availableFilterRadioButton;
     private GridListDataView<UsersData> gridListDataView;
-    private Grid<UsersData> grid;
+    private final Grid<UsersData> grid;
 
     // グリッドにマルチセレクトモードを付けるかどうか判定する
     public enum SelectionMode {
@@ -36,7 +39,11 @@ public class UsersDataGrid extends VerticalLayout {
         rolesRadioButton = new RadioButtonGroup<>();
         rolesRadioButton.setItems("全て", "システム管理者", "IR委員会メンバー", "教員", "学生");
         rolesRadioButton.setValue("全て");
+        availableFilterRadioButton = new RadioButtonGroup<>();
+        availableFilterRadioButton.setItems("有効のみ表示", "無効も表示する");
+        availableFilterRadioButton.setValue("有効のみ表示");
         rolesRadioButton.addValueChangeListener(event -> applyFilters());
+        availableFilterRadioButton.addValueChangeListener(event -> applyFilters());
     }
 
     // グリッドの初期化
@@ -74,11 +81,23 @@ public class UsersDataGrid extends VerticalLayout {
         grid.addColumn(UsersData::id).setHeader("アカウントID").setSortable(true);
         grid.addColumn(UsersData::user_name).setHeader("ユーザーネーム");
         grid.addColumn(UsersData::display_name).setHeader("ロール");
+
+        // ユーザー情報変更のためのボタン
+        grid.addComponentColumn(usersData -> {
+            Button detailButton = new Button("変更");
+            detailButton.addClickListener(e -> {
+                // 選択したユーザー情報を変更画面に引き渡す
+                UI.getCurrent().getSession().setAttribute(UsersData.class, usersData);
+                UI.getCurrent().navigate(UserUpdateView.class);
+            });
+            return detailButton;
+        }).setHeader("ユーザーの情報変更");
     }
 
     // 各種コンポーネントを画面に追加
     private void addComponentsToLayout(Grid<UsersData> grid) {
         add(new H3("ロール"), rolesRadioButton);
+        add(availableFilterRadioButton);
         add(grid);
     }
 
@@ -91,8 +110,13 @@ public class UsersDataGrid extends VerticalLayout {
     private class Filter implements SerializablePredicate<UsersData> {
         @Override
         public boolean test(UsersData usersData) {
-            boolean roleMatches = "全体".equals(rolesRadioButton.getValue()) || usersData.display_name().equals(rolesRadioButton.getValue());
-            return roleMatches;
+            boolean roleMatches = "全て".equals(rolesRadioButton.getValue()) || usersData.display_name().equals(rolesRadioButton.getValue());
+            boolean availableMatches;
+            if ("有効のみ表示".equals(availableFilterRadioButton.getValue())) {
+                availableMatches = usersData.is_available();
+            } else {
+                availableMatches = true;
+            }return roleMatches && availableMatches;
         }
     }
 }
