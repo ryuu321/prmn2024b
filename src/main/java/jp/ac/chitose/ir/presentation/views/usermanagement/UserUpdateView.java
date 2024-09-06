@@ -14,6 +14,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import jp.ac.chitose.ir.application.service.management.UsersData;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 
 import java.util.Set;
@@ -34,6 +35,14 @@ public class UserUpdateView extends VerticalLayout {
         initializeButton();
         initializeCheckBox();
         addComponents();
+
+        // 選択したユーザーの情報を取得し、テキストフィールドに格納
+        UsersData usersData = (UsersData) UI.getCurrent().getSession().getAttribute(UsersData.class);
+        if (usersData != null) {
+            loginIDTextField.setValue(usersData.login_id());
+            userNameTextField.setValue(usersData.user_name());
+            userPasswordTextField.setValue(usersData.password());
+        }
     }
 
     // テキストフィールドの初期化

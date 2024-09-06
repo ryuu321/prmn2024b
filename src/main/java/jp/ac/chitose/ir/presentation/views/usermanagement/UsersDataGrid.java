@@ -15,7 +15,7 @@ public class UsersDataGrid extends VerticalLayout {
     private RadioButtonGroup<String> rolesRadioButton;
     private RadioButtonGroup<String> availableFilterRadioButton;
     private GridListDataView<UsersData> gridListDataView;
-    private Grid<UsersData> grid;
+    private final Grid<UsersData> grid;
 
     // グリッドにマルチセレクトモードを付けるかどうか判定する
     public enum SelectionMode {
@@ -86,7 +86,9 @@ public class UsersDataGrid extends VerticalLayout {
         grid.addComponentColumn(usersData -> {
             Button detailButton = new Button("変更");
             detailButton.addClickListener(e -> {
-                UI.getCurrent().navigate("/user_management/update");
+                // 選択したユーザー情報を
+                UI.getCurrent().getSession().setAttribute(UsersData.class, usersData);
+                UI.getCurrent().navigate(UserUpdateView.class);
             });
             return detailButton;
         }).setHeader("ユーザーの情報変更");
