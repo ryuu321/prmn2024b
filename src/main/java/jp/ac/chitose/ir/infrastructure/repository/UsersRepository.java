@@ -52,16 +52,6 @@ public class UsersRepository {
         return userId;
     }
 
-    // ロール追加
-    public void addRole(long userId, int roleId){
-        int inserted = jdbcClient.sql("""
-                        INSERT INTO user_role(user_id, role_id) VALUES (?, ?)
-                        """)
-                .params(userId, roleId)
-                .update();
-        System.out.println("inserted : " + inserted);
-    }
-
     // ユーザ情報変更
     public void updateUser(long id, String loginId, String username, String password){
         int updated = jdbcClient.sql("""
@@ -72,18 +62,6 @@ public class UsersRepository {
                 .params(loginId, username, password, id)
                 .update();
         System.out.println("updated : " + updated);
-    }
-
-    // ロールを全て削除
-    // 全削除→チェックされたロールを追加 という形でロール変更に用いる
-    public void deleteRoles(long userId){
-        int deleted = jdbcClient.sql("""
-                DELETE FROM user_role
-                WHERE user_id = ?
-                """)
-                .param(userId)
-                .update();
-        System.out.println("deleted : " + deleted);
     }
 
     // パスワード変更
@@ -114,7 +92,7 @@ public class UsersRepository {
         return deleted;
     }
 
-    // 削除したユーザを有効化
+    // 削除したユーザを有効化(テスト用)
     public int reviveUser(long userId){
         int deleted = jdbcClient.sql("""
                 UPDATE users
@@ -127,17 +105,26 @@ public class UsersRepository {
         return deleted;
     }
 
-    // テスト用に使うかもしれないので一応作った痕跡を残さない削除 後々消す
-    public int deleteData(long id){
-        this.deleteRoles(id);
+    // ロール追加
+    public void addRole(long userId, int roleId){
+        int inserted = jdbcClient.sql("""
+                        INSERT INTO user_role(user_id, role_id) VALUES (?, ?)
+                        """)
+                .params(userId, roleId)
+                .update();
+        System.out.println("inserted : " + inserted);
+    }
+
+    // ロールを全て削除
+    // 全削除→チェックされたロールを追加 という形でロール変更に用いる
+    public void deleteRoles(long userId){
         int deleted = jdbcClient.sql("""
-                DELETE FROM users
-                WHERE id = ?
+                DELETE FROM user_role
+                WHERE user_id = ?
                 """)
-                .param(id)
+                .param(userId)
                 .update();
         System.out.println("deleted : " + deleted);
-        return deleted;
     }
 
 }

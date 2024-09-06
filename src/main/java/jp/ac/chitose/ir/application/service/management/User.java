@@ -5,7 +5,6 @@ public record User(
         String login_id,
         String name,
         String password,
-        boolean is_available,
-        String role
+        boolean is_available
 ) {
 }

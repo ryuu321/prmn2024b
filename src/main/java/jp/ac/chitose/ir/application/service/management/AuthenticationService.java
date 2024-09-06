@@ -4,8 +4,6 @@ import jp.ac.chitose.ir.infrastructure.repository.AuthenticationRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,15 +16,15 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<User> authenticate(String loginId, String password) {
+    public Optional<User> authenticate(String loginId, String password) {
 
         // DBと接続して情報を取ってくる処理。AuthenticationRepositoryで実際の処理をかく
         // todo データベースの移行が完了したら以下の分岐処理は削除する
-        List<User> userList = authenticationRepository.getUserInformation(loginId, password);
-        if(!userList.isEmpty()){
+        Optional<User> userOp = authenticationRepository.getUserInformation(loginId, password);
+        if(userOp.isPresent()){
             System.out.println("平文で認証します");
             System.out.println("認証処理");
-            return userList;
+            return userOp;
         }
 
         // loginIdからパスワードを取得
@@ -35,7 +33,7 @@ public class AuthenticationService {
         // そもそもloginIdが存在しなければ空のリストを返す
         if(passwordOp.isEmpty()){
             System.out.println("ログインIDが存在しません");
-            return new ArrayList<>();
+            return userOp;
         }
 
         // ハッシュ化したパスワードが一致していればユーザ情報を取得
@@ -43,14 +41,13 @@ public class AuthenticationService {
         try {
             if (passwordEncoder.matches(password, passwordOp.get().value())) {
                 System.out.println("平文で存在しなかったのでハッシュ化したパスワードで認証します");
-                userList = authenticationRepository.getUserInformation(loginId);
+                userOp = authenticationRepository.getUserInformation(loginId);
             }
         } catch (IllegalArgumentException ignore){
 
         }
 
         System.out.println("認証処理");
-
-        return userList;
+        return userOp;
     }
 }
