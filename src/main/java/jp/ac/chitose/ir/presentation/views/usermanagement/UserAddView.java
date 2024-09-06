@@ -2,7 +2,7 @@ package jp.ac.chitose.ir.presentation.views.usermanagement;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
@@ -13,42 +13,64 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import jp.ac.chitose.ir.application.service.management.SecurityService;
+import jp.ac.chitose.ir.application.service.management.UsersService;
+import jp.ac.chitose.ir.infrastructure.repository.RoleRepository;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
+import jp.ac.chitose.ir.presentation.component.notification.ErrorNotification;
+import jp.ac.chitose.ir.presentation.component.notification.SuccessNotification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
+import java.util.Set;
 
 @PageTitle("UserAdd")
 @Route(value = "/user_management/add", layout = MainLayout.class)
 @RolesAllowed({"administrator"})
 public class UserAddView extends VerticalLayout {
+    private final UsersService usersService;
     private TextField userIDTextField;
     private TextField userNameTextField;
-    private Button deleteAccount;
+    private TextField userPasswordTextField;
+    private Button createAccount;
     private Button cancelButton;
+    CheckboxGroup<String> checkboxGroup;
 
-    public UserAddView() {
+    public UserAddView(UsersService usersService, SecurityService securityService, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         initializeTextField();
         initializeButton();
         addComponents();
+        this.usersService = usersService;
     }
 
     // テキストフィールドの初期設定
     private void initializeTextField() {
         userIDTextField = new TextField("ユーザーID");
         userNameTextField = new TextField("ユーザーネーム");
-        FormLayout formLayout = new FormLayout(userIDTextField, userNameTextField);
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
+        userPasswordTextField = new TextField("パスワード");
+        checkboxGroup = new CheckboxGroup<>();
+        checkboxGroup.setItems("システム管理者", "IR委員会メンバー","教員", "学生");
     }
 
     // ボタンの初期設定
     private void initializeButton() {
-        deleteAccount = new Button("削除", new Icon(VaadinIcon.MINUS), buttonClickEvent -> {
+        createAccount = new Button("追加", new Icon(VaadinIcon.PLUS), buttonClickEvent -> {
             // ここでDBとやりとりするための情報を取得している(サービスが出来たらデータを引き渡す)
             String userId = userIDTextField.getValue();
-            String userName = userNameTextField.getValue();
-            LocalDateTime deleteAt = LocalDateTime.now();
+            String username = userNameTextField.getValue();
+//            LocalDateTime createAt = LocalDateTime.now();
+            String password = userPasswordTextField.getValue();
+            Set<String> selectedRoles = checkboxGroup.getSelectedItems();
+
+            int result = usersService.addUser(userId, username, password, selectedRoles);
+            if (result == 2) {
+                new ErrorNotification(username + "ログインIDが既に存在しています");
+            } else if (result == 0) {
+                new SuccessNotification(username + "の追加に成功");
+            } else if (result == 1) {
+                new ErrorNotification(username + "空の入力欄があります");
+            }
         });
-        deleteAccount.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        //deleteAccount.addThemeVariants(ButtonVariant.LUMO_ERROR);
         cancelButton = new Button("戻る", buttonClickEvent -> {
             UI.getCurrent().navigate("/user_management");
         });
@@ -57,10 +79,11 @@ public class UserAddView extends VerticalLayout {
     // 各種コンポーネントの追加
     private void addComponents() {
         add(cancelButton);
-        add(new H1("ユーザーの削除"), new Paragraph("ユーザーを削除することができます。削除したいユーザーのユーザIDとユーザーネームを入力してください。"));
-        FormLayout formLayout = new FormLayout(userIDTextField, userNameTextField);
+        add(new H1("ユーザーの追加"), new Paragraph("ユーザーを追加することができます。追加したいユーザーのユーザID,ユーザーネーム,12文字以上のパスワードを入力し、ロールを選択してください。"));
+        FormLayout formLayout = new FormLayout(userIDTextField, userNameTextField, userPasswordTextField);
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
         add(formLayout);
-        add(deleteAccount);
+        add(checkboxGroup);
+        add(createAccount);
     }
 }
