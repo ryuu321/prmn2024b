@@ -34,17 +34,19 @@ public class UsersService {
     }
 
     // ユーザ追加(単体)
-    public int addUser(String loginId, String username, String password, Set<String> selectedRoles){
+    public void addUser(String loginId, String username, String password, Set<String> selectedRoles) throws UserManagementException{
         // 入力情報が空の場所があった場合1を返す
         if(StringUtils.isEmpty(loginId) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || selectedRoles.isEmpty())
-            return 1;
+            throw new UserManagementException("空の入力欄があります");
 
         // loginidでユーザが取得できるか判断
         // 既に登録されてたら2を返す
-        if(usersRepository.getUsersCount(loginId) > 0) return 2;
+        if(usersRepository.getUsersCount(loginId) > 0)
+            throw new UserManagementException("ログインIDが既に存在しています");
 
         // パスワードの書式が正しいか判定
-        if(!this.checkPasswordFormat(password)) return 3;
+        if(!this.checkPasswordFormat(password))
+            throw new UserManagementException("パスワードの要件を満たしていません");
 
         // パスワードのハッシュ化
         String encodedPassword = passwordEncoder.encode(password);
@@ -54,7 +56,6 @@ public class UsersService {
 
         // user_roleテーブルに追加
         this.addRolesFromCheckBox(userId, selectedRoles);
-        return 0;
     }
 
     // csvによるユーザ一括追加
@@ -130,6 +131,7 @@ public class UsersService {
 
     // ユーザ更新
     public void updateUser(User targetUser, String loginId, String username, String password, Set<String> selectedRoles) throws UserManagementException{
+        System.out.println(targetUser);
         // ユーザ・ロールともに全て空欄だった場合エラーを返す
         if(StringUtils.isEmpty(loginId) && StringUtils.isEmpty(username) && StringUtils.isEmpty(password) && selectedRoles.isEmpty())
             throw new UserManagementException("変更内容を入力してください");
@@ -150,7 +152,7 @@ public class UsersService {
         if(StringUtils.isEmpty(username)) username = targetUser.name();
         else existUpdateData = true;
 
-        if(StringUtils.isEmpty(password)) password = targetUser.password();
+        if(StringUtils.isEmpty(password)) password = authenticationRepository.getPassword(securityService.getLoginUser().getAccountId()).get().value();
         else{
             // パスワードの書式が正しいか判定
             if(!this.checkPasswordFormat(password))
@@ -190,7 +192,7 @@ public class UsersService {
         }
     }
 
-    public void updateLoginUserPassword(String prePassword, String newPassword, String confirmPassword){
+    public void updateLoginUserPassword(String prePassword, String newPassword, String confirmPassword) throws UserManagementException{
         // 入力情報が空の場所があった場合エラーを返す
         if(StringUtils.isEmpty(prePassword) || StringUtils.isEmpty(newPassword) || StringUtils.isEmpty(confirmPassword))
             throw new UserManagementException("入力が空のフィールドが存在します");

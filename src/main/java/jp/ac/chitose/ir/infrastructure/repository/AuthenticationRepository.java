@@ -25,10 +25,9 @@ public class AuthenticationRepository {
     }
 
     // JDBC Clientを使ったデータ取得のメソッド
-    // パスワードには必ずNULLになる式を使ってNULLを代入する
     public Optional<User> getUserInformation(String loginId, String password){
         Optional<User> userOp = jdbcClient.sql("""
-                SELECT id, login_id, user_name AS name, NULLIF(1,1) AS password, is_available
+                SELECT id, login_id, user_name AS name, is_available
                 FROM users
                 WHERE is_available
                 AND login_id = ?
@@ -42,7 +41,7 @@ public class AuthenticationRepository {
 
     public Optional<User> getUserInformation(String loginId){
         Optional<User> userOp = jdbcClient.sql("""
-                SELECT id, login_id, user_name AS name, NULLIF(1,1) AS password, is_available
+                SELECT id, login_id, user_name AS name, is_available
                 FROM users
                 WHERE is_available
                 AND login_id = ?

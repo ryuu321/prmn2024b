@@ -13,6 +13,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import jp.ac.chitose.ir.application.exception.UserManagementException;
 import jp.ac.chitose.ir.application.service.management.SecurityService;
 import jp.ac.chitose.ir.application.service.management.UsersService;
 import jp.ac.chitose.ir.infrastructure.repository.RoleRepository;
@@ -61,13 +62,15 @@ public class UserAddView extends VerticalLayout {
             String password = userPasswordTextField.getValue();
             Set<String> selectedRoles = checkboxGroup.getSelectedItems();
 
-            int result = usersService.addUser(userId, username, password, selectedRoles);
-            if (result == 2) {
-                new ErrorNotification(username + "ログインIDが既に存在しています");
-            } else if (result == 0) {
+            try {
+                usersService.addUser(userId, username, password, selectedRoles);
                 new SuccessNotification(username + "の追加に成功");
-            } else if (result == 1) {
-                new ErrorNotification(username + "空の入力欄があります");
+            } catch (UserManagementException e){
+                if(e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
+                else new ErrorNotification(e.getMessage());
+            } catch (RuntimeException e){
+                e.printStackTrace();
+                new ErrorNotification("エラーが発生しました");
             }
         });
         //deleteAccount.addThemeVariants(ButtonVariant.LUMO_ERROR);

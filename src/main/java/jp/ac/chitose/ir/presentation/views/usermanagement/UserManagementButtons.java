@@ -27,7 +27,9 @@ public class UserManagementButtons extends VerticalLayout {
         userBulkAddButton.setAutofocus(true);
 
         // ユーザーの追加ボタン
-        this.userAddButton = new Button("追加", new Icon(VaadinIcon.PLUS));
+        this.userAddButton = new Button("追加", new Icon(VaadinIcon.PLUS), buttonClickEvent -> {
+            UI.getCurrent().navigate("/user_management/add");
+        });
         userAddButton.setAutofocus(true);
 
         // ユーザーの削除ボタン
