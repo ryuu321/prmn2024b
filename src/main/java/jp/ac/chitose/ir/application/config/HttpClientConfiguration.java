@@ -6,8 +6,13 @@ import jp.ac.chitose.ir.application.service.HelloService;
 import jp.ac.chitose.ir.application.service.class_select.ClassSelect;
 import jp.ac.chitose.ir.application.service.commission.GradeService;
 import jp.ac.chitose.ir.application.service.commission.UniversityService;
+import jp.ac.chitose.ir.application.service.commission.UniversityService;
 import jp.ac.chitose.ir.application.service.questionnaire.QuestionnaireService;
 import jp.ac.chitose.ir.application.service.sample.SampleService;
+import jp.ac.chitose.ir.application.service.student.StudentService;
+import jp.ac.chitose.ir.application.service.management.UserManagementService;
+import jp.ac.chitose.ir.application.service.student.StudentGradeService;
+import jp.ac.chitose.ir.application.service.student.StudentGradeService;
 import jp.ac.chitose.ir.application.service.student.StudentService;
 import jp.ac.chitose.ir.application.service.management.UserManagementService;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,17 +52,6 @@ public class HttpClientConfiguration {
     public ClassSelect classSelect(HttpServiceProxyFactory factory) {
         return factory.createClient(ClassSelect.class);
     }
-
-    @Bean
-    public StudentService studentService(HttpServiceProxyFactory factory) {
-        return factory.createClient(StudentService.class);
-    }
-
-    @Bean
-    public GradeService gradeService(HttpServiceProxyFactory factory){
-        return factory.createClient(GradeService.class);
-    }
-
     @Bean
     public QuestionnaireService questionnaireService(HttpServiceProxyFactory factory){
         return factory.createClient(QuestionnaireService.class);
@@ -71,5 +65,10 @@ public class HttpClientConfiguration {
     @Bean
     public UniversityService universityService(HttpServiceProxyFactory factory) {
         return factory.createClient(UniversityService.class);
+    }
+
+    @Bean
+    public StudentGradeService studentGradeService(HttpServiceProxyFactory factory){
+        return factory.createClient(StudentGradeService.class);
     }
 }
