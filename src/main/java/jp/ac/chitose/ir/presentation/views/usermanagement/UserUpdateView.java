@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -31,6 +32,7 @@ public class UserUpdateView extends VerticalLayout {
     private TextField userNameTextField;
     private TextField userPasswordTextField;
     private CheckboxGroup<String> rolesCheckboxGroup;
+    private Grid<UsersData> targetUserGrid;
     private Button updateAccount;
     private Button cancelButton;
     private final UsersData targetUser;
@@ -41,6 +43,7 @@ public class UserUpdateView extends VerticalLayout {
         // 選択したユーザーの情報を取得
         this.targetUser = (UsersData) UI.getCurrent().getSession().getAttribute(UsersData.class);
 
+        initializeGrid();
         initializeTextField();
         initializeButton();
         initializeCheckBox();
@@ -58,6 +61,7 @@ public class UserUpdateView extends VerticalLayout {
     private void initializeCheckBox() {
         rolesCheckboxGroup = new CheckboxGroup<>();
         rolesCheckboxGroup.setLabel("権限");
+        // ロールIDも保持できるか
         rolesCheckboxGroup.setItems("システム管理者", "IR委員会メンバー", "教員", "学生");
         add(rolesCheckboxGroup);
     }
@@ -72,10 +76,11 @@ public class UserUpdateView extends VerticalLayout {
             Set<String> newRoles = rolesCheckboxGroup.getValue();
 
             // レコードが混在している（UsersDataとUser）のでキャストしている。統一したい。
-            User castedtargetUser = new User(targetUser.id(), targetUser.login_id(), targetUser.user_name(), targetUser.password(), targetUser.is_available(), targetUser.display_name());
+            User castedtargetUser = new User(targetUser.id(), targetUser.login_id(), targetUser.user_name(), targetUser.is_available());
             try {
                 usersService.updateUser(castedtargetUser, newLoginID, newUserName, newPassword, newRoles);
                 new SuccessNotification(targetUser.user_name() + "さんの情報を変更しました");
+                //todo 変更した情報が確認できるようにする（gridの情報を更新）
                 UI.getCurrent().navigate("/user_management");
             } catch (UserManagementException e) {
                 if (e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
@@ -91,10 +96,23 @@ public class UserUpdateView extends VerticalLayout {
         });
     }
 
+    // グリッドの初期化
+    private void initializeGrid() {
+        targetUserGrid = new Grid<>(UsersData.class, false);
+        targetUserGrid.addColumn(UsersData::login_id).setHeader("ログインID");
+        targetUserGrid.addColumn(UsersData::user_name).setHeader("ユーザーネーム");
+        targetUserGrid.addColumn(UsersData::display_name).setHeader("ロール");
+        targetUserGrid.setHeight("100px");
+        targetUserGrid.setWidthFull();
+        targetUserGrid.setItems(targetUser);
+
+    }
+
     // 各種コンポーネントの追加
     private void addComponents() {
-        add(new H1("ユーザーの情報変更"), new Paragraph("ユーザーの情報を変更することができます。変更したい情報を入力してください。"));
+        add(new H1("ユーザーの情報変更"), new Paragraph("ユーザーの情報を変更することができます。変更したい情報のみ入力してください。\n入力があった情報のみ変更されます。また、パスワードは12文字以上で設定してください。"));
         add(cancelButton);
+        add(targetUserGrid);
         FormLayout formLayout = new FormLayout(loginIDTextField, userNameTextField, userPasswordTextField, rolesCheckboxGroup);
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
         add(formLayout);
