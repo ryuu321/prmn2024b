@@ -17,8 +17,12 @@ import jp.ac.chitose.ir.presentation.views.commission.university.UniversityView;
 import jp.ac.chitose.ir.presentation.views.questionnaire.QuestionnaireTopView;
 import jp.ac.chitose.ir.presentation.views.student.StudentView;
 import jp.ac.chitose.ir.presentation.views.top.TopView;
+import jp.ac.chitose.ir.presentation.views.usermanagement.UserManagementTopView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.lineawesome.LineAwesomeIcon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -115,15 +119,36 @@ public class MainLayout extends AppLayout {
     }
 
     private MenuItemInfo[] createMenuItems() {
-        return new MenuItemInfo[]{ //
-                new MenuItemInfo("Top", LineAwesomeIcon.GLOBE_SOLID.create(), TopView.class), //
-                new MenuItemInfo("成績情報", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class),//
-                new MenuItemInfo("成績統計",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class),//
-                new MenuItemInfo("アンケート", LineAwesomeIcon.CHART_BAR.create(), QuestionnaireTopView.class),//
-                new MenuItemInfo("IRアンケート",LineAwesomeIcon.FILE_ALT.create(), IrQuestionView.class),//
-                new MenuItemInfo("Teacher", LineAwesomeIcon.CHART_AREA_SOLID.create(), QPOJFICHKVJBView.class),//
-                new MenuItemInfo("大学情報",LineAwesomeIcon.CHALKBOARD_TEACHER_SOLID.create(), UniversityView.class),//
-        };
+
+        List<MenuItemInfo> menuItems = new ArrayList<>();
+
+        // 共通画面
+        menuItems.add(new MenuItemInfo("Top", LineAwesomeIcon.GLOBE_SOLID.create(), TopView.class));
+        menuItems.add(new MenuItemInfo("アンケート", LineAwesomeIcon.CHART_BAR.create(), QuestionnaireTopView.class));
+
+        // 管理者向け
+        if (securityService.getLoginUser().isAdmin()) {
+            menuItems.add(new MenuItemInfo("ユーザ管理", LineAwesomeIcon.USER.create(), UserManagementTopView.class));
+        }
+
+        // IR委員向け
+        if (securityService.getLoginUser().isCommission()) {
+            menuItems.add(new MenuItemInfo("成績統計",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class));
+            menuItems.add(new MenuItemInfo("大学情報",LineAwesomeIcon.CHALKBOARD_TEACHER_SOLID.create(), UniversityView.class));
+        }
+
+        // 教員向け
+        if (securityService.getLoginUser().isTeacher()) {
+            menuItems.add(new MenuItemInfo("Teacher", LineAwesomeIcon.CHART_AREA_SOLID.create(), QPOJFICHKVJBView.class));
+            menuItems.add(new MenuItemInfo("IRアンケート",LineAwesomeIcon.FILE_ALT.create(), IrQuestionView.class));
+        }
+
+        // 学生向け
+        if (securityService.getLoginUser().isStudent()) {
+            menuItems.add(new MenuItemInfo("成績情報", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class));
+        }
+
+        return menuItems.toArray(new MenuItemInfo[0]);
     }
 
 }
