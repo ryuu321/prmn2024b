@@ -14,6 +14,7 @@ import jp.ac.chitose.ir.presentation.views.class_select.QPOJFICHKVJBView;
 import jp.ac.chitose.ir.presentation.views.commission.ir.IrQuestionView;
 import jp.ac.chitose.ir.presentation.views.commission.seiseki.CommissionView;
 import jp.ac.chitose.ir.presentation.views.commission.university.UniversityView;
+import jp.ac.chitose.ir.presentation.views.common.CommonView;
 import jp.ac.chitose.ir.presentation.views.questionnaire.QuestionnaireTopView;
 import jp.ac.chitose.ir.presentation.views.student.StudentView;
 import jp.ac.chitose.ir.presentation.views.top.TopView;
@@ -124,11 +125,12 @@ public class MainLayout extends AppLayout {
 
         // 共通画面
         menuItems.add(new MenuItemInfo("Top", LineAwesomeIcon.GLOBE_SOLID.create(), TopView.class));
+        menuItems.add(new MenuItemInfo("共通画面", LineAwesomeIcon.CHART_PIE_SOLID.create(), CommonView.class));
         menuItems.add(new MenuItemInfo("アンケート", LineAwesomeIcon.CHART_BAR.create(), QuestionnaireTopView.class));
 
         // 管理者向け
         if (securityService.getLoginUser().isAdmin()) {
-            menuItems.add(new MenuItemInfo("ユーザ管理", LineAwesomeIcon.USER.create(), UserManagementTopView.class));
+            menuItems.add(new MenuItemInfo("ユーザ管理", LineAwesomeIcon.ADDRESS_BOOK.create(), UserManagementTopView.class));
         }
 
         // IR委員向け
