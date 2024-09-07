@@ -21,11 +21,11 @@ public class Heisei22 extends VerticalLayout {
     private ArrayList<VerticalLayout> layouts;
     private ArrayList<ArrayList<Integer>> data = new ArrayList<>();
     private UniversityService universityService;
+    TeacherTraining teacherTraining;
     public Heisei22(UniversityService universityService) {
         this.universityService = universityService;
+        this.teacherTraining = universityService.getTeacherTraining(2010).data().get(0);
         getData();
-        TeacherTraining teacherTraining = this.universityService.getTeacherTraining(2010).data().get(0);
-
         add(new H2("平成22年度"));
         year = new RadioButtonGroup<>();
         year.setItems("1年","2年","3年","4年");
@@ -71,28 +71,28 @@ public class Heisei22 extends VerticalLayout {
         firstYear.add(null);
         firstYear.add(null);
         firstYear.add(null);
-        firstYear.add(25);
+        firstYear.add(teacherTraining.first_year());
         data.add(firstYear);
 
         ArrayList<Integer> secondYear = new ArrayList<>();
-        secondYear.add(8);
-        secondYear.add(6);
-        secondYear.add(5);
-        secondYear.add(8+6+5);
+        secondYear.add(teacherTraining.second_year_ouyoukagaku());
+        secondYear.add(teacherTraining.second_year_densihikari());
+        secondYear.add(teacherTraining.second_year_jouhou());
+        secondYear.add(teacherTraining.second_year_total());
         data.add(secondYear);
 
         ArrayList<Integer> thirdYear = new ArrayList<>();
-        thirdYear.add(7);
-        thirdYear.add(4);
-        thirdYear.add(3);
-        thirdYear.add(7+4+3);
+        thirdYear.add(teacherTraining.third_year_ouyoukagaku());
+        thirdYear.add(teacherTraining.third_year_densihikari());
+        thirdYear.add(teacherTraining.third_year_jouhou());
+        thirdYear.add(teacherTraining.third_year_total());
         data.add(thirdYear);
 
         ArrayList<Integer> fourthYear = new ArrayList<>();
-        fourthYear.add(7);
-        fourthYear.add(2);
-        fourthYear.add(3);
-        fourthYear.add(7+2+3);
+        fourthYear.add(teacherTraining.fourth_year_ouyoukagaku());
+        fourthYear.add(teacherTraining.fourth_year_densihikari());
+        fourthYear.add(teacherTraining.fourth_year_jouhou());
+        fourthYear.add(teacherTraining.fourth_year_total());
         data.add(fourthYear);
     }
     private VerticalLayout getGraph(String name,int science,int elect,int info,int all) {

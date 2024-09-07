@@ -33,20 +33,8 @@ public class GraduationCredits extends VerticalLayout {
 
         TableData<CommonUnits> commonUnitsTableData=universityService.getCommonUnits(2024);
 
-        //CommonUnits commonUnits=new CommonUnits(
-        //        commonUnitsTableData.data().get(0).department(),
-        //        commonUnitsTableData.data().get(0).required(),
-        //        commonUnitsTableData.data().get(0).required_elective_specialty1(),
-        //        commonUnitsTableData.data().get(0).required_elective_specialty2(),
-        //        commonUnitsTableData.data().get(0).required_elective_education(),
-        //        commonUnitsTableData.data().get(0).elective(),
-        //        commonUnitsTableData.data().get(0).foreign_language_required1(),
-        //        commonUnitsTableData.data().get(0).foreign_language_required2(),
-        //        commonUnitsTableData.data().get(0).physical_education_elective(),
-        //        commonUnitsTableData.data().get(0).total()
-        //);
         Grid<CommonUnits> grid = new Grid<>();
-        grid.setItems(commonUnitsTableData.data());
+        grid.setItems(commonUnitsTableData.data().get(0));
         grid.addColumn(CommonUnits::required).setHeader("必修");
         grid.addColumn(CommonUnits::required_elective_specialty1).setHeader("選択必修(専門基礎1)");
         grid.addColumn(CommonUnits::required_elective_specialty2).setHeader("選択必修(専門基礎2)");
