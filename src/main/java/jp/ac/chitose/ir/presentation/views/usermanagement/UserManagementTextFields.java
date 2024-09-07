@@ -5,6 +5,8 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
+import java.util.Set;
+
 public class UserManagementTextFields extends VerticalLayout {
     private CheckboxGroup<String> rolesCheckboxGroup;
     private TextField loginIDTextField;
@@ -40,5 +42,22 @@ public class UserManagementTextFields extends VerticalLayout {
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
         add(formLayout);
         add(rolesCheckboxGroup);
+    }
+
+    // 各コンポーネントから値を取得するメソッド
+    public String getLoginID() {
+        return loginIDTextField.getValue();
+    }
+
+    public String getUserName() {
+        return userNameTextField.getValue();
+    }
+
+    public String getUserPassword() {
+        return userPasswordTextField.getValue();
+    }
+
+    public Set<String> getRoles() {
+        return rolesCheckboxGroup.getSelectedItems();
     }
 }

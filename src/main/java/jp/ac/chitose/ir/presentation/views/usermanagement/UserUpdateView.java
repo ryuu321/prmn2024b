@@ -8,7 +8,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
@@ -27,9 +26,6 @@ import java.util.Set;
 @RolesAllowed({"administrator"})
 public class UserUpdateView extends VerticalLayout {
     private final UsersService usersService;
-    private TextField loginIDTextField;
-    private TextField userNameTextField;
-    private TextField userPasswordTextField;
     private CheckboxGroup<String> rolesCheckboxGroup;
     private Grid<UsersData> targetUserGrid;
     private Button updateAccount;
@@ -50,31 +46,15 @@ public class UserUpdateView extends VerticalLayout {
 
     }
 
-    // テキストフィールドの初期化
-    private void initializeTextField() {
-        loginIDTextField = new TextField("ログインID");
-        userNameTextField = new TextField("ユーザーネーム");
-        userPasswordTextField = new TextField("パスワード");
-    }
-
-    private void initializeCheckBox() {
-        rolesCheckboxGroup = new CheckboxGroup<>();
-        rolesCheckboxGroup.setLabel("権限");
-        // ロールIDも保持できるか
-        rolesCheckboxGroup.setItems("システム管理者", "IR委員会メンバー", "教員", "学生");
-        add(rolesCheckboxGroup);
-    }
-
     // ボタンの初期設定
     private void initializeButton() {
         updateAccount = new Button("変更", buttonClickEvent -> {
+            // テキストフィールド・チェックボックス上の値をサービスに渡す
+            String newLoginID = userManagementTextFields.getLoginID();
+            String newUserName = userManagementTextFields.getUserName();
+            String newPassword = userManagementTextFields.getUserPassword();
+            Set<String> newRoles = userManagementTextFields.getRoles();
 
-            String newLoginID = loginIDTextField.getValue();
-            String newUserName = userNameTextField.getValue();
-            String newPassword = userPasswordTextField.getValue();
-            Set<String> newRoles = rolesCheckboxGroup.getValue();
-
-            // レコードが混在している（UsersDataとUser）のでキャストしている。統一したい。
             User castedtargetUser = new User(targetUser.id(), targetUser.login_id(), targetUser.user_name(), targetUser.is_available());
             try {
                 usersService.updateUser(castedtargetUser, newLoginID, newUserName, newPassword, newRoles);
