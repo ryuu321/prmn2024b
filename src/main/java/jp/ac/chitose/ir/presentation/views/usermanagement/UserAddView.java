@@ -2,7 +2,6 @@ package jp.ac.chitose.ir.presentation.views.usermanagement;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
@@ -26,7 +25,6 @@ public class UserAddView extends VerticalLayout {
     private final UsersService usersService;
     private Button createAccount;
     private Button cancelButton;
-    CheckboxGroup<String> checkboxGroup;
     private UserManagementTextFields userManagementTextFields;
 
     public UserAddView(UsersService usersService) {
