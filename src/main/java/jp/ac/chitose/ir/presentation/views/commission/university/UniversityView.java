@@ -10,19 +10,20 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.application.service.commission.GradeService;
+import jp.ac.chitose.ir.application.service.commission.UniversityService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.SelectButton;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.teacherTraining.TeacherTraining;
-import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.GraduationCredits.GraduationCredits;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.GraduationCredits;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.people.numberOfStudents.NumberOfStudents;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.studentsupport.Scholarship;
 
 import java.util.ArrayList;
-
 @PageTitle("University")
 @Route(value = "university", layout = MainLayout.class)
 @PermitAll
+
 public class UniversityView extends VerticalLayout {
     private GradeService gradeService;
     private BackButton backButton;
@@ -36,9 +37,13 @@ public class UniversityView extends VerticalLayout {
     private ArrayList<Button> annualReport;
     private ArrayList<VerticalLayout> layouts;
     private FormLayout buttonLayout;
-    public UniversityView(GradeService gradeService) {
+    private UniversityService universityService;
+
+
+    public UniversityView(GradeService gradeService,UniversityService universityService) {
 
         this.gradeService = gradeService;
+        this.universityService = universityService;
 
         mainLayout = new VerticalLayout();
         add(mainLayout);
@@ -142,17 +147,17 @@ public class UniversityView extends VerticalLayout {
 //        add(activeLearning);
 
         //卒業単位数
-        VerticalLayout graduationCredits = new GraduationCredits();
+        VerticalLayout graduationCredits = new GraduationCredits(universityService);
         setLayout(graduationCredits,"卒業単位数",classwork);
         add(graduationCredits);
 
         //大学年報
-        VerticalLayout teacherTraining = new TeacherTraining();
+        VerticalLayout teacherTraining = new TeacherTraining(universityService);
         setLayout(teacherTraining,"教職課程",annualReport);
         add(teacherTraining);
 
         //大学年報の奨学金
-        VerticalLayout schalarship= new Scholarship();
+        VerticalLayout schalarship= new Scholarship(universityService);
         setLayout(schalarship,"奨学金",annualReport);
         add(schalarship);
 

@@ -6,6 +6,7 @@ import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
 @HttpExchange(value = "/university", accept = "application/json", contentType = "application/json")
+
 public interface UniversityService {
     @GetExchange("/teacher_training/{academic_year}")
     TableData<TeacherTraining> getTeacherTraining(@PathVariable int academic_year);

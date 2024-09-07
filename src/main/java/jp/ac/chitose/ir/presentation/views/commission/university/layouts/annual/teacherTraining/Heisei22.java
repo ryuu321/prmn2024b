@@ -7,6 +7,8 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import jp.ac.chitose.ir.application.service.commission.TeacherTraining;
+import jp.ac.chitose.ir.application.service.commission.UniversityService;
 import jp.ac.chitose.ir.presentation.component.graph.Data;
 import jp.ac.chitose.ir.presentation.component.graph.GRAPH_TYPE;
 import jp.ac.chitose.ir.presentation.component.graph.Graph;
@@ -18,9 +20,11 @@ public class Heisei22 extends VerticalLayout {
     private RadioButtonGroup<String> year;
     private ArrayList<VerticalLayout> layouts;
     private ArrayList<ArrayList<Integer>> data = new ArrayList<>();
-    public Heisei22() {
-
+    private UniversityService universityService;
+    public Heisei22(UniversityService universityService) {
+        this.universityService = universityService;
         getData();
+        TeacherTraining teacherTraining = this.universityService.getTeacherTraining(2010).data().get(0);
 
         add(new H2("平成22年度"));
         year = new RadioButtonGroup<>();
