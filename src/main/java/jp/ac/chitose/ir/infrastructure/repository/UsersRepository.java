@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.infrastructure.repository;
 
+import jp.ac.chitose.ir.application.service.management.UsersData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -7,6 +8,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 @Repository
 public class UsersRepository {
@@ -62,6 +64,20 @@ public class UsersRepository {
                 .params(loginId, username, password, id)
                 .update();
         System.out.println("updated : " + updated);
+    }
+
+    // ユーザ情報を UsersData レコードの形で取得
+    // 変更後の確認のため
+    public Optional<UsersData> getUsersData(long id){
+        Optional<UsersData> usersDataOp = jdbcClient.sql("""
+                SELECT id, login_id, user_name, NULLIF(1,1) AS password, is_available, NULLIF(1,1) AS display_name
+                FROM users
+                WHERE id = ?
+                """)
+                .params(id)
+                .query(UsersData.class)
+                .optional();
+        return  usersDataOp;
     }
 
     // パスワード変更

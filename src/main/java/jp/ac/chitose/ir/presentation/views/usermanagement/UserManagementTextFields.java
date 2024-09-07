@@ -4,7 +4,9 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import jp.ac.chitose.ir.application.service.management.Role;
 import jp.ac.chitose.ir.application.service.management.RoleService;
+import jp.ac.chitose.ir.application.service.management.UsersData;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -18,11 +20,22 @@ public class UserManagementTextFields extends VerticalLayout {
     private final RoleService roleService;
     private final Map<String, Integer> allRolesMap;
 
+    // 通常のコンストラクタ
     public UserManagementTextFields(RoleService roleService) {
         this.roleService = roleService;
         allRolesMap = roleService.getAllRolesMap();
         initializeTextField();
         initializeCheckBox();
+        addComponentsToLayout();
+    }
+
+    // ユーザ情報を可視化する際のコンストラクタ
+    public UserManagementTextFields(RoleService roleService, UsersData targetUser) {
+        this.roleService = roleService;
+        allRolesMap = roleService.getAllRolesMap();
+        initializeTextField();
+        initializeCheckBox();
+        addUserInfomation(targetUser);
         addComponentsToLayout();
     }
 
@@ -40,8 +53,25 @@ public class UserManagementTextFields extends VerticalLayout {
         rolesCheckboxGroup.setLabel("権限");
         // ロールIDも保持できるか
 
-        rolesCheckboxGroup.setItems(allRolesMap.keySet());
+        rolesCheckboxGroup.setItems(roleService.getRoles());
         add(rolesCheckboxGroup);
+    }
+
+    // 各テキストフィールドに現在の情報を表示
+    private void addUserInfomation(UsersData targetUser){
+        loginIDTextField.setLabel(loginIDTextField.getLabel() + " (現在：" + targetUser.login_id() + ")");
+        userNameTextField.setLabel(userNameTextField.getLabel() + " (現在：" + targetUser.user_name() + ")");
+        userPasswordTextField.setLabel(userPasswordTextField.getLabel() + " (現在の情報は表示できません)");
+        StringBuilder roleLabel = new StringBuilder(rolesCheckboxGroup.getLabel());
+        roleLabel.append(" (現在：");
+        boolean isFirst = true;
+        for(Role role : roleService.getRoleList(targetUser.id())){
+            if(!isFirst) roleLabel.append(", ");
+            roleLabel.append(role.display_name());
+            isFirst = false;
+        }
+        roleLabel.append(")");
+        rolesCheckboxGroup.setLabel(roleLabel.toString());
     }
 
     // 各種コンポーネントの追加

@@ -130,7 +130,7 @@ public class UsersService {
     }
 
     // ユーザ更新
-    public void updateUser(User targetUser, String loginId, String username, String password, Set<Integer> selectedRoleIds) throws UserManagementException{
+    public UsersData updateUser(User targetUser, String loginId, String username, String password, Set<Integer> selectedRoleIds) throws UserManagementException{
         System.out.println(targetUser);
         // ユーザ・ロールともに全て空欄だった場合エラーを返す
         if(StringUtils.isEmpty(loginId) && StringUtils.isEmpty(username) && StringUtils.isEmpty(password) && selectedRoleIds.isEmpty())
@@ -171,6 +171,8 @@ public class UsersService {
             usersRepository.deleteRoles(targetUser.id());
             this.addRolesFromCheckBox(targetUser.id(), selectedRoleIds);
         }
+
+        return usersRepository.getUsersData(targetUser.id()).get();
     }
 
     // ユーザ削除
