@@ -4,7 +4,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
@@ -36,6 +35,7 @@ public class UserUpdateView extends VerticalLayout {
     private Button updateAccount;
     private Button cancelButton;
     private final UsersData targetUser;
+    private UserManagementTextFields userManagementTextFields;
 
     public UserUpdateView(UsersService usersService) {
         this.usersService = usersService;
@@ -43,10 +43,9 @@ public class UserUpdateView extends VerticalLayout {
         // 選択したユーザーの情報を取得
         this.targetUser = (UsersData) UI.getCurrent().getSession().getAttribute(UsersData.class);
 
+        userManagementTextFields = new UserManagementTextFields();
         initializeGrid();
-        initializeTextField();
         initializeButton();
-        initializeCheckBox();
         addComponents();
 
     }
@@ -113,9 +112,7 @@ public class UserUpdateView extends VerticalLayout {
         add(new H1("ユーザーの情報変更"), new Paragraph("ユーザーの情報を変更することができます。変更したい情報のみ入力してください。\n入力があった情報のみ変更されます。また、パスワードは12文字以上で設定してください。"));
         add(cancelButton);
         add(targetUserGrid);
-        FormLayout formLayout = new FormLayout(loginIDTextField, userNameTextField, userPasswordTextField, rolesCheckboxGroup);
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
-        add(formLayout);
+        add(userManagementTextFields);
         add(updateAccount);
     }
 
