@@ -3,7 +3,6 @@ package jp.ac.chitose.ir.presentation.views.usermanagement;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
@@ -12,6 +11,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import jp.ac.chitose.ir.application.exception.UserManagementException;
+import jp.ac.chitose.ir.application.service.management.RoleService;
 import jp.ac.chitose.ir.application.service.management.User;
 import jp.ac.chitose.ir.application.service.management.UsersData;
 import jp.ac.chitose.ir.application.service.management.UsersService;
@@ -26,20 +26,21 @@ import java.util.Set;
 @RolesAllowed({"administrator"})
 public class UserUpdateView extends VerticalLayout {
     private final UsersService usersService;
-    private CheckboxGroup<String> rolesCheckboxGroup;
+    private final RoleService roleService;
     private Grid<UsersData> targetUserGrid;
     private Button updateAccount;
     private Button cancelButton;
     private final UsersData targetUser;
     private UserManagementTextFields userManagementTextFields;
 
-    public UserUpdateView(UsersService usersService) {
+    public UserUpdateView(UsersService usersService, RoleService roleService) {
         this.usersService = usersService;
+        this.roleService = roleService;
 
         // 選択したユーザーの情報を取得
         this.targetUser = (UsersData) UI.getCurrent().getSession().getAttribute(UsersData.class);
 
-        userManagementTextFields = new UserManagementTextFields();
+        userManagementTextFields = new UserManagementTextFields(roleService);
         initializeGrid();
         initializeButton();
         addComponents();

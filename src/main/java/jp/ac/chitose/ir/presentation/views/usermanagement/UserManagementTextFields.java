@@ -4,6 +4,7 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import jp.ac.chitose.ir.application.service.management.RoleService;
 
 import java.util.Set;
 
@@ -12,8 +13,10 @@ public class UserManagementTextFields extends VerticalLayout {
     private TextField loginIDTextField;
     private TextField userNameTextField;
     private TextField userPasswordTextField;
+    private final RoleService roleService;
 
-    public UserManagementTextFields() {
+    public UserManagementTextFields(RoleService roleService) {
+        this.roleService = roleService;
         initializeTextField();
         initializeCheckBox();
         addComponentsToLayout();
@@ -32,7 +35,8 @@ public class UserManagementTextFields extends VerticalLayout {
         rolesCheckboxGroup = new CheckboxGroup<>();
         rolesCheckboxGroup.setLabel("権限");
         // ロールIDも保持できるか
-        rolesCheckboxGroup.setItems("システム管理者", "IR委員会メンバー", "教員", "学生");
+
+        rolesCheckboxGroup.setItems(roleService.getRoles());
         add(rolesCheckboxGroup);
     }
 

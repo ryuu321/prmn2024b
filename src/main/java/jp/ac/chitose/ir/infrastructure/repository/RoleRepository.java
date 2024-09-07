@@ -56,4 +56,14 @@ public class RoleRepository {
         return roleIdOp;
     }
 
+    // roleのリストを取得
+    public List<String> getRole(){
+        List<String> roleList = jdbcClient.sql("""
+            SELECT display_name FROM role 
+            """)
+            .query(String.class)
+            .list();
+        return roleList;
+    }
+
 }

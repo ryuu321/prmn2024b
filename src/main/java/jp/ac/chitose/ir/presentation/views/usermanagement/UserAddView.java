@@ -11,6 +11,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import jp.ac.chitose.ir.application.exception.UserManagementException;
+import jp.ac.chitose.ir.application.service.management.RoleService;
 import jp.ac.chitose.ir.application.service.management.UsersService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.component.notification.ErrorNotification;
@@ -26,12 +27,14 @@ public class UserAddView extends VerticalLayout {
     private Button createAccount;
     private Button cancelButton;
     private UserManagementTextFields userManagementTextFields;
+    private final RoleService roleService;
 
-    public UserAddView(UsersService usersService) {
-        userManagementTextFields = new UserManagementTextFields();
+    public UserAddView(UsersService usersService, RoleService roleService) {
+        this.usersService = usersService;
+        this.roleService = roleService;
+        userManagementTextFields = new UserManagementTextFields(this.roleService);
         initializeButton();
         addComponents();
-        this.usersService = usersService;
     }
 
     // ボタンの初期設定

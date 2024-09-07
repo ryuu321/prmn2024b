@@ -36,4 +36,7 @@ public class RoleService {
     public Optional<Integer> getRoleId(String roleName){
         return roleRepository.getRoleId(roleName);
     }
+
+    // 登録されているroleの取得
+    public List<String> getRoles(){return roleRepository.getRole();}
 }
