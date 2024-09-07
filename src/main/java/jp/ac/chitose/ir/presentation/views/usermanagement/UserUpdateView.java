@@ -40,8 +40,7 @@ public class UserUpdateView extends VerticalLayout {
         // 選択したユーザーの情報を取得
         this.targetUser = (UsersData) UI.getCurrent().getSession().getAttribute(UsersData.class);
 
-        userManagementTextFields = new UserManagementTextFields(roleService);
-        initializeGrid();
+        userManagementTextFields = new UserManagementTextFields(roleService, targetUser);
         initializeButton();
         addComponents();
 
@@ -58,10 +57,11 @@ public class UserUpdateView extends VerticalLayout {
 
             User castedtargetUser = new User(targetUser.id(), targetUser.login_id(), targetUser.user_name(), targetUser.is_available());
             try {
-                usersService.updateUser(castedtargetUser, newLoginID, newUserName, newPassword, newRoleIds);
+                UsersData updatedUser = usersService.updateUser(castedtargetUser, newLoginID, newUserName, newPassword, newRoleIds);
                 new SuccessNotification(targetUser.user_name() + "さんの情報を変更しました");
                 //todo 変更した情報が確認できるようにする（gridの情報を更新）
-                UI.getCurrent().navigate("/user_management");
+                UI.getCurrent().getSession().setAttribute(UsersData.class, updatedUser);
+                UI.getCurrent().getPage().reload();
             } catch (UserManagementException e) {
                 if (e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
                 else new ErrorNotification(e.getMessage());
@@ -76,23 +76,10 @@ public class UserUpdateView extends VerticalLayout {
         });
     }
 
-    // グリッドの初期化
-    private void initializeGrid() {
-        targetUserGrid = new Grid<>(UsersData.class, false);
-        targetUserGrid.addColumn(UsersData::login_id).setHeader("ログインID");
-        targetUserGrid.addColumn(UsersData::user_name).setHeader("ユーザーネーム");
-        targetUserGrid.addColumn(UsersData::display_name).setHeader("ロール");
-        targetUserGrid.setHeight("100px");
-        targetUserGrid.setWidthFull();
-        targetUserGrid.setItems(targetUser);
-
-    }
-
     // 各種コンポーネントの追加
     private void addComponents() {
         add(new H1("ユーザーの情報変更"), new Paragraph("ユーザーの情報を変更することができます。変更したい情報のみ入力してください。\n入力があった情報のみ変更されます。また、パスワードは12文字以上で設定してください。"));
         add(cancelButton);
-        add(targetUserGrid);
         add(userManagementTextFields);
         add(updateAccount);
     }

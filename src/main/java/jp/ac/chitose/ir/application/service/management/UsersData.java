@@ -1,7 +1,7 @@
 package jp.ac.chitose.ir.application.service.management;
 
 public record UsersData(
-        int id,
+        long id,
         String login_id,
         String user_name,
         String password,
