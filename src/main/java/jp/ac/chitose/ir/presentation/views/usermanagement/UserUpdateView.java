@@ -3,7 +3,6 @@ package jp.ac.chitose.ir.presentation.views.usermanagement;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,8 +25,6 @@ import java.util.Set;
 @RolesAllowed({"administrator"})
 public class UserUpdateView extends VerticalLayout {
     private final UsersService usersService;
-    private final RoleService roleService;
-    private Grid<UsersData> targetUserGrid;
     private Button updateAccount;
     private Button cancelButton;
     private final UsersData targetUser;
@@ -35,11 +32,14 @@ public class UserUpdateView extends VerticalLayout {
 
     public UserUpdateView(UsersService usersService, RoleService roleService) {
         this.usersService = usersService;
-        this.roleService = roleService;
 
         // 選択したユーザーの情報を取得
         this.targetUser = (UsersData) UI.getCurrent().getSession().getAttribute(UsersData.class);
-
+        // 文字列がセッションに渡されていたら成功メッセージを出力→セッションの文字列をnullに戻す
+        if(UI.getCurrent().getSession().getAttribute(String.class) != null) {
+            new SuccessNotification(UI.getCurrent().getSession().getAttribute(String.class));
+            UI.getCurrent().getSession().setAttribute(String.class, null);
+        }
         userManagementTextFields = new UserManagementTextFields(roleService, targetUser);
         initializeButton();
         addComponents();
@@ -58,9 +58,10 @@ public class UserUpdateView extends VerticalLayout {
             User castedtargetUser = new User(targetUser.id(), targetUser.login_id(), targetUser.user_name(), targetUser.is_available());
             try {
                 UsersData updatedUser = usersService.updateUser(castedtargetUser, newLoginID, newUserName, newPassword, newRoleIds);
-                new SuccessNotification(targetUser.user_name() + "さんの情報を変更しました");
-                //todo 変更した情報が確認できるようにする（gridの情報を更新）
+
+                // 変更後のユーザ情報と成功メッセージをセッションに渡して画面をリロード
                 UI.getCurrent().getSession().setAttribute(UsersData.class, updatedUser);
+                UI.getCurrent().getSession().setAttribute(String.class, targetUser.user_name() + "さんの情報を変更しました");
                 UI.getCurrent().getPage().reload();
             } catch (UserManagementException e) {
                 if (e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
