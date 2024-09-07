@@ -4,6 +4,7 @@ import jp.ac.chitose.ir.application.exception.APIClientErrorException;
 import jp.ac.chitose.ir.application.exception.APIServerErrorException;
 import jp.ac.chitose.ir.application.service.HelloService;
 import jp.ac.chitose.ir.application.service.class_select.ClassSelect;
+import jp.ac.chitose.ir.application.service.commission.GradeService;
 import jp.ac.chitose.ir.application.service.commission.UniversityService;
 import jp.ac.chitose.ir.application.service.management.UserManagementService;
 import jp.ac.chitose.ir.application.service.questionnaire.QuestionnaireService;
@@ -64,5 +65,10 @@ public class HttpClientConfiguration {
     @Bean
     public StudentGradeService studentGradeService(HttpServiceProxyFactory factory){
         return factory.createClient(StudentGradeService.class);
+    }
+
+    @Bean
+    public GradeService gradeService(HttpServiceProxyFactory factory){
+        return factory.createClient(GradeService.class);
     }
 }
