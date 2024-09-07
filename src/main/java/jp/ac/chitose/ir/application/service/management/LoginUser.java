@@ -6,17 +6,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Set;
 
 public class LoginUser implements UserDetails {
 
     private User user;
-
-    private HashSet<String> roles;
-
+    private Set<String> roles;
     private Collection<GrantedAuthority> authorities;
 
-    public LoginUser(User user, HashSet<String> roles) {
+    public LoginUser(User user, Set<String> roles) {
         this.user = user;
         this.roles = roles;
     }
@@ -39,10 +37,6 @@ public class LoginUser implements UserDetails {
     @Override
     public String getUsername() {
         return user.name();
-    }
-
-    public long getId() {
-        return user.id();
     }
 
     @Override

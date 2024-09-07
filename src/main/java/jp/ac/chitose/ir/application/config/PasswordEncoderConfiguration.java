@@ -12,7 +12,6 @@ import java.util.Map;
 public class PasswordEncoderConfiguration {
 
     // SecurityConfiguration に記述すると相互参照が発生したのでとりあえずクラスを分けた
-    // todo 先生に要相談
     @Bean
     public PasswordEncoder passwordEncoder() {
         String idForEncode = "bcrypt";

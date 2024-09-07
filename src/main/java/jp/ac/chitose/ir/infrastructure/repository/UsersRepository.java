@@ -1,7 +1,6 @@
 package jp.ac.chitose.ir.infrastructure.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -42,8 +41,8 @@ public class UsersRepository {
 
         // users テーブルへの追加
         int inserted = jdbcClient.sql("""
-                        INSERT into users(login_id, user_name, password, is_available, created_at) 
-                        values (?, ?, ?, TRUE, ?)
+                        INSERT INTO users(login_id, user_name, password, is_available, created_at)
+                        VALUES (?, ?, ?, TRUE, ?)
                         """)
                 .params(loginId, username, password, createdAt)
                 .update(keyHolder, "id");
@@ -51,6 +50,59 @@ public class UsersRepository {
 
         long userId = keyHolder.getKey().longValue();
         return userId;
+    }
+
+    // ユーザ情報変更
+    public void updateUser(long id, String loginId, String username, String password){
+        int updated = jdbcClient.sql("""
+                UPDATE users
+                SET login_id = ?, user_name = ?, password = ?
+                WHERE id = ?
+                """)
+                .params(loginId, username, password, id)
+                .update();
+        System.out.println("updated : " + updated);
+    }
+
+    // パスワード変更
+    public void updatePassword(long userId, String password){
+        int updated = jdbcClient.sql("""
+                UPDATE users
+                SET password = ?
+                WHERE id = ?
+                """)
+                .params(password, userId)
+                .update();
+        System.out.println("updated : " + updated);
+    }
+
+    // ユーザ削除(無効化)
+    public int deleteUser(long userId){
+        // 日付の取得
+        Timestamp deletedAt = new Timestamp(System.currentTimeMillis());
+
+        int deleted = jdbcClient.sql("""
+                UPDATE users
+                SET is_available = FALSE, deleted_at = ?
+                WHERE id = ?
+                """)
+                .params(deletedAt, userId)
+                .update();
+        System.out.println("deleted : " + deleted);
+        return deleted;
+    }
+
+    // 削除したユーザを有効化(テスト用)
+    public int reviveUser(long userId){
+        int deleted = jdbcClient.sql("""
+                UPDATE users
+                SET is_available = TRUE, deleted_at = NULL
+                WHERE id = ?
+                """)
+                .params(userId)
+                .update();
+        System.out.println("deleted : " + deleted);
+        return deleted;
     }
 
     // ロール追加
@@ -63,88 +115,16 @@ public class UsersRepository {
         System.out.println("inserted : " + inserted);
     }
 
-    // ユーザidの取得(主にユーザ追加で使用)
-    public long getUserId(String loginId){
-        long id = jdbcClient.sql("""
-                SELECT id FROM users WHERE login_id = ?
-                """)
-                .params(loginId)
-                .query(new DataClassRowMapper<>(Long.class))
-                .single();
-        return id;
-    }
-
-    // ユーザ情報変更
-    // 変更内容どう受け取ってくるか要検討
-    // serviceでfor文？sql文を順々に結合？->一旦後者で実装
-    public void updateUser(long id, String loginId, String username, String password){
-        int updated = jdbcClient.sql("""
-                update users
-                SET login_id = ?, user_name = ?, password = ?
-                WHERE id = ?
-                """)
-                .params(loginId, username, password, id)
-                .update();
-        System.out.println("updated : " + updated);
-    }
-
-    // パスワード変更
-    public void updatePassword(String loginId, String password){
-        int updated = jdbcClient.sql("""
-                update users 
-                SET password = ?
-                WHERE login_id = ?
-                """)
-                .params(password, loginId)
-                .update();
-        System.out.println("updated : " + updated);
-    }
-
-    // ユーザ削除(無効化)
-    public int deleteUser(long userId){
-        // 日付の取得
-        Timestamp deletedAt = new Timestamp(System.currentTimeMillis());
-
+    // ロールを全て削除
+    // 全削除→チェックされたロールを追加 という形でロール変更に用いる
+    public void deleteRoles(long userId){
         int deleted = jdbcClient.sql("""
-                update users
-                SET is_available = FALSE, deleted_at = ?
-                WHERE id = ?
-                """)
-                .params(deletedAt, userId)
-                .update();
-        System.out.println("deleted : " + deleted);
-        return deleted;
-    }
-
-    // 削除したユーザを有効化
-    public int reviveUser(long userId){
-        int deleted = jdbcClient.sql("""
-                update users
-                SET is_available = TRUE, deleted_at = NULL
-                WHERE id = ?
-                """)
-                .params(userId)
-                .update();
-        System.out.println("deleted : " + deleted);
-        return deleted;
-    }
-
-    // テスト用に使うかもしれないので一応作った痕跡を残さない削除 後々消す
-    public int deleteData(long id){
-        jdbcClient.sql("""
-                delete from user_role
+                DELETE FROM user_role
                 WHERE user_id = ?
                 """)
-                .param(id)
-                .update();
-        int deleted = jdbcClient.sql("""
-                delete from users 
-                WHERE id = ?
-                """)
-                .param(id)
+                .param(userId)
                 .update();
         System.out.println("deleted : " + deleted);
-        return deleted;
     }
 
 }

@@ -2,6 +2,7 @@ package jp.ac.chitose.ir.presentation.component;
 
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
@@ -88,9 +89,11 @@ public class MainLayout extends AppLayout {
         appName.addClassNames(Margin.Vertical.MEDIUM, Margin.End.AUTO, FontSize.LARGE);
 
         H5 username = new H5(securityService.getLoginUser().getUsername() + "　");
+        Button settings = new Button("設定", click -> UI.getCurrent().navigate("/settings/password"));
+        settings.addClassNames(Margin.End.XSMALL);
         Button logout = new Button("ログアウト", click -> securityService.logout());
 
-        layout.add(appName,username, logout);
+        layout.add(appName,username, settings, logout);
 
         Nav nav = new Nav();
         nav.addClassNames(Display.FLEX, Overflow.AUTO, Padding.Horizontal.MEDIUM, Padding.Vertical.XSMALL);
