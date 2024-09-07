@@ -6,6 +6,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import jp.ac.chitose.ir.application.service.management.RoleService;
 
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class UserManagementTextFields extends VerticalLayout {
@@ -14,9 +16,11 @@ public class UserManagementTextFields extends VerticalLayout {
     private TextField userNameTextField;
     private TextField userPasswordTextField;
     private final RoleService roleService;
+    private final Map<String, Integer> allRolesMap;
 
     public UserManagementTextFields(RoleService roleService) {
         this.roleService = roleService;
+        allRolesMap = roleService.getAllRolesMap();
         initializeTextField();
         initializeCheckBox();
         addComponentsToLayout();
@@ -36,7 +40,7 @@ public class UserManagementTextFields extends VerticalLayout {
         rolesCheckboxGroup.setLabel("権限");
         // ロールIDも保持できるか
 
-        rolesCheckboxGroup.setItems(roleService.getRoles());
+        rolesCheckboxGroup.setItems(allRolesMap.keySet());
         add(rolesCheckboxGroup);
     }
 
@@ -63,5 +67,13 @@ public class UserManagementTextFields extends VerticalLayout {
 
     public Set<String> getRoles() {
         return rolesCheckboxGroup.getSelectedItems();
+    }
+    public Set<Integer> getRoleIds(){
+        Map<String, Integer> allRolesMap = roleService.getAllRolesMap();
+        Set<Integer> selectedRoleId = new HashSet<>();
+        for(String displayName : rolesCheckboxGroup.getSelectedItems()){
+            selectedRoleId.add(allRolesMap.get(displayName));
+        }
+        return selectedRoleId;
     }
 }

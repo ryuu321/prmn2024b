@@ -34,9 +34,9 @@ public class UsersService {
     }
 
     // ユーザ追加(単体)
-    public void addUser(String loginId, String username, String password, Set<String> selectedRoles) throws UserManagementException{
+    public void addUser(String loginId, String username, String password, Set<Integer> selectedRoleIds) throws UserManagementException{
         // 入力情報が空の場所があった場合1を返す
-        if(StringUtils.isEmpty(loginId) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || selectedRoles.isEmpty())
+        if(StringUtils.isEmpty(loginId) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || selectedRoleIds.isEmpty())
             throw new UserManagementException("空の入力欄があります");
 
         // loginidでユーザが取得できるか判断
@@ -55,7 +55,7 @@ public class UsersService {
         long userId = usersRepository.addUser(loginId, username, encodedPassword);
 
         // user_roleテーブルに追加
-        this.addRolesFromCheckBox(userId, selectedRoles);
+        this.addRolesFromCheckBox(userId, selectedRoleIds);
     }
 
     // csvによるユーザ一括追加
@@ -130,10 +130,10 @@ public class UsersService {
     }
 
     // ユーザ更新
-    public void updateUser(User targetUser, String loginId, String username, String password, Set<String> selectedRoles) throws UserManagementException{
+    public void updateUser(User targetUser, String loginId, String username, String password, Set<Integer> selectedRoleIds) throws UserManagementException{
         System.out.println(targetUser);
         // ユーザ・ロールともに全て空欄だった場合エラーを返す
-        if(StringUtils.isEmpty(loginId) && StringUtils.isEmpty(username) && StringUtils.isEmpty(password) && selectedRoles.isEmpty())
+        if(StringUtils.isEmpty(loginId) && StringUtils.isEmpty(username) && StringUtils.isEmpty(password) && selectedRoleIds.isEmpty())
             throw new UserManagementException("変更内容を入力してください");
 
         // 変更の有無を判定する変数
@@ -167,9 +167,9 @@ public class UsersService {
         if(existUpdateData) usersRepository.updateUser(targetUser.id(), loginId, username, password);
 
         // ロールの変更がある場合ロールを全て消してから追加する
-        if(!selectedRoles.isEmpty()){
+        if(!selectedRoleIds.isEmpty()){
             usersRepository.deleteRoles(targetUser.id());
-            this.addRolesFromCheckBox(targetUser.id(), selectedRoles);
+            this.addRolesFromCheckBox(targetUser.id(), selectedRoleIds);
         }
     }
 
@@ -222,21 +222,11 @@ public class UsersService {
     }
 
     // チェックボックスを用いたロール追加
-    // todo ロールに関する情報をViewで取得できるようになったら変更
-    private void addRolesFromCheckBox(long userId, Set<String> selectedRoles){
-        for(String role : selectedRoles){
-            int roleId = roleService.getRoleId(role).get();
+    private void addRolesFromCheckBox(long userId, Set<Integer> selectedRoleIds){
+        for(int roleId : selectedRoleIds){
             usersRepository.addRole(userId, roleId);
         }
     }
-
-    /*
-    private void addRolesFromCheckBox(long userId, Set<Integer> selectedRolesId){
-        for(int roleId : selectedRolesId){
-            usersRepository.addRole(userId, roleId);
-        }
-    }
-    */
 
     // パスワードの要件を満たしているか判定
     // 現状は12文字以上だけだが、他に条件が追加される可能性もあるのでメソッド化

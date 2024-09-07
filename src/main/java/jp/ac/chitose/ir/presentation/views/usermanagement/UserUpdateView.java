@@ -54,11 +54,11 @@ public class UserUpdateView extends VerticalLayout {
             String newLoginID = userManagementTextFields.getLoginID();
             String newUserName = userManagementTextFields.getUserName();
             String newPassword = userManagementTextFields.getUserPassword();
-            Set<String> newRoles = userManagementTextFields.getRoles();
+            Set<Integer> newRoleIds = userManagementTextFields.getRoleIds();
 
             User castedtargetUser = new User(targetUser.id(), targetUser.login_id(), targetUser.user_name(), targetUser.is_available());
             try {
-                usersService.updateUser(castedtargetUser, newLoginID, newUserName, newPassword, newRoles);
+                usersService.updateUser(castedtargetUser, newLoginID, newUserName, newPassword, newRoleIds);
                 new SuccessNotification(targetUser.user_name() + "さんの情報を変更しました");
                 //todo 変更した情報が確認できるようにする（gridの情報を更新）
                 UI.getCurrent().navigate("/user_management");
