@@ -28,7 +28,11 @@ public record StudentGrade(
     }
 
     public String department() {
-        if ("理工学部 情報ｼｽﾃﾑ工学科".equals(target_department())) return "情報システム工学科";
-        return target_department();
+        return switch (target_department()) {
+            case "理工学部 情報ｼｽﾃﾑ工学科" -> "情報システム工学科";
+            case "理工学部 応用化学生物学科" -> "応用化学生物学科";
+            case "理工学部 電子光工学科" -> "電子光工学科";
+            default -> target_department();
+        };
     }
 }
