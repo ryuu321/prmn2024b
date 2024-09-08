@@ -2,6 +2,7 @@ package jp.ac.chitose.ir.application.config;
 
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import jp.ac.chitose.ir.application.service.management.AuthenticationService;
+import jp.ac.chitose.ir.application.service.management.RoleService;
 import jp.ac.chitose.ir.application.service.management.UserDetailsAuthenticationProvider;
 import jp.ac.chitose.ir.presentation.views.login.LoginView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
     @Autowired
     private AuthenticationService authenticationService;
+    @Autowired
+    private RoleService roleService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -33,7 +36,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     @Bean
     public AuthenticationProvider getAuthenticationProvider() {
         // 認証状態とユーザーの情報を取得
-        return new UserDetailsAuthenticationProvider(authenticationService);
+        return new UserDetailsAuthenticationProvider(authenticationService, roleService);
     }
 
 }

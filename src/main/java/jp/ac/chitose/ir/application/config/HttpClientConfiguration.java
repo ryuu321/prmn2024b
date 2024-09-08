@@ -5,9 +5,11 @@ import jp.ac.chitose.ir.application.exception.APIServerErrorException;
 import jp.ac.chitose.ir.application.service.HelloService;
 import jp.ac.chitose.ir.application.service.class_select.ClassSelect;
 import jp.ac.chitose.ir.application.service.commission.GradeService;
+import jp.ac.chitose.ir.application.service.commission.UniversityService;
 import jp.ac.chitose.ir.application.service.questionnaire.QuestionnaireService;
 import jp.ac.chitose.ir.application.service.sample.SampleService;
-import jp.ac.chitose.ir.application.service.student.StudentGradeService;
+import jp.ac.chitose.ir.application.service.student.StudentService;
+import jp.ac.chitose.ir.application.service.management.UserManagementService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,8 +49,8 @@ public class HttpClientConfiguration {
     }
 
     @Bean
-    public QuestionnaireService questionnaireService(HttpServiceProxyFactory factory){
-        return factory.createClient(QuestionnaireService.class);
+    public StudentService studentService(HttpServiceProxyFactory factory) {
+        return factory.createClient(StudentService.class);
     }
 
     @Bean
@@ -57,7 +59,17 @@ public class HttpClientConfiguration {
     }
 
     @Bean
-    public StudentGradeService studentGradeService(HttpServiceProxyFactory factory){
-        return factory.createClient(StudentGradeService.class);
+    public QuestionnaireService questionnaireService(HttpServiceProxyFactory factory){
+        return factory.createClient(QuestionnaireService.class);
+    }
+
+    @Bean
+    public UserManagementService userManagementService(HttpServiceProxyFactory factory) {
+        return factory.createClient(UserManagementService.class);
+    }
+
+    @Bean
+    public UniversityService universityService(HttpServiceProxyFactory factory) {
+        return factory.createClient(UniversityService.class);
     }
 }

@@ -7,15 +7,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public class UserDetailsAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
 
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
+    private final RoleService roleService;
 
-    public UserDetailsAuthenticationProvider(AuthenticationService authenticationService) {
+    public UserDetailsAuthenticationProvider(AuthenticationService authenticationService, RoleService roleService) {
         this.authenticationService = authenticationService;
+        this.roleService = roleService;
     }
 
     @Override
@@ -29,20 +32,21 @@ public class UserDetailsAuthenticationProvider extends AbstractUserDetailsAuthen
 
         String password = (String) authentication.getCredentials(); // authenticationからpasswordを取得
 
-        List<User> loginUserList = authenticationService.authenticate(loginId, password);
+        Optional<User> loginUserOp = authenticationService.authenticate(loginId, password);
         System.out.print("認証結果: ");
-        if (loginUserList.isEmpty()) {
+        if (loginUserOp.isEmpty()) {
             System.out.println("認証に失敗しました. login_id=" + loginId);
             // 上手くいかなかったらかえる
             throw new BadCredentialsException("認証に失敗しました。");
         }
         System.out.println("認証に成功しました. login_id=" + loginId);
+        System.out.println(loginUserOp.get());
 
-        User user = loginUserList.get(0);
-        HashSet<String> roles = new HashSet<>();
+        User user = loginUserOp.get();
+        Set<String> roles = new HashSet<>();
 
-        for(User u : loginUserList){
-            roles.add(u.role());
+        for(Role role : roleService.getRoleList(user.id())){
+            roles.add(role.name());
         }
 
         LoginUser loginUser = new LoginUser(user, roles);
