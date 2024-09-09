@@ -8,7 +8,6 @@ import jp.ac.chitose.ir.application.service.commission.GradeService;
 import jp.ac.chitose.ir.application.service.commission.UniversityService;
 import jp.ac.chitose.ir.application.service.questionnaire.QuestionnaireService;
 import jp.ac.chitose.ir.application.service.sample.SampleService;
-import jp.ac.chitose.ir.application.service.student.StudentService;
 import jp.ac.chitose.ir.application.service.management.UserManagementService;
 import jp.ac.chitose.ir.application.service.student.StudentGradeService;
 import org.springframework.beans.factory.annotation.Value;
