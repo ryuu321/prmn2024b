@@ -9,8 +9,7 @@ import jp.ac.chitose.ir.application.service.TableData;
 import jp.ac.chitose.ir.application.service.commission.CommonUnits;
 import jp.ac.chitose.ir.application.service.commission.MajorUnits;
 import jp.ac.chitose.ir.application.service.commission.UniversityService;
-
-
+import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 
 
 public class GraduationCredits extends VerticalLayout {
@@ -18,11 +17,12 @@ public class GraduationCredits extends VerticalLayout {
     private UniversityService universityService;
 
     //卒業単位数
-    public GraduationCredits(UniversityService universityService) {
+    public GraduationCredits(UniversityService universityService, BackButton backButton) {
         this.universityService = universityService;
 
         add(new H1("卒業単位数"));
         add(new Paragraph("説明"));
+        add(backButton);
         add(new H2("共通教育科目"));
         add(creatcommonGrid());
         add(new H2("専門教育科目"));

@@ -8,18 +8,20 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jp.ac.chitose.ir.application.service.TableData;
 import jp.ac.chitose.ir.application.service.commission.GradeGpaStat;
 import jp.ac.chitose.ir.application.service.commission.GradeService;
+import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 
 import java.util.ArrayList;
 
 //学生数
 public class NumberOfStudents extends VerticalLayout {
     private GradeService gradeService;
-    public NumberOfStudents(GradeService gradeService) {
+    public NumberOfStudents(GradeService gradeService,BackButton backButton) {
 
         this.gradeService = gradeService;
 
         add(new H1("学生数"));
         add(new Paragraph("説明"));
+        add(backButton);
         add(new H3("1年生"));
         add(createFirstGrid());
         add(new H3("2~4年生"));

@@ -8,25 +8,24 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jp.ac.chitose.ir.application.service.commission.GradeService;
 import jp.ac.chitose.ir.application.service.commission.UniversityService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.SelectButton;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.studentsupport.Scholarship;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.teachertraining.TeacherTraining;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.GraduationCredits;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.people.numberOfStudents.NumberOfStudents;
-import jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.studentsupport.Scholarship;
 
 import java.util.ArrayList;
 @PageTitle("University")
 @Route(value = "university", layout = MainLayout.class)
-@PermitAll
+@RolesAllowed("commission")
 
 public class UniversityView extends VerticalLayout {
     private GradeService gradeService;
-    private BackButton backButton;
     private VerticalLayout mainLayout;
     private RadioButtonGroup<String> category;
     private ArrayList<ArrayList<Button>> buttons;
@@ -51,10 +50,6 @@ public class UniversityView extends VerticalLayout {
         mainLayout.add(new H1("大学情報"));
         mainLayout.add(new Paragraph("説明"));
 
-        //backButtonを追加
-        backButton = new BackButton();
-        backButton.setVisible(false);
-        add(backButton);
 
         //カテゴリ別ラジオボタンを追加
         category = new RadioButtonGroup<>();
@@ -96,6 +91,12 @@ public class UniversityView extends VerticalLayout {
         );
         mainLayout.add(buttonLayout);
 
+        //backButtonを追加
+        BackButton backButtonNumberOfStudent = new BackButton(layouts, mainLayout);
+        BackButton backButtonGraduationCredits = new BackButton(layouts, mainLayout);
+        BackButton backButtonTeacherTraining = new BackButton(layouts, mainLayout);
+        BackButton backButtonSchalarship = new BackButton(layouts, mainLayout);
+
         //各レイアウトのボタン、レイアウトを追加
         //人数に関するボタン
         //教員数
@@ -104,7 +105,7 @@ public class UniversityView extends VerticalLayout {
 //        add(numberOfTeachers);
 
         //学生数
-        VerticalLayout numberOfStudents = new NumberOfStudents(gradeService);
+        VerticalLayout numberOfStudents = new NumberOfStudents(gradeService,backButtonNumberOfStudent);
         setLayout(numberOfStudents,"学生数",people);
         add(numberOfStudents);
 
@@ -158,34 +159,34 @@ public class UniversityView extends VerticalLayout {
 //        add(activeLearning);
 
         //卒業単位数
-        VerticalLayout graduationCredits = new GraduationCredits(universityService);
+        VerticalLayout graduationCredits = new GraduationCredits(universityService,backButtonGraduationCredits);
         setLayout(graduationCredits,"卒業単位数",classwork);
         add(graduationCredits);
 
-        //大学年報
-        VerticalLayout teacherTraining = new TeacherTraining(universityService);
+        //大学年報の教職課程
+        VerticalLayout teacherTraining = new TeacherTraining(universityService,backButtonTeacherTraining);
         setLayout(teacherTraining,"教職課程",annualReport);
         add(teacherTraining);
 
         //大学年報の奨学金
-        VerticalLayout schalarship= new Scholarship(universityService);
+        VerticalLayout schalarship= new Scholarship(universityService,backButtonSchalarship);
         setLayout(schalarship,"奨学金",annualReport);
         add(schalarship);
 
-        backButton.addClickListener(e -> {
-            for (VerticalLayout layout : layouts) {
-                layout.setVisible(false);
-            }
-            mainLayout.setVisible(true);
-            backButton.setVisible(false);
-        });
+//        backButton.addClickListener(e -> {
+//            for (VerticalLayout layout : layouts) {
+//                layout.setVisible(false);
+//            }
+//            mainLayout.setVisible(true);
+////            backButton.setVisible(false);
+//        });
     }
 
 
     //button作成のためのメソッド
     private void setLayout(VerticalLayout layout, String name, ArrayList<Button> buttons) {
         layout.setVisible(false);
-        SelectButton sR = new SelectButton(name,layout,mainLayout,backButton);
+        SelectButton sR = new SelectButton(name,layout,mainLayout);
         sR.setVisible(false);
         buttonLayout.add(sR);
         buttons.add(sR);

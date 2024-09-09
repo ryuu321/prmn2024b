@@ -10,14 +10,16 @@ import jp.ac.chitose.ir.application.service.commission.ResearchSupports;
 import jp.ac.chitose.ir.application.service.commission.ScholarShipJasso;
 import jp.ac.chitose.ir.application.service.commission.ScholarShipOthers;
 import jp.ac.chitose.ir.application.service.commission.UniversityService;
+import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 
 public class Scholarship extends VerticalLayout {
 
     private UniversityService universityService;
-    public Scholarship(UniversityService universityService) {
+    public Scholarship(UniversityService universityService, BackButton backButton) {
         this.universityService = universityService;
         add(new H1("奨学金"));
         add(new Paragraph("説明"));
+        add(backButton);
         add(new H2("日本学生支援機構"));
         add(createJassoGrid());
         add(new H2("大学院研究援助金"));

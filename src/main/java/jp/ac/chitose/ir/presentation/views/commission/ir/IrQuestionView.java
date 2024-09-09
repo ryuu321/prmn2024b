@@ -5,13 +5,13 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jp.ac.chitose.ir.application.service.sample.SampleService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 
 @PageTitle("IRアンケート")
 @Route(value = "IRアンケート", layout = MainLayout.class)
-@PermitAll
+@RolesAllowed("commission")
 public class IrQuestionView extends VerticalLayout {
     private SampleService sampleService;
 
