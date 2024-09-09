@@ -41,9 +41,9 @@ public class SubjectTarget extends VerticalLayout {
         List<Target> subjectTargets = studentGradeService.getSubjectTarget(accountId, courseId).data();
         if(!subjectTargets.isEmpty()) {
             Target subjectTarget = subjectTargets.get(0);
-            targetQuestion.setText("Q \n" + subjectTarget.target_question_1());
+            targetQuestion.setText("Q " + subjectTarget.target_question_1());
             targetAnswer.setText(subjectTarget.target_answer_1());
-            reviewQuestion.setText("Q \n" + subjectTarget.review_question_1());
+            reviewQuestion.setText("Q " + subjectTarget.review_question_1());
             reviewAnswer.setText(subjectTarget.review_answer_1());
         }
     }
