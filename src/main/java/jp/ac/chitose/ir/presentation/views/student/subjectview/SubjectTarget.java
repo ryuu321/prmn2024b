@@ -9,22 +9,26 @@ import jp.ac.chitose.ir.application.service.student.Target;
 import java.util.List;
 
 public class SubjectTarget extends VerticalLayout {
-    private final Paragraph target;
-    private final Paragraph reflection;
+    private final H3 targetQuestion;
+    private final H3 reviewQuestion;
+    private final Paragraph targetAnswer;
+    private final Paragraph reviewAnswer;
     private final String accountId;
     private final StudentGradeService studentGradeService;
 
     public SubjectTarget(final StudentGradeService studentGradeService, String studentNumber) {
         this.studentGradeService = studentGradeService;
         this.accountId = studentNumber;
-        target = createParagraph();
-        reflection = createParagraph();
+        targetQuestion = new H3();
+        reviewQuestion = new H3();
+        targetAnswer = createParagraph();
+        reviewAnswer = createParagraph();
         addComponentToLayout();
     }
 
     public void addComponentToLayout() {
-        add(new H3("目標"), target);
-        add(new H3("振り返り"), reflection);
+        add(targetQuestion, targetAnswer);
+        add(reviewQuestion, reviewAnswer);
     }
 
     private Paragraph createParagraph() {
@@ -37,8 +41,10 @@ public class SubjectTarget extends VerticalLayout {
         List<Target> subjectTargets = studentGradeService.getSubjectTarget(accountId, courseId).data();
         if(!subjectTargets.isEmpty()) {
             Target subjectTarget = subjectTargets.get(0);
-            target.setText(subjectTarget.question());
-            reflection.setText(subjectTarget.answer());
+            targetQuestion.setText("Q \n" + subjectTarget.target_question_1());
+            targetAnswer.setText(subjectTarget.target_answer_1());
+            reviewQuestion.setText("Q \n" + subjectTarget.review_question_1());
+            reviewAnswer.setText(subjectTarget.review_answer_1());
         }
     }
 }
