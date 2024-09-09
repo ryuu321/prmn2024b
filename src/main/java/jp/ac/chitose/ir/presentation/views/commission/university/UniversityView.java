@@ -61,16 +61,27 @@ public class UniversityView extends VerticalLayout {
         category.setItems("授業","進路","入試","人数","年報");
         mainLayout.add(category);
         selectRadio();
-        
+
+
         buttons = new ArrayList<>();
+
+        //授業に関係する内容のボタンを入れるリスト
         classwork = new ArrayList<>();
         buttons.add(classwork);
+
+        //進路に関係する内容のボタンを入れるリスト
         course = new ArrayList<>();
         buttons.add(course);
+
+        //入試に関係する内容のボタンを入れるリスト
         exam = new ArrayList<>();
         buttons.add(exam);
+
+        //人数に関係する内容のボタンを入れるリスト
         people = new ArrayList<>();
         buttons.add(people);
+
+        //大学年報に関係する内容のボタンを入れるリスト
         annualReport = new ArrayList<>();
         buttons.add(annualReport);
 
