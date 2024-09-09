@@ -33,6 +33,7 @@ public class SeisekiTable {
         grid.addColumn(GradeGpaStat::max).setHeader("最大値").setSortable(true);
         grid.addColumn(GradeGpaStat::std).setHeader("標準偏差").setSortable(true);
         grid.setItems(tableAll.data());
+        grid.setHeight("250px");
         return grid;
     }
 
@@ -46,6 +47,7 @@ public class SeisekiTable {
         grid.addColumn(GradeGpaStat::max).setHeader("最大値").setSortable(true);
         grid.addColumn(GradeGpaStat::std).setHeader("標準偏差").setSortable(true);
         grid.setItems(tableFirst.data());
+        grid.setHeight("250px");
         return grid;
     }
 
@@ -59,6 +61,7 @@ public class SeisekiTable {
         grid.addColumn(GradeGpaStat::max).setHeader("最大値").setSortable(true);
         grid.addColumn(GradeGpaStat::std).setHeader("標準偏差").setSortable(true);
         grid.setItems(tableSecond.data());
+        grid.setHeight("230px");
         return grid;
     }
 
@@ -72,6 +75,7 @@ public class SeisekiTable {
         grid.addColumn(GradeGpaStat::max).setHeader("最大値").setSortable(true);
         grid.addColumn(GradeGpaStat::std).setHeader("標準偏差").setSortable(true);
         grid.setItems(tableThird.data());
+        grid.setHeight("230px");
         return grid;
     }
 
@@ -85,6 +89,7 @@ public class SeisekiTable {
         grid.addColumn(GradeGpaStat::max).setHeader("最大値").setSortable(true);
         grid.addColumn(GradeGpaStat::std).setHeader("標準偏差").setSortable(true);
         grid.setItems(tableFourth.data());
+        grid.setHeight("230px");
         return grid;
     }
 
@@ -98,6 +103,7 @@ public class SeisekiTable {
         grid.addColumn(GetTableData::max).setHeader("最大値").setSortable(true);
         grid.addColumn(GetTableData::std).setHeader("標準偏差").setSortable(true);
         grid.setItems(getTable.getTable(0));
+        grid.setHeight("250px");
         return grid;
     }
 
@@ -111,6 +117,7 @@ public class SeisekiTable {
         grid.addColumn(GetTableData::max).setHeader("最大値").setSortable(true);
         grid.addColumn(GetTableData::std).setHeader("標準偏差").setSortable(true);
         grid.setItems(getTable.getTable(1));
+        grid.setHeight("230px");
         return grid;
     }
 
@@ -124,6 +131,7 @@ public class SeisekiTable {
         grid.addColumn(GetTableData::max).setHeader("最大値").setSortable(true);
         grid.addColumn(GetTableData::std).setHeader("標準偏差").setSortable(true);
         grid.setItems(getTable.getTable(2));
+        grid.setHeight("230px");
         return grid;
     }
 
@@ -137,6 +145,7 @@ public class SeisekiTable {
         grid.addColumn(GetTableData::max).setHeader("最大値").setSortable(true);
         grid.addColumn(GetTableData::std).setHeader("標準偏差").setSortable(true);
         grid.setItems(getTable.getTable(3));
+        grid.setHeight("230px");
         return grid;
     }
 

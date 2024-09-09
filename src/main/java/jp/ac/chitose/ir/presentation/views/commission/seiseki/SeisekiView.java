@@ -18,7 +18,7 @@ public class SeisekiView implements View {
     }
     public VerticalLayout view(){
         VerticalLayout main = new VerticalLayout();
-        H1 a = new H1("成績に関する統計データ");
+        H1 a = new H1("GPAと基本統計量に関するデータ");
         main.add(a);
 
         main.add(new Paragraph("成績画面に関する説明文"));

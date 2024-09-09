@@ -26,7 +26,7 @@ public class Seiseki {
             str2 = "学科";
             this.r1 = new RadioButtonGroup<>();
             r1.setLabel("学年選択");
-            r1.setItems("全体", "1年", "2年", "3年", "4年", "M1", "M2");
+            r1.setItems("全体", "1年", "2年", "3年", "4年");
             radioAndText.add(r1);
 
             //main.add(radioAndText);
@@ -34,35 +34,35 @@ public class Seiseki {
 
             this.r2 = new RadioButtonGroup<>();
             r2.setLabel("学科を選択");
-            r2.setItems("全体", "応用化学生物学科", "電子光工学科", "情報システム工学科", "一年生", "全て");
+            r2.setItems("全体", "応用化学生物学科", "電子光工学科", "情報システム工学科", "共通教育");
             r2.setVisible(false);
             r1.addValueChangeListener(e -> r2.setVisible(e.getValue().equals("全体")));
 
 
             this.r3 = new RadioButtonGroup<>();
             r3.setLabel("クラスを選択");
-            r3.setItems("学年全体", "Aクラス", "Bクラス", "Cクラス", "Dクラス", "全て");
+            r3.setItems("学年全体", "Aクラス", "Bクラス", "Cクラス", "Dクラス");
             r3.setVisible(false);
             r1.addValueChangeListener(e -> r3.setVisible(e.getValue().equals("1年")));
 
 
             this.r4 = new RadioButtonGroup<>();
             r4.setLabel("学科を選択");
-            r4.setItems("学年全体", "応用化学生物学科", "電子光工学科", "情報システム工学科", "全て");
+            r4.setItems("学年全体", "応用化学生物学科", "電子光工学科", "情報システム工学科");
             r4.setVisible(false);
             r1.addValueChangeListener(e -> r4.setVisible(e.getValue().equals("2年")));
 
 
             this.r5 = new RadioButtonGroup<>();
             r5.setLabel("学科を選択");
-            r5.setItems("学年全体", "応用化学生物学科", "電子光工学科", "情報システム工学科", "全て");
+            r5.setItems("学年全体", "応用化学生物学科", "電子光工学科", "情報システム工学科");
             r5.setVisible(false);
             r1.addValueChangeListener(e -> r5.setVisible(e.getValue().equals("3年")));
 
 
             this.r6 = new RadioButtonGroup<>();
             r6.setLabel("学科を選択");
-            r6.setItems("学年全体", "応用化学生物学科", "電子光工学科", "情報システム工学科", "全て");
+            r6.setItems("学年全体", "応用化学生物学科", "電子光工学科", "情報システム工学科");
             r6.setVisible(false);
             r1.addValueChangeListener(e -> r6.setVisible(e.getValue().equals("4年")));
 

@@ -96,17 +96,11 @@ public class SeisekiGraphView {
             chartListB.get(3).setVisible(e.getValue().equals("情報システム工学科"));
         });
         seiseki.getR2().addValueChangeListener(e -> {
-            chartList.get(4).setVisible(!(e.getValue().equals("一年生")));
-            chartListB.get(4).setVisible(e.getValue().equals("一年生"));
+            chartList.get(4).setVisible(!(e.getValue().equals("共通教育")));
+            chartListB.get(4).setVisible(e.getValue().equals("共通教育"));
 
         });
-        seiseki.getR2().addValueChangeListener(e -> {
-            if (e.getValue().equals("全て")) {
-                for (VerticalLayout chart : chartList) {
-                    chart.setVisible(true);
-                }
-            }
-        });
+
         //ここまでall
 
         //ここからfirst
@@ -153,14 +147,7 @@ public class SeisekiGraphView {
             chartList1B.get(4).setVisible(e.getValue().equals("Dクラス"));
 
         });
-        seiseki.getR3().addValueChangeListener(e -> {
-            if (e.getValue().equals("全て")) {
-                for (VerticalLayout chart : chartList1) {
-                    chart.setVisible(true);
-                }
-            }
-        });
-        //ここまでfirst
+
 
         //ここからsecond
         HorizontalLayout layout5=new HorizontalLayout();
@@ -200,13 +187,7 @@ public class SeisekiGraphView {
             chartList2B.get(3).setVisible(e.getValue().equals("情報システム工学科"));
         });
 
-        seiseki.getR2().addValueChangeListener(e -> {
-            if (e.getValue().equals("全て")) {
-                for (VerticalLayout chart : chartList2) {
-                    chart.setVisible(true);
-                }
-            }
-        });
+
         //ここまでsecond
 
         //ここからthird
@@ -247,13 +228,7 @@ public class SeisekiGraphView {
             chartList3B.get(3).setVisible(e.getValue().equals("情報システム工学科"));
         });
 
-        seiseki.getR5().addValueChangeListener(e -> {
-            if (e.getValue().equals("全て")) {
-                for (VerticalLayout chart : chartList3) {
-                    chart.setVisible(true);
-                }
-            }
-        });
+
         //ここまでthird
 
         //ここからfourth
@@ -294,13 +269,7 @@ public class SeisekiGraphView {
             chartList4B.get(3).setVisible(e.getValue().equals("情報システム工学科"));
         });
 
-        seiseki.getR6().addValueChangeListener(e -> {
-            if (e.getValue().equals("全て")) {
-                for (VerticalLayout chart : chartList4) {
-                    chart.setVisible(true);
-                }
-            }
-        });
+
         //ここまでfourth
 
         //ここから基本統計量
@@ -385,13 +354,7 @@ public class SeisekiGraphView {
             chartListB.get(4).setVisible(e.getValue().equals("4年"));
 
         });
-        seiseki.getR2().addValueChangeListener(e -> {
-            if (e.getValue().equals("全て")) {
-                for (VerticalLayout chart : chartList) {
-                    chart.setVisible(true);
-                }
-            }
-        });
+
         //ここまでall
 
         //ここからscience
@@ -434,13 +397,7 @@ public class SeisekiGraphView {
             chartList1B.get(3).setVisible(e.getValue().equals("4年"));
         });
 
-        seiseki.getR3().addValueChangeListener(e -> {
-            if (e.getValue().equals("全て")) {
-                for (VerticalLayout chart : chartList1) {
-                    chart.setVisible(true);
-                }
-            }
-        });
+
         //ここまでscience
 
         //ここからelectronic
@@ -481,13 +438,7 @@ public class SeisekiGraphView {
             chartList2B.get(3).setVisible(e.getValue().equals("4年"));
         });
 
-        seiseki.getR2().addValueChangeListener(e -> {
-            if (e.getValue().equals("全て")) {
-                for (VerticalLayout chart : chartList2) {
-                    chart.setVisible(true);
-                }
-            }
-        });
+
         //ここまでelectronic
 
         //ここからinformation
@@ -528,13 +479,7 @@ public class SeisekiGraphView {
             chartList3B.get(3).setVisible(e.getValue().equals("4年"));
         });
 
-        seiseki.getR5().addValueChangeListener(e -> {
-            if (e.getValue().equals("全て")) {
-                for (VerticalLayout chart : chartList3) {
-                    chart.setVisible(true);
-                }
-            }
-        });
+
         //ここまでinformation
 
         //ここから基本統計量
