@@ -10,6 +10,7 @@ import jp.ac.chitose.ir.application.service.questionnaire.QuestionnaireService;
 import jp.ac.chitose.ir.application.service.sample.SampleService;
 import jp.ac.chitose.ir.application.service.student.StudentService;
 import jp.ac.chitose.ir.application.service.management.UserManagementService;
+import jp.ac.chitose.ir.application.service.student.StudentGradeService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,11 +50,6 @@ public class HttpClientConfiguration {
     }
 
     @Bean
-    public StudentService studentService(HttpServiceProxyFactory factory) {
-        return factory.createClient(StudentService.class);
-    }
-
-    @Bean
     public GradeService gradeService(HttpServiceProxyFactory factory){
         return factory.createClient(GradeService.class);
     }
@@ -71,5 +67,10 @@ public class HttpClientConfiguration {
     @Bean
     public UniversityService universityService(HttpServiceProxyFactory factory) {
         return factory.createClient(UniversityService.class);
+    }
+
+    @Bean
+    public StudentGradeService studentGradeService(HttpServiceProxyFactory factory){
+        return factory.createClient(StudentGradeService.class);
     }
 }

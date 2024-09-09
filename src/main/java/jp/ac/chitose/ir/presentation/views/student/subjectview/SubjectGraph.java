@@ -1,14 +1,12 @@
-package jp.ac.chitose.ir.presentation.views.student;
+package jp.ac.chitose.ir.presentation.views.student.subjectview;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jp.ac.chitose.ir.application.service.student.StudentGrade;
-import jp.ac.chitose.ir.application.service.student.StudentSubjectCalc;
+import jp.ac.chitose.ir.application.service.student.GradeCount;
 import jp.ac.chitose.ir.presentation.component.graph.*;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SubjectGraph extends VerticalLayout {
     private Graph mainGraph;
@@ -16,9 +14,8 @@ public class SubjectGraph extends VerticalLayout {
     private final HorizontalLayout mainGraphLayout;
     private final HorizontalLayout subGraphsLayout;
     private static final String[] GRADE_LABELS = {"不可", "可", "良", "優", "秀"};
-    private static final double[] GRADE_THRESHOLDS = {0.5, 1.5, 2.5, 3.5, 4.5};
-    private static final String RED = "#FF0000";
-    private static final String BLUE = "#0000FF";
+    private static final String BLUE = "#4795F5";
+    private static final String RED = "#FF5192";
     private static final String LAYOUT_HEIGHT = "40vh";
     private static final String NO_DATA_LAYOUT_HEIGHT = "0px";
     private static final String GRAPH_HEIGHT = "100%";
@@ -71,43 +68,15 @@ public class SubjectGraph extends VerticalLayout {
         add(mainGraphLayout, subGraphsLayout);
     }
 
-    public void updateGraphs(List<StudentSubjectCalc> histData, StudentGrade studentGrade) {
+    public void updateGraphs(GradeCount histData, GradeCount preYearHistData, StudentGrade studentGrade) {
         // メイングラフの更新
-        final String target = findTargetGrade(histData, studentGrade);
-        final String[] colors = createColors(studentGrade.成績評価());
-        final String[] labels = createLabels(studentGrade.成績評価());
-        final GraphSeries<Data<String, Integer>> mainGraphSeries = createSelectYearSeries(histData, studentGrade.開講年(), studentGrade.科目名());
-        updateMainGraph(studentGrade.成績評価(), target, colors, labels, mainGraphSeries);
+        final String[] colors = createColors(studentGrade.grading());
+        final String[] labels = createLabels(studentGrade.grading());
+        final GraphSeries<Data<String, Integer>> mainGraphSeries = createSeries(histData, studentGrade.lecture_name());
+        updateMainGraph(studentGrade.grading(), targetGradeLabel(histData), colors, labels, mainGraphSeries);
 
         // サブグラフの更新
-        updateSubGraphs(histData, studentGrade);
-    }
-
-    private void updateSubGraphs(List<StudentSubjectCalc> histData, StudentGrade studentGrade) {
-        if (!hasAvailableYearData(histData, studentGrade.開講年() - 1)) {
-            hidePreYearGraph();
-        } else {
-            GraphSeries<Data<String, Integer>> preYearSeries = createSelectYearSeries(histData, studentGrade.開講年() - 1, studentGrade.科目名());
-            updatePreYearGraph(preYearSeries);
-        }
-    }
-
-    private void hidePreYearGraph() {
-        subGraphsLayout.remove(preYearGraph.getGraph());
-        subGraphsLayout.setHeight(NO_DATA_LAYOUT_HEIGHT);
-    }
-
-    private String findTargetGrade(List<StudentSubjectCalc> histData, StudentGrade studentGrade) {
-        return histData.stream()
-                .filter(data -> data.開講年() == studentGrade.開講年())
-                .map(StudentSubjectCalc::平均)
-                .map(average -> {
-                    for (int i = 0; i < GRADE_THRESHOLDS.length; i++)
-                        if (average + 0.5 < GRADE_THRESHOLDS[i]) return GRADE_LABELS[i];
-                    return GRADE_LABELS[0];
-                })
-                .findFirst()
-                .orElse("");
+        updateSubGraphs(preYearHistData, studentGrade);
     }
 
     private String[] createColors(String grade) {
@@ -120,6 +89,25 @@ public class SubjectGraph extends VerticalLayout {
         return Arrays.stream(GRADE_LABELS)
                 .map(label -> label.equals(grade) ? grade + "(あなたの成績位置)" : label)
                 .toArray(String[]::new);
+    }
+
+    private GraphSeries<Data<String, Integer>> createSeries(GradeCount histData, String subject) {
+        Data<String, Integer>[] selectYearData = createDataArray(histData);
+        return new GraphSeries<>(subject, selectYearData);
+    }
+
+    private Data<String, Integer>[] createDataArray(GradeCount data) {
+        Data<String, Integer>[] dataArray = new Data[5];
+        dataArray[0] = new Data<>(GRADE_LABELS[0], data.不可());
+        dataArray[1] = new Data<>(GRADE_LABELS[1], data.可());
+        dataArray[2] = new Data<>(GRADE_LABELS[2], data.良());
+        dataArray[3] = new Data<>(GRADE_LABELS[3], data.優());
+        dataArray[4] = new Data<>(GRADE_LABELS[4], data.秀());
+        return dataArray;
+    }
+
+    private String targetGradeLabel(GradeCount histData) {
+        return GRADE_LABELS[Math.round(histData.平均())];
     }
 
     private void updateMainGraph(String grade, String target, String[] colors, String[] labels, GraphSeries<Data<String, Integer>> series) {
@@ -135,35 +123,18 @@ public class SubjectGraph extends VerticalLayout {
         mainGraphLayout.add(mainGraph.getGraph());
     }
 
-    private boolean hasAvailableYearData(List<StudentSubjectCalc> histData, int year) {
-        return histData.stream()
-                .filter(data -> data.開講年() == year)
-                .mapToInt(data -> data.欠席() + data.不可() + data.可() + data.良() + data.優() + data.秀())
-                .sum() != 0;
+    private void updateSubGraphs(GradeCount preYearHistData, StudentGrade studentGrade) {
+        if (studentGrade.pre_year_course_id() == null) {
+            hidePreYearGraph();
+        } else {
+            GraphSeries<Data<String, Integer>> preYearSeries = createSeries(preYearHistData, studentGrade.lecture_name());
+            updatePreYearGraph(preYearSeries);
+        }
     }
 
-    private List<StudentSubjectCalc> filterByYear(List<StudentSubjectCalc> histData, int year) {
-        return histData.stream()
-                .filter(data -> data.開講年() == year)
-                .collect(Collectors.toList());
-    }
-
-    private Data<String, Integer>[] createDataArray(List<StudentSubjectCalc> dataList) {
-        Data<String, Integer>[] dataArray = new Data[5];
-        dataList.forEach(data -> {
-            dataArray[0] = new Data<>(GRADE_LABELS[0], data.不可() + data.欠席());
-            dataArray[1] = new Data<>(GRADE_LABELS[1], data.可());
-            dataArray[2] = new Data<>(GRADE_LABELS[2], data.良());
-            dataArray[3] = new Data<>(GRADE_LABELS[3], data.優());
-            dataArray[4] = new Data<>(GRADE_LABELS[4], data.秀());
-        });
-        return dataArray;
-    }
-
-    private GraphSeries<Data<String, Integer>> createSelectYearSeries(List<StudentSubjectCalc> histData, int year, String subject) {
-        List<StudentSubjectCalc> filteredData = filterByYear(histData, year);
-        Data<String, Integer>[] selectYearData = createDataArray(filteredData);
-        return new GraphSeries<>(subject, selectYearData);
+    private void hidePreYearGraph() {
+        subGraphsLayout.remove(preYearGraph.getGraph());
+        subGraphsLayout.setHeight(NO_DATA_LAYOUT_HEIGHT);
     }
 
     private void updatePreYearGraph(GraphSeries<Data<String, Integer>> preYearSeries) {
