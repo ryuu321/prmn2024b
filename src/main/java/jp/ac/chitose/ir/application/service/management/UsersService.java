@@ -174,7 +174,7 @@ public class UsersService {
         return usersRepository.getUsersData(targetUser.id()).get();
     }
 
-    // ユーザ削除
+    // ユーザ無効化
     // 途中でおかしくなったら例外を投げてロールバック
     public void deleteUsers(Set<UsersData> selectedUsers) throws UserManagementException{
         // 1件ずつユーザー情報を取り出して操作する
@@ -185,10 +185,19 @@ public class UsersService {
             }
 
             int deleted = usersRepository.deleteUser(id);
-            // 削除したユーザを有効化したい場合は以下の処理を行う
-            // deleted = usersRepository.reviveUser(id);
 
             if(deleted == 0) throw new UserManagementException(user.user_name() + "の削除に失敗");
+        }
+    }
+
+    // ユーザ有効化
+    public void reviveUsers(Set<UsersData> selectedUsers) throws UserManagementException{
+        // 1件ずつユーザー情報を取り出して操作する
+        for (UsersData user : selectedUsers) {
+            long id = user.id();
+            int revived = usersRepository.reviveUser(id);
+
+            if(revived == 0) throw new UserManagementException(user.user_name() + "の削除に失敗");
         }
     }
 
