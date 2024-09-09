@@ -14,10 +14,10 @@ import jp.ac.chitose.ir.application.service.commission.UniversityService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 import jp.ac.chitose.ir.presentation.views.commission.university.components.SelectButton;
-import jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.teacherTraining.TeacherTraining;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.teachertraining.TeacherTraining;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.classwork.GraduationCredits;
 import jp.ac.chitose.ir.presentation.views.commission.university.layouts.people.numberOfStudents.NumberOfStudents;
-import jp.ac.chitose.ir.presentation.views.commission.university.layouts.studentsupport.Scholarship;
+import jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.studentsupport.Scholarship;
 
 import java.util.ArrayList;
 @PageTitle("University")
@@ -170,6 +170,8 @@ public class UniversityView extends VerticalLayout {
         });
     }
 
+
+    //button作成のためのメソッド
     private void setLayout(VerticalLayout layout, String name, ArrayList<Button> buttons) {
         layout.setVisible(false);
         SelectButton sR = new SelectButton(name,layout,mainLayout,backButton);
@@ -179,6 +181,8 @@ public class UniversityView extends VerticalLayout {
         layouts.add(layout);
     }
 
+
+    //カテゴリー別ラジオボタンを押した際の対応するボタンを表示するメソッド
     private void selectRadio(){
         category.addValueChangeListener(e -> {
             if(e.getValue().equals("授業")){
@@ -212,6 +216,8 @@ public class UniversityView extends VerticalLayout {
             }
         });
     }
+
+
     private void deleteAll(){
         for(ArrayList<Button> buttonAndLayout : buttons) {
                 for(Button button : buttonAndLayout) {

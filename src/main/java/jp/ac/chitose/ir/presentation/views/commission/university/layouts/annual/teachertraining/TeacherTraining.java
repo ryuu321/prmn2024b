@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.teacherTraining;
+package jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.teachertraining;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -10,6 +10,8 @@ import jp.ac.chitose.ir.application.service.commission.UniversityService;
 
 public class TeacherTraining extends VerticalLayout {
     private UniversityService universityService;
+
+    //教職課程
     public TeacherTraining(UniversityService universityService) {
         this.universityService = universityService;
         add(new H1("教職課程"));

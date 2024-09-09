@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.presentation.views.commission.university.layouts.studentsupport;
+package jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.studentsupport;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
@@ -48,6 +48,7 @@ public class Scholarship extends VerticalLayout {
         return grid;
     };
 
+    //大学院研究援助金に関するGrid
     private Grid<ResearchSupports> createResearchSupportGrid(){
       TableData<ResearchSupports> researchSupportsTableData=this.universityService.getResearchSupports(2022);
 
@@ -61,6 +62,7 @@ public class Scholarship extends VerticalLayout {
       return grid;
     };
 
+    //上記以外の奨学金に関するGrid
     private Grid<ScholarShipOthers> creatOtherSupportgrid(){
         TableData<ScholarShipOthers> scholarShipOthersTableData=this.universityService.getScholarShipOthers(2022);
 
