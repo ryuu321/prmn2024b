@@ -31,6 +31,8 @@ import java.util.List;
  */
 public class MainLayout extends AppLayout {
 
+    private SecurityService securityService;
+
     /**
      * A simple navigation item component, based on ListItem element.
      */
@@ -63,7 +65,6 @@ public class MainLayout extends AppLayout {
 
     }
 
-    private SecurityService securityService;
     public MainLayout(@Autowired SecurityService securityService) {
 //        addToNavbar(createHeaderContent());
 //        setDrawerOpened(false);
