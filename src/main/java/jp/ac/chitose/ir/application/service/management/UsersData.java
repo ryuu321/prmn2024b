@@ -4,7 +4,6 @@ public record UsersData(
         long id,
         String login_id,
         String user_name,
-        String password,
         boolean is_available,
         String display_name
 ) {
