@@ -40,8 +40,8 @@ public class UsersDataGrid extends VerticalLayout {
         rolesRadioButton.setItems("全て", "システム管理者", "IR委員会メンバー", "教員", "学生");
         rolesRadioButton.setValue("全て");
         availableFilterRadioButton = new RadioButtonGroup<>();
-        availableFilterRadioButton.setItems("有効のみ表示", "無効のみ表示", "無効も表示する");
-        availableFilterRadioButton.setValue("有効のみ表示");
+        availableFilterRadioButton.setItems("全て", "無効のみ", "有効のみ");
+        availableFilterRadioButton.setValue("有効のみ");
         rolesRadioButton.addValueChangeListener(event -> applyFilters());
         availableFilterRadioButton.addValueChangeListener(event -> applyFilters());
     }
@@ -78,7 +78,7 @@ public class UsersDataGrid extends VerticalLayout {
     // グリッドにカラムを追加
     private void addColumnsToGrid(Grid<UsersData> grid) {
         grid.addColumn(data -> changeIsAvailableValue(data.is_available())).setHeader("状態").setSortable(true);
-        grid.addColumn(UsersData::id).setHeader("アカウントID").setSortable(true);
+        grid.addColumn(UsersData::login_id).setHeader("ログインID").setSortable(true);
         grid.addColumn(UsersData::user_name).setHeader("ユーザーネーム");
         grid.addColumn(UsersData::display_name).setHeader("ロール");
 
@@ -112,9 +112,9 @@ public class UsersDataGrid extends VerticalLayout {
         public boolean test(UsersData usersData) {
             boolean roleMatches = "全て".equals(rolesRadioButton.getValue()) || usersData.display_name().equals(rolesRadioButton.getValue());
             boolean availableMatches;
-            if ("有効のみ表示".equals(availableFilterRadioButton.getValue())) {
+            if ("有効のみ".equals(availableFilterRadioButton.getValue())) {
                 availableMatches = usersData.is_available();
-            } else if ("無効のみ表示".equals(availableFilterRadioButton.getValue())) {
+            } else if ("無効のみ".equals(availableFilterRadioButton.getValue())) {
                 availableMatches = !usersData.is_available();
             } else {
                 availableMatches = true;
