@@ -125,7 +125,7 @@ public class MainLayout extends AppLayout {
 
         // 共通画面
         menuItems.add(new MenuItemInfo("Top", LineAwesomeIcon.GLOBE_SOLID.create(), TopView.class));
-        menuItems.add(new MenuItemInfo("共通画面", LineAwesomeIcon.CHART_PIE_SOLID.create(), CommonView.class));
+        menuItems.add(new MenuItemInfo("授業に関する情報公開", LineAwesomeIcon.CHART_PIE_SOLID.create(), CommonView.class));
         menuItems.add(new MenuItemInfo("アンケート", LineAwesomeIcon.CHART_BAR.create(), QuestionnaireTopView.class));
 
         // 管理者向け
