@@ -47,6 +47,7 @@ public class HttpClientConfiguration {
     public ClassSelect classSelect(HttpServiceProxyFactory factory) {
         return factory.createClient(ClassSelect.class);
     }
+
     @Bean
     public QuestionnaireService questionnaireService(HttpServiceProxyFactory factory){
         return factory.createClient(QuestionnaireService.class);

@@ -21,7 +21,7 @@ import jp.ac.chitose.ir.presentation.component.notification.SuccessNotification;
 import java.util.Set;
 
 @PageTitle("UserUpdate")
-@Route(value = "/user_management/update", layout = MainLayout.class)
+@Route(value = "/user_management/updateView", layout = MainLayout.class)
 @RolesAllowed({"administrator"})
 public class UserUpdateView extends VerticalLayout {
     private final UsersService usersService;
