@@ -1,6 +1,7 @@
 package jp.ac.chitose.ir.presentation.views.commission.seiseki;
 
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -24,6 +25,7 @@ public class SeisekiView implements View {
         main.add(a);
 
         main.add(new Paragraph("この画面ではGPAに関する基本統計量に関する情報を閲覧することが出来ます。"));
+        main.add(new H2("2022年度"));
         //学年・学科を選択するラジオボタン
         RadioButtonGroup<String> yearOrSubject = new RadioButtonGroup<>();
         yearOrSubject.setItems("学年","学科");

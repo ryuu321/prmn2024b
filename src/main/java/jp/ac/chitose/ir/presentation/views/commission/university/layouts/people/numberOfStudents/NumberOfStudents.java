@@ -2,6 +2,7 @@ package jp.ac.chitose.ir.presentation.views.commission.university.layouts.people
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -20,8 +21,9 @@ public class NumberOfStudents extends VerticalLayout {
         this.gradeService = gradeService;
 
         add(new H1("学生数"));
-        add(new Paragraph("説明"));
+        add(new Paragraph("学年ごとの学生数を見ることが出来ます。"));
         add(backButton);
+        add(new H2("2022年度"));
         add(new H3("1年生"));
         add(createFirstGrid());
         add(new H3("2~4年生"));

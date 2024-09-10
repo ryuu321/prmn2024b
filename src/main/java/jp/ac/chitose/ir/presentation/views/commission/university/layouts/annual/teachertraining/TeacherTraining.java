@@ -16,7 +16,7 @@ public class TeacherTraining extends VerticalLayout {
     public TeacherTraining(UniversityService universityService, BackButton backButton) {
         this.universityService = universityService;
         add(new H1("教職課程"));
-        add(new Paragraph("説明"));
+        add(new Paragraph("教職課程に関する情報を見ることが出来ます。"));
         add(backButton);
         add(new H2("・教職課程履修者数"));
         add(new Paragraph("入学年"));

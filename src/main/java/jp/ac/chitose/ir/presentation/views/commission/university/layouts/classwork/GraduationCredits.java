@@ -21,8 +21,9 @@ public class GraduationCredits extends VerticalLayout {
         this.universityService = universityService;
 
         add(new H1("卒業単位数"));
-        add(new Paragraph("説明"));
+        add(new Paragraph("卒業に必要最低限必要な単位数に関する情報を見ることが出来ます"));
         add(backButton);
+        add(new H2("2024年度"));
         add(new H2("共通教育科目"));
         add(creatcommonGrid());
         add(new H2("専門教育科目"));
