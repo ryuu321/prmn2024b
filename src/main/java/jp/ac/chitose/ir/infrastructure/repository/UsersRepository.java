@@ -92,7 +92,7 @@ public class UsersRepository {
         System.out.println("updated : " + updated);
     }
 
-    // ユーザ削除(無効化)
+    // ユーザ無効化
     public int deleteUser(long userId){
         // 日付の取得
         Timestamp deletedAt = new Timestamp(System.currentTimeMillis());
@@ -108,17 +108,17 @@ public class UsersRepository {
         return deleted;
     }
 
-    // 削除したユーザを有効化(テスト用)
+    // 削除したユーザを有効化
     public int reviveUser(long userId){
-        int deleted = jdbcClient.sql("""
+        int revived = jdbcClient.sql("""
                 UPDATE users
                 SET is_available = TRUE, deleted_at = NULL
                 WHERE id = ?
                 """)
                 .params(userId)
                 .update();
-        System.out.println("deleted : " + deleted);
-        return deleted;
+        System.out.println("deleted : " + revived);
+        return revived;
     }
 
     // ロール追加

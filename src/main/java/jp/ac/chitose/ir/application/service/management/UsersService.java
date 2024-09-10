@@ -131,7 +131,6 @@ public class UsersService {
 
     // ユーザ更新
     public UsersData updateUser(User targetUser, String loginId, String username, String password, Set<Integer> selectedRoleIds) throws UserManagementException{
-        System.out.println(targetUser);
         // ユーザ・ロールともに全て空欄だった場合エラーを返す
         if(StringUtils.isEmpty(loginId) && StringUtils.isEmpty(username) && StringUtils.isEmpty(password) && selectedRoleIds.isEmpty())
             throw new UserManagementException("変更内容を入力してください");
@@ -175,9 +174,8 @@ public class UsersService {
         return usersRepository.getUsersData(targetUser.id()).get();
     }
 
-    // ユーザ削除
+    // ユーザ無効化
     // 途中でおかしくなったら例外を投げてロールバック
-    // todo 例外処理に統一
     public void deleteUsers(Set<UsersData> selectedUsers) throws UserManagementException{
         // 1件ずつユーザー情報を取り出して操作する
         for (UsersData user : selectedUsers) {
@@ -187,10 +185,19 @@ public class UsersService {
             }
 
             int deleted = usersRepository.deleteUser(id);
-            // 削除したユーザを有効化したい場合は以下の処理を行う
-            // deleted = usersRepository.reviveUser(id);
 
             if(deleted == 0) throw new UserManagementException(user.user_name() + "の削除に失敗");
+        }
+    }
+
+    // ユーザ有効化
+    public void reviveUsers(Set<UsersData> selectedUsers) throws UserManagementException{
+        // 1件ずつユーザー情報を取り出して操作する
+        for (UsersData user : selectedUsers) {
+            long id = user.id();
+            int revived = usersRepository.reviveUser(id);
+
+            if(revived == 0) throw new UserManagementException(user.user_name() + "の削除に失敗");
         }
     }
 

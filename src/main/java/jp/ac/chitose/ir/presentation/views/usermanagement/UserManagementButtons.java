@@ -12,6 +12,7 @@ public class UserManagementButtons extends VerticalLayout {
     private Button userBulkAddButton;
     private Button userAddButton;
     private Button userDeleteButton;
+    private Button userReviveButton;
 
     public UserManagementButtons() {
         initializeButtons();
@@ -33,16 +34,24 @@ public class UserManagementButtons extends VerticalLayout {
         userAddButton.setAutofocus(true);
 
         // ユーザーの削除ボタン
-        this.userDeleteButton = new Button("削除", new Icon(VaadinIcon.MINUS), buttonClickEvent -> {
+        this.userDeleteButton = new Button("無効化", new Icon(VaadinIcon.BAN), buttonClickEvent -> {
             UI.getCurrent().navigate("/user_management/delete");
         });
         userDeleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+
+        this.userReviveButton = new Button("有効化", new Icon(VaadinIcon.PLAY), buttonClickEvent -> {
+            UI.getCurrent().navigate("/user_management/revive");
+        });
+        userReviveButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
     }
 
     // 各種コンポーネントを画面に追加
     private void addComponentsToLayout() {
-        HorizontalLayout buttonLayout = new HorizontalLayout(userBulkAddButton,
-                userAddButton, userDeleteButton);
+        HorizontalLayout buttonLayout = new HorizontalLayout(
+                userBulkAddButton,
+                userAddButton,
+                userDeleteButton,
+                userReviveButton);
         buttonLayout.getStyle().set("flex-wrap", "wrap");
         add(buttonLayout);
     }
