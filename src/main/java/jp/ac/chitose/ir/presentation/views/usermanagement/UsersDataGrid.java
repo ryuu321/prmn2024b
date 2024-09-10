@@ -40,7 +40,7 @@ public class UsersDataGrid extends VerticalLayout {
         rolesRadioButton.setItems("全て", "システム管理者", "IR委員会メンバー", "教員", "学生");
         rolesRadioButton.setValue("全て");
         availableFilterRadioButton = new RadioButtonGroup<>();
-        availableFilterRadioButton.setItems("有効のみ表示", "無効も表示する");
+        availableFilterRadioButton.setItems("有効のみ表示", "無効のみ表示", "無効も表示する");
         availableFilterRadioButton.setValue("有効のみ表示");
         rolesRadioButton.addValueChangeListener(event -> applyFilters());
         availableFilterRadioButton.addValueChangeListener(event -> applyFilters());
@@ -114,9 +114,12 @@ public class UsersDataGrid extends VerticalLayout {
             boolean availableMatches;
             if ("有効のみ表示".equals(availableFilterRadioButton.getValue())) {
                 availableMatches = usersData.is_available();
+            } else if ("無効のみ表示".equals(availableFilterRadioButton.getValue())) {
+                availableMatches = !usersData.is_available();
             } else {
                 availableMatches = true;
-            }return roleMatches && availableMatches;
+            }
+            return roleMatches && availableMatches;
         }
     }
 }
