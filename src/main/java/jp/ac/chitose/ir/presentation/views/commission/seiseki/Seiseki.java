@@ -4,7 +4,7 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-
+//学年比較、学科比較のラジオボタンを用意するクラス
 public class Seiseki {
     private RadioButtonGroup<String> r1;
     private RadioButtonGroup<String> r2;
@@ -21,6 +21,7 @@ public class Seiseki {
 
         HorizontalLayout radioAndText = new HorizontalLayout();
         //mode=0 : yearFirstのレイアウト、mode=1 : subjectFirstのレイアウト
+        //モード別にラジオボタンを割り振る
         if(mode == 0) {
             str1 = "学年";
             str2 = "学科";
@@ -29,7 +30,6 @@ public class Seiseki {
             r1.setItems("全体", "1年", "2年", "3年", "4年");
             radioAndText.add(r1);
 
-            //main.add(radioAndText);
 
 
             this.r2 = new RadioButtonGroup<>();
@@ -101,7 +101,7 @@ public class Seiseki {
         }
 
     }
-
+    //ラジオボタンを表示するレイアウトを返すクラス
     public VerticalLayout view(){
         VerticalLayout main = new VerticalLayout();
         main.add(new H3(str1));
@@ -111,12 +111,13 @@ public class Seiseki {
         main.add(r3);
         main.add(r4);
         main.add(r5);
+        //学科で比較する場合、ラジオボタンは1つ不要
         if(mode==0) {
             main.add(r6);
         }
         return main;
     }
-
+    //各ラジオボタンを返すクラス
     public RadioButtonGroup<String> getR1(){return r1;}
     public RadioButtonGroup<String> getR2(){return r2;}
     public RadioButtonGroup<String> getR3(){return r3;}

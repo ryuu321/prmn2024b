@@ -12,7 +12,7 @@ public class SeisekiTableSubjectFirst {
     private TableData<GradeGpaStat> tableSecond;
     private TableData<GradeGpaStat> tableThird;
     private TableData<GradeGpaStat> tableFourth;
-
+    //学年別の基本統計量を学科別に変換するクラス
     public SeisekiTableSubjectFirst(TableData<GradeGpaStat> tableAll,
                                     TableData<GradeGpaStat> tableFirst,
                                     TableData<GradeGpaStat> tableSecond,

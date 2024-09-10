@@ -13,7 +13,7 @@ public class SeisekiTable {
     private GradeService gradeService;
     private SeisekiTableSubjectFirst getTable;
 
-
+    //GPAに関する基本統計量をの表を返すクラス
     public SeisekiTable(GradeService gradeService){
         this.gradeService=gradeService;
         tableAll = this.gradeService.getGradeGpaStat("B");
@@ -23,6 +23,7 @@ public class SeisekiTable {
         tableFourth = this.gradeService.getGradeGpaStat("B4");
         getTable = new SeisekiTableSubjectFirst(tableAll,tableFirst,tableSecond,tableThird,tableFourth);
     }
+    //学年全体のグリッドを返すメソッド
     public Grid<GradeGpaStat> getTableYearFirstAll(){
         Grid<GradeGpaStat> grid = new Grid<>();
         grid.addColumn(GradeGpaStat::subject).setHeader("学科").setSortable(true);
@@ -36,7 +37,7 @@ public class SeisekiTable {
         grid.setHeight("250px");
         return grid;
     }
-
+    //１年生のグリッドを返すメソッド
     public Grid<GradeGpaStat> getTableFirst(){
         Grid<GradeGpaStat> grid = new Grid<>();
         grid.addColumn(GradeGpaStat::subject).setHeader("学科").setSortable(true);
@@ -50,7 +51,7 @@ public class SeisekiTable {
         grid.setHeight("250px");
         return grid;
     }
-
+    //2年生のグリッドを返すメソッド
     public Grid<GradeGpaStat> getTableSecond(){
         Grid<GradeGpaStat> grid = new Grid<>();
         grid.addColumn(GradeGpaStat::subject).setHeader("学科").setSortable(true);
@@ -64,7 +65,7 @@ public class SeisekiTable {
         grid.setHeight("230px");
         return grid;
     }
-
+    //3年生のグリッドを返すメソッド
     public Grid<GradeGpaStat> getTableThird(){
         Grid<GradeGpaStat> grid = new Grid<>();
         grid.addColumn(GradeGpaStat::subject).setHeader("学科").setSortable(true);
@@ -78,7 +79,7 @@ public class SeisekiTable {
         grid.setHeight("230px");
         return grid;
     }
-
+    //4年生のグリッドを返すメソッド
     public Grid<GradeGpaStat> getTableFourth(){
         Grid<GradeGpaStat> grid = new Grid<>();
         grid.addColumn(GradeGpaStat::subject).setHeader("学科").setSortable(true);
@@ -92,7 +93,7 @@ public class SeisekiTable {
         grid.setHeight("230px");
         return grid;
     }
-
+    //学科全体のグリッドを返すメソッド
     public Grid<GetTableData> getTableSubjectFirst(){
         Grid<GetTableData> grid = new Grid<>();
         grid.addColumn(GetTableData::subject).setHeader("学年").setSortable(true);
@@ -106,7 +107,7 @@ public class SeisekiTable {
         grid.setHeight("250px");
         return grid;
     }
-
+    //応用化学生物学科のグリッドを返すメソッド
     public Grid<GetTableData> getTableSubjectFirstScience(){
         Grid<GetTableData> grid = new Grid<>();
         grid.addColumn(GetTableData::subject).setHeader("学年").setSortable(true);
@@ -120,7 +121,7 @@ public class SeisekiTable {
         grid.setHeight("230px");
         return grid;
     }
-
+    //電子光工学科のグリッドを返すメソッド
     public Grid<GetTableData> getTableSubjectFirstElectronic(){
         Grid<GetTableData> grid = new Grid<>();
         grid.addColumn(GetTableData::subject).setHeader("学年").setSortable(true);
@@ -134,7 +135,7 @@ public class SeisekiTable {
         grid.setHeight("230px");
         return grid;
     }
-
+    //情報システム工学科のグリッドを返すメソッド
     public Grid<GetTableData> getTableSubjectFirstInformation(){
         Grid<GetTableData> grid = new Grid<>();
         grid.addColumn(GetTableData::subject).setHeader("学年").setSortable(true);
@@ -148,6 +149,5 @@ public class SeisekiTable {
         grid.setHeight("230px");
         return grid;
     }
-
 
 }
