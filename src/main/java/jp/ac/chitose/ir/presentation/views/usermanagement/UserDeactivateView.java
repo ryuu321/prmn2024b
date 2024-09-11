@@ -21,18 +21,18 @@ import jp.ac.chitose.ir.presentation.component.notification.SuccessNotification;
 
 import java.util.Set;
 
-@PageTitle("UserRevive")
-@Route(value = "/user_management/revive", layout = MainLayout.class)
+@PageTitle("UserDelete")
+@Route(value = "/user_management/deactivate", layout = MainLayout.class)
 @RolesAllowed({"administrator"})
-public class UserReviveView extends VerticalLayout {
+public class UserDeactivateView extends VerticalLayout {
     private final UserManagementService userManagementService;
     private final UsersService usersService;
-    private Button reviveAccount;
+    private Button deactivateAccount;
     private Button cancelButton;
     private final UsersDataGrid usersDataGrid;
 
     // コンストラクタ
-    public UserReviveView(UserManagementService userManagementService, UsersService usersService) {
+    public UserDeactivateView(UserManagementService userManagementService, UsersService usersService) {
         // 文字列がセッションに渡されていたら成功メッセージを出力→セッションの文字列をnullに戻す
         if(UI.getCurrent().getSession().getAttribute(String.class) != null) {
             new SuccessNotification(UI.getCurrent().getSession().getAttribute(String.class));
@@ -48,16 +48,16 @@ public class UserReviveView extends VerticalLayout {
 
     // ボタンの初期設定
     private void initializeButton() {
-        reviveAccount = new Button("有効化", new Icon(VaadinIcon.PLAY), buttonClickEvent -> {
+        deactivateAccount = new Button("無効化", new Icon(VaadinIcon.BAN), buttonClickEvent -> {
             // 選択されているユーザーの情報を取得
             Set<UsersData> selectedUsers = usersDataGrid.getGrid().getSelectedItems();
 
-            // ユーザ有効化処理
+            // ユーザ無効化処理
             // 正常終了→成功メッセージ 異常終了→エラーメッセージ
             try {
-                usersService.reviveUsers(selectedUsers);
+                usersService.deleteUsers(selectedUsers);
                 // 成功メッセージをセッションに渡して画面をリロード
-                UI.getCurrent().getSession().setAttribute(String.class, selectedUsers.size() + " 件のユーザの有効化に成功");
+                UI.getCurrent().getSession().setAttribute(String.class, selectedUsers.size() + " 件のユーザの無効化に成功");
                 UI.getCurrent().getPage().reload();
             } catch (UserManagementException e){
                 if(e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
@@ -67,7 +67,7 @@ public class UserReviveView extends VerticalLayout {
                 new ErrorNotification("エラーが発生しました");
             }
         });
-        reviveAccount.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+        deactivateAccount.addThemeVariants(ButtonVariant.LUMO_ERROR);
         cancelButton = new Button("戻る", buttonClickEvent -> {
             UI.getCurrent().navigate("/user_management");
         });
@@ -75,9 +75,9 @@ public class UserReviveView extends VerticalLayout {
 
     // 各種コンポーネントの追加
     private void addComponents() {
-        add(new H1("ユーザーの有効化"), new Paragraph("ユーザーのアクセス権限を有効化することができます。有効化したいユーザーを選んで有効化ボタンを押してください。"));
+        add(new H1("ユーザーの無効化"), new Paragraph("ユーザーのアクセス権限を無効化することができます。無効化したいユーザーを選んで無効化ボタンを押してください。"));
         add(cancelButton);
         add(usersDataGrid);
-        add(reviveAccount);
+        add(deactivateAccount);
     }
 }

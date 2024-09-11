@@ -11,8 +11,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 public class UserManagementButtons extends VerticalLayout {
     private Button userBulkAddButton;
     private Button userAddButton;
-    private Button userDeleteButton;
-    private Button userReviveButton;
+    private Button userDeactivateButton;
+    private Button userActivateButton;
 
     public UserManagementButtons() {
         initializeButtons();
@@ -22,27 +22,27 @@ public class UserManagementButtons extends VerticalLayout {
     private void initializeButtons() {
         // ユーザーの一括追加ボタン
         this.userBulkAddButton = new Button("一括追加", new Icon(VaadinIcon.PLUS), buttonClickEvent -> {
-            UI.getCurrent().navigate("/user_management/bulk_add");
+            UI.getCurrent().navigate(UserBulkAddView.class);
         });
         userBulkAddButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         userBulkAddButton.setAutofocus(true);
 
         // ユーザーの追加ボタン
         this.userAddButton = new Button("追加", new Icon(VaadinIcon.PLUS), buttonClickEvent -> {
-            UI.getCurrent().navigate("/user_management/add");
+            UI.getCurrent().navigate(UserAddView.class);
         });
         userAddButton.setAutofocus(true);
 
         // ユーザーの削除ボタン
-        this.userDeleteButton = new Button("無効化", new Icon(VaadinIcon.BAN), buttonClickEvent -> {
-            UI.getCurrent().navigate("/user_management/delete");
+        this.userDeactivateButton = new Button("無効化", new Icon(VaadinIcon.BAN), buttonClickEvent -> {
+            UI.getCurrent().navigate(UserDeactivateView.class);
         });
-        userDeleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        userDeactivateButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
-        this.userReviveButton = new Button("有効化", new Icon(VaadinIcon.PLAY), buttonClickEvent -> {
-            UI.getCurrent().navigate("/user_management/revive");
+        this.userActivateButton = new Button("有効化", new Icon(VaadinIcon.PLAY), buttonClickEvent -> {
+            UI.getCurrent().navigate(UserActivateView.class);
         });
-        userReviveButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+        userActivateButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
     }
 
     // 各種コンポーネントを画面に追加
@@ -50,8 +50,8 @@ public class UserManagementButtons extends VerticalLayout {
         HorizontalLayout buttonLayout = new HorizontalLayout(
                 userBulkAddButton,
                 userAddButton,
-                userDeleteButton,
-                userReviveButton);
+                userDeactivateButton,
+                userActivateButton);
         buttonLayout.getStyle().set("flex-wrap", "wrap");
         add(buttonLayout);
     }
