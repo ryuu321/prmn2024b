@@ -21,7 +21,7 @@ import jp.ac.chitose.ir.presentation.component.notification.SuccessNotification;
 
 import java.util.Set;
 
-@PageTitle("UserRevive")
+@PageTitle("UserActivate")
 @Route(value = "/user_management/activate", layout = MainLayout.class)
 @RolesAllowed({"administrator"})
 public class UserActivateView extends VerticalLayout {

@@ -21,7 +21,7 @@ import jp.ac.chitose.ir.presentation.component.notification.SuccessNotification;
 
 import java.util.Set;
 
-@PageTitle("UserDelete")
+@PageTitle("UserDeactivate")
 @Route(value = "/user_management/deactivate", layout = MainLayout.class)
 @RolesAllowed({"administrator"})
 public class UserDeactivateView extends VerticalLayout {
