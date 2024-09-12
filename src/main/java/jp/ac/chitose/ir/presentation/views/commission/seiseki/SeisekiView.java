@@ -24,7 +24,7 @@ public class SeisekiView implements View {
         H1 a = new H1("GPAと基本統計量に関するデータ");
         main.add(a);
 
-        main.add(new Paragraph("この画面ではGPAに関する基本統計量に関する情報を閲覧することが出来ます。"));
+        main.add(new Paragraph("この画面ではGPAに関する情報を見ることが出来ます。"));
         main.add(new H2("2022年度"));
         //学年・学科を選択するラジオボタン
         RadioButtonGroup<String> yearOrSubject = new RadioButtonGroup<>();
