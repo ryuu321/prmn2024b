@@ -52,7 +52,7 @@ public class UniversityView extends VerticalLayout {
         add(mainLayout);
 
         mainLayout.add(new H1("大学情報"));
-        mainLayout.add(new Paragraph("説明"));
+        mainLayout.add(new Paragraph("この画面では、大学に関する情報を見ることが出来ます。"));
 
 
         //カテゴリ別ラジオボタンを追加

@@ -1,10 +1,10 @@
 package jp.ac.chitose.ir.presentation.views.usermanagement;
 
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.upload.Upload;
@@ -73,10 +73,10 @@ public class UserBulkAddView extends VerticalLayout {
             try {
                 long inserted = usersService.addUsers(inputStream);
                 new SuccessNotification(inserted + " 件のユーザ追加に成功");
-            } catch (UserManagementException e){
-                if(e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
+            } catch (UserManagementException e) {
+                if (e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
                 else new ErrorNotification(e.getMessage());
-            } catch (RuntimeException e){
+            } catch (RuntimeException e) {
                 e.printStackTrace();
                 new ErrorNotification("エラーが発生しました");
             }
@@ -85,7 +85,8 @@ public class UserBulkAddView extends VerticalLayout {
 
     // 各種コンポーネントの追加
     private void addComponents() {
-        add(new H1("ユーザーの一括追加"), new Paragraph("ユーザーを一括で追加できます。追加したいユーザーの情報をcsv形式で用意してください。パスワードは12文字以上で設定してください。"));
+        add(new H1("ユーザーの一括追加"));
+        add(new Html("<div>ユーザーを一括で追加できます。追加したいユーザーの情報をcsv形式で用意してください。<br>csvは一列目：ログインID, 二列目：ユーザーネーム, 三列目：パスワード, 四列目以降：付与したい権限名（複数の場合は一列ずつ記入）の形式で作成してください。<br>また、パスワードは12文字以上で設定してください。</div>"));
         HorizontalLayout buttonLayout = new HorizontalLayout(cancelButton);
         buttonLayout.getStyle().set("flex-wrap", "wrap");
         add(buttonLayout);

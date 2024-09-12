@@ -4,6 +4,7 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.PasswordField;
 import jp.ac.chitose.ir.application.service.management.Role;
 import jp.ac.chitose.ir.application.service.management.RoleService;
 import jp.ac.chitose.ir.application.service.management.UsersData;
@@ -16,7 +17,7 @@ public class UserManagementTextFields extends VerticalLayout {
     private CheckboxGroup<String> rolesCheckboxGroup;
     private TextField loginIDTextField;
     private TextField userNameTextField;
-    private TextField userPasswordTextField;
+    private PasswordField userPasswordTextField;
     private final RoleService roleService;
     private final Map<String, Integer> allRolesMap;
 
@@ -44,7 +45,7 @@ public class UserManagementTextFields extends VerticalLayout {
     private void initializeTextField() {
         loginIDTextField = new TextField("ログインID");
         userNameTextField = new TextField("ユーザーネーム");
-        userPasswordTextField = new TextField("パスワード");
+        userPasswordTextField = new PasswordField("パスワード");
     }
 
     // チェックボックスの初期化
