@@ -3,6 +3,7 @@ package jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -19,7 +20,7 @@ public class TeacherTraining extends VerticalLayout {
         add(new Paragraph("教職課程に関する情報を見ることが出来ます。"));
         add(backButton);
         add(new H2("・教職課程履修者数"));
-        add(new Paragraph("入学年"));
+        add(new H3("入学年"));
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.add(new Button("平成22年"));
         add(buttonLayout);
