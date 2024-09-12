@@ -41,7 +41,7 @@ public class QuestionnaireGrid extends VerticalLayout {
         this.questionMatters = new QuestionMatters(classSelect, scrollManager);
         this.questionGrid = new jp.ac.chitose.ir.application.service.class_select.QuestionnaireGrid(classSelect);
         this.questionDescribe = new QuestionDescribe(classSelect);
-        add(new H1("アンケート"));
+        add(new H1("授業評価アンケート"));
         initializeRadioButtons();
         Grid<QuestionnaireTopGrid> grid = initializeGrid(questionnaireService);
         addComponentsToLayout(grid);
@@ -118,14 +118,19 @@ public class QuestionnaireGrid extends VerticalLayout {
             subjectButton.getElement().getStyle().set("cursor", "pointer");
 
             subjectButton.addClickListener(event -> {
+
+                //130ms
                 removeAll();
                 init1(subjectId,questionnaireService,year);
 
                 VerticalLayout layout2 = new VerticalLayout();
-                layout2.getStyle().set("padding", "40px");
 
+                //127109ms
                 var classTests = classSelect.getClassQPOJFICHKVJB(subjectId).data();
                 int flag = classTests.get(0).Flag();
+
+
+                //127109ms
                 for (int i = 0; i < 11; i++) {
                     if (i == 3 && flag == 1) {
                         layout2.add(questionMatters.generateQuestionMatters(3, subjectId));
@@ -137,14 +142,15 @@ public class QuestionnaireGrid extends VerticalLayout {
                     layout2.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, subjectId).getGraph());
                     layout2.add(questionDescribe.getStatics(i + 4, subjectId));
                 }
-
+                
+                //725ms
                 // 追加のループで質問と自由記述を追加
                 for (int i = 13; i <= 15; i++) {
                     layout2.add(questionMatters.generateQuestionMatters(i, subjectId));
                     layout2.add(questionGrid.generateGrid(i, subjectId)); // 自由記述
                 }
 
-                // 新しいレイアウトを追加
+                //4ms
                 add(layout2);
 
             });
