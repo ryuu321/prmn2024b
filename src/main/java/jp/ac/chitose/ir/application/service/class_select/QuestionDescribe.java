@@ -56,7 +56,12 @@ public class QuestionDescribe {
                 rank = ranking.順位().get(12) +"位";
             }
         }
-        String formatted = "回答数:"+ resultList.get(0) +", 平均:"+String.format("%.2f",resultList.get(1))+", 分散:"+ String.format("%.2f",resultList.get(2))+", 最小値:"+resultList.get(3)+", 25%:"+ resultList.get(4)+", 50%:"+resultList.get(5)+", 75%:"+resultList.get(6)+", 最大値:"+resultList.get(7)+", 順位:"+rank;
+
+        double variance = (double) resultList.get(2); // 分散
+        double standardDeviation = Math.sqrt(variance); // 標準偏差
+
+
+        String formatted = "回答数:"+ resultList.get(0) +", 平均:"+String.format("%.2f",resultList.get(1))+", 標準偏差:"+ String.format("%.2f",standardDeviation)+", 最小値:"+resultList.get(3)+/*", 25%:"+ resultList.get(4)+", 50%:"+resultList.get(5)+", 75%:"+resultList.get(6)+", 最大値:"+resultList.get(7)+*/", 順位:"+rank;
         return new H6(formatted);
     }
 
