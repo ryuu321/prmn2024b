@@ -1,7 +1,6 @@
-package jp.ac.chitose.ir.presentation.views.common;
+package jp.ac.chitose.ir.presentation.views.common.grade;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.ItemClickEvent;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

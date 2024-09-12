@@ -31,14 +31,14 @@ public class TopView extends VerticalLayout {
         add(menutitle1);
 
         // 成績情報ページ（StudentView）の紹介
-        Anchor grade = new Anchor("/grade/student", "授業に関する情報公開");
+        Anchor grade = new Anchor("common/grade", "授業に関する情報公開");
         grade.getElement().setAttribute("target", "");
         Paragraph grade_paragraph =  new Paragraph("成績評価分布や授業評価アンケートの結果を科目ごとに確認できます。");
         grade_paragraph.getStyle().set("top-margin", "0px");
         add(grade, grade_paragraph);
 
         // 成績評価分布状況表
-        Anchor gradegird = new Anchor("", "成績評価分布状況表");
+        Anchor gradegird = new Anchor("common/grid", "成績評価分布状況表");
         add(gradegird, new Paragraph("成績評価分布をまとめた表を確認できます。"));
 
         // 固有メニュー
