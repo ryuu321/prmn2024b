@@ -1,6 +1,8 @@
-package jp.ac.chitose.ir.presentation.views.common;
+package jp.ac.chitose.ir.presentation.views.common.grade;
 
-import com.vaadin.flow.component.grid.ItemClickEvent;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.function.ValueProvider;
 import jp.ac.chitose.ir.application.service.student.StudentGrade;
@@ -26,9 +28,8 @@ public class SelectCommonView extends VerticalLayout {
             (grade, str) -> matchesFilter(str, grade.schoolYear()),
             (grade, str) -> matchesFilter(str, grade.department()),
             (grade, str) -> matchesFilter(str, grade.compulsory_subjects()));
-    private final static List<String> GRADE_HEADER_NAMES = List.of("科目名", "対象学年", "対象学科", "必選別", "単位数");
+    private final static List<String> GRADE_HEADER_NAMES = List.of("対象学年", "対象学科", "必選別", "単位数");
     private final static List<ValueProvider<StudentGrade, String>> GRADE_VALUE_PROVIDERS = List.of(
-            StudentGrade::lecture_name,
             StudentGrade::schoolYear,
             StudentGrade::department,
             StudentGrade::compulsory_subjects,
@@ -37,22 +38,28 @@ public class SelectCommonView extends VerticalLayout {
     public SelectCommonView(final StudentGradeService studentGradeService, CommonView commonView) {
         this.studentGradeService = studentGradeService;
         grid = createCommonGrid(commonView);
-        add(grid);
+        H1 title = new H1("授業に関する情報公開");
+        Paragraph explanation = new Paragraph("成績評価分布や授業評価アンケートの結果を科目ごとに確認できます。");
+        add(title, explanation, grid);
     }
 
     private CommonGrid createCommonGrid(CommonView commonView) {
         CommonGrid grid = new CommonGrid(createCommonGridFilters(), FilterPosition.TOP);
+        grid.addComponentColumn(grade -> {
+            Button button = new Button(grade.lecture_name());
+            button.addClickListener(buttonClickEvent -> updateView(grade, commonView));
+            return button;
+        }).setHeader("科目名").setSortable(true);
         for(int i = 0; i < GRADE_HEADER_NAMES.size(); i++) {
-            grid.addColumn(GRADE_VALUE_PROVIDERS.get(i), GRADE_HEADER_NAMES.get(i));
+            grid.addColumn(GRADE_VALUE_PROVIDERS.get(i), GRADE_HEADER_NAMES.get(i)).setSortable(true);
         }
         grid.setItems(studentGradeService.getSubjectStudents().data());
         grid.setAllRowsVisible(true);
-        grid.addItemClickListener(grade -> updateView(grade, commonView));
         return grid;
     }
 
-    public void updateView(ItemClickEvent<StudentGrade> gradeItemClickEvent, CommonView commonView) {
-        commonView.updateView(gradeItemClickEvent);
+    public void updateView(StudentGrade grade, CommonView commonView) {
+        commonView.updateView(grade);
     }
 
     private List<Filter<String, StudentGrade>> createCommonGridFilters() {

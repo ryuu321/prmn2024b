@@ -19,6 +19,9 @@ public interface StudentGradeService {
     @GetExchange("/subject")
     TableData<StudentGrade> getSubjectStudents();
 
+    @GetExchange("/subjectAll")
+    TableData<StudentGrade> getAllSubjectStudents();
+
     @GetExchange("/courseIds")
     CourseIdDict getCourseIdDict();
 }
