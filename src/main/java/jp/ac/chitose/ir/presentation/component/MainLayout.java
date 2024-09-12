@@ -136,7 +136,7 @@ public class MainLayout extends AppLayout {
 
         // IR委員向け
         if (securityService.getLoginUser().isCommission()) {
-            menuItems.add(new MenuItemInfo("成績統計",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class));
+            menuItems.add(new MenuItemInfo("GPA統計",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class));
             menuItems.add(new MenuItemInfo("大学情報",LineAwesomeIcon.CHALKBOARD_TEACHER_SOLID.create(), UniversityView.class));
         }
 

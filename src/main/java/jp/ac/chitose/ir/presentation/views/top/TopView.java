@@ -68,10 +68,10 @@ public class TopView extends VerticalLayout {
     // IR委員会向け要素の追加
     public void addCommissionView() {
         H2 commission = new H2("IR委員会向けメニュー");
-        H3 stat = new H3(new Anchor("/commission", "統計情報"));
+        H3 stat = new H3(new Anchor("/commission", "GPAと基本統計量に関するデータ"));
         H3 universityInfo = new H3(new Anchor("university", "大学情報"));
         add(commission);
-        Paragraph statDescription = new Paragraph("統計情報が確認できます。");
+        Paragraph statDescription = new Paragraph("GPAに関する統計情報が確認できます。");
         Paragraph universityInfoDescription = new Paragraph("大学の基本的な情報が確認出来ます");
         add(stat, createIndent(statDescription));
         add(universityInfo, createIndent(universityInfoDescription));
