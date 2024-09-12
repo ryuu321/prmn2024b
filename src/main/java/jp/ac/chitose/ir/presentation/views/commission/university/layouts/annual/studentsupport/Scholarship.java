@@ -1,8 +1,9 @@
-package jp.ac.chitose.ir.presentation.views.commission.university.layouts.studentsupport;
+package jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.studentsupport;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jp.ac.chitose.ir.application.service.TableData;
@@ -10,19 +11,22 @@ import jp.ac.chitose.ir.application.service.commission.ResearchSupports;
 import jp.ac.chitose.ir.application.service.commission.ScholarShipJasso;
 import jp.ac.chitose.ir.application.service.commission.ScholarShipOthers;
 import jp.ac.chitose.ir.application.service.commission.UniversityService;
+import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 
 public class Scholarship extends VerticalLayout {
 
     private UniversityService universityService;
-    public Scholarship(UniversityService universityService) {
+    public Scholarship(UniversityService universityService, BackButton backButton) {
         this.universityService = universityService;
         add(new H1("奨学金"));
-        add(new Paragraph("説明"));
-        add(new H2("日本学生支援機構"));
+        add(new Paragraph("大学年報の奨学金に関する情報を見ることが出来ます。"));
+        add(backButton);
+        add(new H2("2022年度"));
+        add(new H3("日本学生支援機構"));
         add(createJassoGrid());
-        add(new H2("大学院研究援助金"));
+        add(new H3("大学院研究援助金"));
         add(createResearchSupportGrid());
-        add(new H2("その他奨学金"));
+        add(new H3("その他奨学金"));
         add(creatOtherSupportgrid());
 
     }
@@ -48,6 +52,7 @@ public class Scholarship extends VerticalLayout {
         return grid;
     };
 
+    //大学院研究援助金に関するGrid
     private Grid<ResearchSupports> createResearchSupportGrid(){
       TableData<ResearchSupports> researchSupportsTableData=this.universityService.getResearchSupports(2022);
 
@@ -61,6 +66,7 @@ public class Scholarship extends VerticalLayout {
       return grid;
     };
 
+    //上記以外の奨学金に関するGrid
     private Grid<ScholarShipOthers> creatOtherSupportgrid(){
         TableData<ScholarShipOthers> scholarShipOthersTableData=this.universityService.getScholarShipOthers(2022);
 

@@ -9,19 +9,21 @@ import jp.ac.chitose.ir.application.service.TableData;
 import jp.ac.chitose.ir.application.service.commission.CommonUnits;
 import jp.ac.chitose.ir.application.service.commission.MajorUnits;
 import jp.ac.chitose.ir.application.service.commission.UniversityService;
-
-
+import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 
 
 public class GraduationCredits extends VerticalLayout {
 
     private UniversityService universityService;
 
-    public GraduationCredits(UniversityService universityService) {
+    //卒業単位数
+    public GraduationCredits(UniversityService universityService, BackButton backButton) {
         this.universityService = universityService;
 
         add(new H1("卒業単位数"));
-        add(new Paragraph("説明"));
+        add(new Paragraph("卒業に必要最低限必要な単位数に関する情報を見ることが出来ます"));
+        add(backButton);
+        add(new H2("2024年度"));
         add(new H2("共通教育科目"));
         add(creatcommonGrid());
         add(new H2("専門教育科目"));
@@ -29,6 +31,7 @@ public class GraduationCredits extends VerticalLayout {
 
     }
 
+    //共通教育科目の卒業単位数に関するGrid
     private Grid<CommonUnits> creatcommonGrid(){
 
         TableData<CommonUnits> commonUnitsTableData=universityService.getCommonUnits(2024);
@@ -49,19 +52,10 @@ public class GraduationCredits extends VerticalLayout {
         return grid;
     }
 
+    //学科配属後の専門科目の卒業単位数に関するGrid
     private Grid<MajorUnits> createMajorgrid(){
 
         TableData<MajorUnits> majorUnitsTableData=universityService.getMajorUnits(2024);
-        MajorUnits majorunits=new MajorUnits(
-                majorUnitsTableData.data().get(0).department(),
-                majorUnitsTableData.data().get(0).required(),
-                majorUnitsTableData.data().get(0).required_elective(),
-                majorUnitsTableData.data().get(0).elective(),
-                majorUnitsTableData.data().get(0).specialty_total(),
-                majorUnitsTableData.data().get(0).others(),
-                majorUnitsTableData.data().get(0).total()
-        );
-
 
         Grid<MajorUnits> grid=new Grid<>();
         grid.setItems(majorUnitsTableData.data());

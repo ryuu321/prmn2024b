@@ -1,5 +1,5 @@
 package jp.ac.chitose.ir.presentation.views.commission.seiseki;
-
+//学年で比較する場合に必要な、基本統計量を保存するクラス
 public class GetTableData {
     private String subject;
     private int human;
