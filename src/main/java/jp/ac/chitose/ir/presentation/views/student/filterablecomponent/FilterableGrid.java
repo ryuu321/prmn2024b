@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.presentation.views.student.filterablecomponent;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.ItemClickEvent;
@@ -36,6 +37,10 @@ public class FilterableGrid<FilterType, ItemType> extends AbstractFilterableComp
 
     public Grid.Column<ItemType> addColumn(ValueProvider<ItemType, FilterType> provider, String headerName) {
         return component.addColumn(provider).setHeader(headerName);
+    }
+
+    public Grid.Column<ItemType> addComponentColumn(ValueProvider<ItemType, Component> provider) {
+        return component.addComponentColumn(provider);
     }
 
     public void addItemClickListener(ComponentEventListener<ItemClickEvent<ItemType>> listener) {
