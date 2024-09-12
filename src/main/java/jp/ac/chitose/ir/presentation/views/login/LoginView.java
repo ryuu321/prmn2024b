@@ -24,6 +24,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         setJustifyContentMode(JustifyContentMode.CENTER);
         setAlignItems(Alignment.CENTER);
 
+        // 各種メッセージに日本語を設定
         LoginI18n.Form i18nForm = i18n.getForm();
 
         i18nForm.setTitle("ログイン");
@@ -41,9 +42,11 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         i18nErrorMessage.setMessage("ユーザー名とパスワードが正しいことを確認して、再試行してください");
 
         login = new LoginForm(i18n);
+        // パスワードを忘れた人向けの表示を削除
         login.setForgotPasswordButtonVisible(false);
         login.setAction("login");
 
+        // タイトルとフォームを画面に出力
         add(new H1("CIST IR-Web"), login);
         add(login);
     }
