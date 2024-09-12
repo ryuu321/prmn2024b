@@ -64,8 +64,8 @@ public class UserAddView extends VerticalLayout {
 
     // 各種コンポーネントの追加
     private void addComponents() {
-        add(cancelButton);
         add(new H1("ユーザーの追加"), new Paragraph("ユーザーを追加することができます。追加したいユーザーのユーザID,ユーザーネーム,12文字以上のパスワードを入力し、ロールを選択してください。"));
+        add(cancelButton);
         add(userManagementTextFields);
         add(createAccount);
     }
