@@ -1,6 +1,7 @@
 package jp.ac.chitose.ir.presentation.views.commission.seiseki;
 
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -16,20 +17,25 @@ public class SeisekiView implements View {
     public SeisekiView(GradeService gradeService){
         this.gradeService = gradeService;
     }
+    //成績統計に関するレイアウトを返すメソッド
     public VerticalLayout view(){
+
         VerticalLayout main = new VerticalLayout();
-        H1 a = new H1("成績に関する統計データ");
+        H1 a = new H1("GPAと基本統計量に関するデータ");
         main.add(a);
 
-        main.add(new Paragraph("成績画面に関する説明文"));
-
+        main.add(new Paragraph("この画面ではGPAに関する基本統計量に関する情報を閲覧することが出来ます。"));
+        main.add(new H2("2022年度"));
+        //学年・学科を選択するラジオボタン
         RadioButtonGroup<String> yearOrSubject = new RadioButtonGroup<>();
         yearOrSubject.setItems("学年","学科");
         yearOrSubject.setValue("学年");
         main.add(yearOrSubject);
+
         yearFirstLayout = getSeisekiYearFirstLayout();
         main.add(yearFirstLayout);
 
+        //学年・学科の選択により、片方のレイアウトだけが表示されるようにラジオボタンを制御
         yearOrSubject.addValueChangeListener(e -> {
             if(e.getValue().equals("学年")){
                 yearFirstLayout = getSeisekiYearFirstLayout();
@@ -44,6 +50,7 @@ public class SeisekiView implements View {
         });
         return main;
     }
+    //学科で比較するレイアウトを返すメソッド
     private VerticalLayout getSeisekiYearFirstLayout(){
         VerticalLayout seisekiYearFirstLayout = new VerticalLayout();
         Seiseki seiseki = new Seiseki(0);
@@ -53,7 +60,7 @@ public class SeisekiView implements View {
         return seisekiYearFirstLayout;
 
     }
-
+    //学年で比較する例アウトを返すメソッド
     private VerticalLayout getSeisekiSubjectFirstLayout(){
         VerticalLayout seisekiSubjectFirstLayout = new VerticalLayout();
         Seiseki seiseki = new Seiseki(1);

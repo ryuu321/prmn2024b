@@ -9,9 +9,10 @@ public class NumberOfTeachers extends VerticalLayout {
 
     private BackButton button;
     private String name;
-    public NumberOfTeachers() {
+    public NumberOfTeachers(BackButton backButton) {
         add(new H1("教員数"));
         add(new Paragraph("説明"));
+        add(backButton);
 
     }
 
