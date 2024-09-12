@@ -12,7 +12,7 @@ import jp.ac.chitose.ir.presentation.component.graph.Graph;
 import jp.ac.chitose.ir.presentation.component.graph.GraphSeries;
 
 import java.util.ArrayList;
-
+//グラフに関するレイアウトを返すクラス
 public class SeisekiGraph {
     private TableData<GradeGpaGraph> tableAll;
     private TableData<GradeGpaGraph> tableFirst;
@@ -32,7 +32,8 @@ public class SeisekiGraph {
     }
 
     //mode = 0
-    public ArrayList<VerticalLayout> makeAll(){
+    //学年全体のヒストグラムを返すメソッド
+    public ArrayList<VerticalLayout> makeAllYear(){
         ArrayList<VerticalLayout> chartList = new ArrayList<>();
         for(int i=0;i<5;i++){
             String b=tableAll.data().get(i).getName();
@@ -40,7 +41,8 @@ public class SeisekiGraph {
         }
       return chartList;
     }
-    public ArrayList<VerticalLayout> makeBigAll(){
+    //学年全体のヒストグラムと円グラフを返すメソッド
+    public ArrayList<VerticalLayout> makeBigAllYear(){
         ArrayList<VerticalLayout> chartListAll = new ArrayList<>();
         for(int i=0;i<5;i++){
             String b=tableAll.data().get(i).getName();
@@ -48,7 +50,7 @@ public class SeisekiGraph {
         }
         return chartListAll;
     }
-
+    //１年生のヒストグラムを返すメソッド
     public ArrayList<VerticalLayout> makeFirst(){
         ArrayList<VerticalLayout> chartList1 = new ArrayList<>();
         for(int i=0;i<5;i++){
@@ -57,7 +59,7 @@ public class SeisekiGraph {
         }
         return chartList1;
     }
-
+    //１年生のヒストグラムと円グラフを返すメソッド
     public ArrayList<VerticalLayout> makeBigFirst(){
         ArrayList<VerticalLayout> chartList1B = new ArrayList<>();
         for(int i=0;i<5;i++){
@@ -66,7 +68,7 @@ public class SeisekiGraph {
         }
         return chartList1B;
     }
-
+    //２年生のヒストグラムを返すメソッド
     public ArrayList<VerticalLayout> makeSecond(){
         ArrayList<VerticalLayout> chartList2 = new ArrayList<>();
         for(int i=0;i<4;i++){
@@ -75,7 +77,7 @@ public class SeisekiGraph {
         }
         return chartList2;
     }
-
+    //２年生のヒストグラムと円グラフを返すメソッド
     public ArrayList<VerticalLayout> makeBigSecond(){
         ArrayList<VerticalLayout> chartList2B = new ArrayList<>();
         for(int i=0;i<4;i++){
@@ -84,7 +86,7 @@ public class SeisekiGraph {
         }
         return chartList2B;
     }
-
+    //３年生のヒストグラムを返すメソッド
     public ArrayList<VerticalLayout> makeThird(){
         ArrayList<VerticalLayout> chartList3 = new ArrayList<>();
         for(int i=0;i<4;i++){
@@ -93,7 +95,7 @@ public class SeisekiGraph {
         }
         return chartList3;
     }
-
+    //３年生のヒストグラムと円グラフを返すメソッド
     public ArrayList<VerticalLayout> makeBigThird(){
         ArrayList<VerticalLayout> chartList3B = new ArrayList<>();
         for(int i=0;i<4;i++){
@@ -102,7 +104,7 @@ public class SeisekiGraph {
         }
         return chartList3B;
     }
-
+    //４年生のヒストグラムを返すメソッド
     public ArrayList<VerticalLayout> makeFourth(){
         ArrayList<VerticalLayout> chartList4 = new ArrayList<>();
         for(int i=0;i<4;i++){
@@ -111,7 +113,7 @@ public class SeisekiGraph {
         }
         return chartList4;
     }
-
+    //４年生のヒストグラムと円グラフを返すメソッド
     public ArrayList<VerticalLayout> makeBigFourth(){
         ArrayList<VerticalLayout> chartList4B = new ArrayList<>();
         for(int i=0;i<4;i++){
@@ -121,7 +123,8 @@ public class SeisekiGraph {
         return chartList4B;
     }
 //mode = 1
-    public ArrayList<VerticalLayout> makeAll2(){
+    //学科全体のヒストグラムを返すメソッド
+    public ArrayList<VerticalLayout> makeAllSubject(){
         ArrayList<VerticalLayout> chartList= new ArrayList<>();
         chartList.add(graph(tableAll.data().get(0).getData(),"全体"));
         chartList.add(graph(tableFirst.data().get(0).getData(),"1年"));
@@ -130,7 +133,8 @@ public class SeisekiGraph {
         chartList.add(graph(tableFourth.data().get(0).getData(),"4年"));
         return chartList;
     }
-    public ArrayList<VerticalLayout> makeBigAll2(){
+    //学科全体のヒストグラムと円グラフを返すメソッド
+    public ArrayList<VerticalLayout> makeBigAllSubject(){
         ArrayList<VerticalLayout> chartList= new ArrayList<>();
         chartList.add(bigGraph(tableAll.data().get(0).getData(),"全体"));
         chartList.add(bigGraph(tableFirst.data().get(0).getData(),"1年"));
@@ -139,6 +143,7 @@ public class SeisekiGraph {
         chartList.add(bigGraph(tableFourth.data().get(0).getData(),"4年"));
         return chartList;
     }
+    //応用化学生物学科のヒストグラムを返すメソッド
     public ArrayList<VerticalLayout> makeScience(){
         ArrayList<VerticalLayout> chartList= new ArrayList<>();
         chartList.add(graph(tableAll.data().get(1).getData(),"全体"));
@@ -147,6 +152,7 @@ public class SeisekiGraph {
         chartList.add(graph(tableFourth.data().get(1).getData(),"4年"));
         return chartList;
     }
+    //応用化学生物学科のヒストグラムと円グラフを返すメソッド
     public ArrayList<VerticalLayout> makeBigScience() {
         ArrayList<VerticalLayout> chartList = new ArrayList<>();
         chartList.add(bigGraph(tableAll.data().get(1).getData(), "全体"));
@@ -155,6 +161,7 @@ public class SeisekiGraph {
         chartList.add(bigGraph(tableFourth.data().get(1).getData(), "4年"));
         return chartList;
     }
+    //電子光工学科のヒストグラムを返すメソッド
     public ArrayList<VerticalLayout> makeElectronic(){
         ArrayList<VerticalLayout> chartList= new ArrayList<>();
         chartList.add(graph(tableAll.data().get(2).getData(),"全体"));
@@ -163,6 +170,7 @@ public class SeisekiGraph {
         chartList.add(graph(tableFourth.data().get(2).getData(),"4年"));
         return chartList;
     }
+    //電子光工学科のヒストグラムと円グラフを返すメソッド
     public ArrayList<VerticalLayout> makeBigElectronic() {
         ArrayList<VerticalLayout> chartList = new ArrayList<>();
         chartList.add(bigGraph(tableAll.data().get(2).getData(), "全体"));
@@ -171,6 +179,7 @@ public class SeisekiGraph {
         chartList.add(bigGraph(tableFourth.data().get(2).getData(), "4年"));
         return chartList;
     }
+    //情報システム工学科のヒストグラムを返すメソッド
     public ArrayList<VerticalLayout> makeInformation(){
         ArrayList<VerticalLayout> chartList= new ArrayList<>();
         chartList.add(graph(tableAll.data().get(3).getData(),"全体"));
@@ -179,6 +188,7 @@ public class SeisekiGraph {
         chartList.add(graph(tableFourth.data().get(3).getData(),"4年"));
         return chartList;
     }
+    //情報システム工学科のヒストグラムと円グラフを返すメソッド
     public ArrayList<VerticalLayout> makeBigInformation() {
         ArrayList<VerticalLayout> chartList = new ArrayList<>();
         chartList.add(bigGraph(tableAll.data().get(3).getData(), "全体"));
@@ -187,6 +197,7 @@ public class SeisekiGraph {
         chartList.add(bigGraph(tableFourth.data().get(3).getData(), "4年"));
         return chartList;
     }
+    //ヒストグラムのレイアウトを返すメソッド
     private VerticalLayout graph(ArrayList<Integer> a, String b){
         VerticalLayout layout = new VerticalLayout();
         layout.add(new H2(b));
@@ -195,24 +206,17 @@ public class SeisekiGraph {
         layout.add(graphLayout);
         return layout;
     }
+    //ヒストグラムと円グラフのレイアウトを返すメソッド
     private VerticalLayout bigGraph(ArrayList<Integer> a, String b){
         VerticalLayout layout = new VerticalLayout();
         layout.add(new H2(b));
-//        FormLayout graphLayout = new FormLayout();
-//        graphLayout.add(bigHistgram(a,b));
-//        graphLayout.add(pie(a,b));
-//        graphLayout.setResponsiveSteps(
-//                new FormLayout.ResponsiveStep("0",1),
-//                new FormLayout.ResponsiveStep("1050px",2)
-//        );
-//        layout.add(graphLayout);
         HorizontalLayout graphLayout = new HorizontalLayout();
         graphLayout.add(bigHistgram(a,b));
         graphLayout.add(pie(a,b));
         layout.add(graphLayout);
         return layout;
     }
-
+    //ヒストグラムを生成するメソッド
     private ApexCharts histgram(ArrayList<Integer> a, String b){
         String[] name = {"0.0~0.5","0.5~1.0","1.0~1.5","1.5~2.0","2.0~2.5","2.5~3.0","3.0~3.5","3.5~4.0","4.0"};
         ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
@@ -233,6 +237,7 @@ public class SeisekiGraph {
         return Graph.Builder.get().histogram()
                 .height("250px").width("300px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
     }
+    //大きいサイズのヒストグラムを生成するメソッド
     private ApexCharts bigHistgram(ArrayList<Integer> a, String b){
         String[] name = {"0.0~0.5","0.5~1.0","1.0~1.5","1.5~2.0","2.0~2.5","2.5~3.0","3.0~3.5","3.5~4.0","4.0"};
         ArrayList<Data<String,Integer>> dataList = new ArrayList<>();
@@ -253,6 +258,7 @@ public class SeisekiGraph {
         return Graph.Builder.get().histogram()
                 .height("300px").width("700px").series(series).XAxisLabel("GPA").YAxisLabel("人数(人)").animationsEnabled(false).build().getGraph();
     }
+    //円グラフを生成するメソッド
     private ApexCharts pie(ArrayList<Integer> a, String b){
         String[] name = {"0以上0.5未満","0.5以上1.0未満","1.0以上1.5未満","1.5以上2.0未満","2.0以上2.5未満","2.5以上3.0未満","3.0以上3.5未満","3.5以上4.0未満","4.0"};
 

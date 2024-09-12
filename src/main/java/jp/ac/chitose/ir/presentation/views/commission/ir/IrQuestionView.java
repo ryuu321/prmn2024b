@@ -5,20 +5,18 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.PermitAll;
-import jp.ac.chitose.ir.application.service.sample.SampleService;
+import jakarta.annotation.security.RolesAllowed;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
-
+//IRアンケート結果を表示するクラス
 @PageTitle("IRアンケート")
 @Route(value = "IRアンケート", layout = MainLayout.class)
-@PermitAll
+@RolesAllowed("commission")
 public class IrQuestionView extends VerticalLayout {
-    private SampleService sampleService;
 
-    public IrQuestionView(SampleService sampleService){
+    public IrQuestionView(){
         add(new H1("Commission_IRアンケート"));
 
-        add(new Paragraph("IRアンケートに関する説明文"));
+        add(new Paragraph("IRアンケート結果を見ることが出来ます"));
 
         Ir2024 ir2024 = new Ir2024();
         VerticalLayout ir2024Layout = ir2024.view();
