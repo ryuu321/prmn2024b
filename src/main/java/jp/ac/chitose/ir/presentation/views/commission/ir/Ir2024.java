@@ -6,7 +6,7 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.select.Select;
 
 import java.util.ArrayList;
-
+//2024年度のIRアンケート結果を記述するクラス
 public class Ir2024 {
 
     public VerticalLayout view(){

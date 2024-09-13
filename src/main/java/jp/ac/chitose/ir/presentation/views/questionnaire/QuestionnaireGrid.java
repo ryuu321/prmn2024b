@@ -96,7 +96,7 @@ public class QuestionnaireGrid extends VerticalLayout {
         grid.setWidthFull();
         grid.setAllRowsVisible(true);
         gridListDataView = grid.setItems(questionnaireService.getQuestionnaireTopGrid().data());
-
+        
         grid.addComponentColumn(item ->{
             String subject_id ="OjfV6m";
 
@@ -123,8 +123,6 @@ public class QuestionnaireGrid extends VerticalLayout {
                 init1(subjectId,questionnaireService,year);
 
                 VerticalLayout layout2 = new VerticalLayout();
-
-
 
                 int flag = classTests.get(0).Flag();
                 for (int i = 0; i < 11; i++) {

@@ -14,8 +14,8 @@ public class SubjectGraph extends VerticalLayout {
     private final HorizontalLayout mainGraphLayout;
     private final HorizontalLayout subGraphsLayout;
     private static final String[] GRADE_LABELS = {"不可", "可", "良", "優", "秀"};
-    private static final String RED = "#FF0000";
-    private static final String BLUE = "#0000FF";
+    private static final String BLUE = "#4795F5";
+    private static final String RED = "#FF5192";
     private static final String LAYOUT_HEIGHT = "40vh";
     private static final String NO_DATA_LAYOUT_HEIGHT = "0px";
     private static final String GRAPH_HEIGHT = "100%";

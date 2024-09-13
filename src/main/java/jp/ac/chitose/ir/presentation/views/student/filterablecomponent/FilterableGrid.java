@@ -7,11 +7,10 @@ import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.function.ValueProvider;
 import jp.ac.chitose.ir.presentation.views.student.filter.Filter;
 
-import java.util.Collection;
 import java.util.List;
 
 public class FilterableGrid<FilterType, ItemType> extends AbstractFilterableComponent<FilterType, ItemType, Grid<ItemType>> {
-    public FilterableGrid(Collection<ItemType> items, List<Filter<FilterType, ItemType>> filters, FilterPosition position) {
+    public FilterableGrid(List<Filter<FilterType, ItemType>> filters, FilterPosition position) {
         super(filters, new Grid<>(), position);
     }
 

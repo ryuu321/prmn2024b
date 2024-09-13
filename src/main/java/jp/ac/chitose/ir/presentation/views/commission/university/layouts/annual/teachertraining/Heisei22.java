@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.teacherTraining;
+package jp.ac.chitose.ir.presentation.views.commission.university.layouts.annual.teachertraining;
 
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.vaadin.flow.component.grid.Grid;
