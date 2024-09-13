@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.infrastructure.repository;
 
+import jp.ac.chitose.ir.application.service.management.UsersData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -7,6 +8,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 @Repository
 public class UsersRepository {
@@ -64,6 +66,20 @@ public class UsersRepository {
         System.out.println("updated : " + updated);
     }
 
+    // ユーザ情報を UsersData レコードの形で取得
+    // 変更後の確認のため
+    public Optional<UsersData> getUsersData(long id){
+        Optional<UsersData> usersDataOp = jdbcClient.sql("""
+                SELECT id, login_id, user_name, NULLIF(1,1) AS password, is_available, NULLIF(1,1) AS display_name
+                FROM users
+                WHERE id = ?
+                """)
+                .params(id)
+                .query(UsersData.class)
+                .optional();
+        return  usersDataOp;
+    }
+
     // パスワード変更
     public void updatePassword(long userId, String password){
         int updated = jdbcClient.sql("""
@@ -76,7 +92,7 @@ public class UsersRepository {
         System.out.println("updated : " + updated);
     }
 
-    // ユーザ削除(無効化)
+    // ユーザ無効化
     public int deleteUser(long userId){
         // 日付の取得
         Timestamp deletedAt = new Timestamp(System.currentTimeMillis());
@@ -92,17 +108,17 @@ public class UsersRepository {
         return deleted;
     }
 
-    // 削除したユーザを有効化(テスト用)
+    // 削除したユーザを有効化
     public int reviveUser(long userId){
-        int deleted = jdbcClient.sql("""
+        int revived = jdbcClient.sql("""
                 UPDATE users
                 SET is_available = TRUE, deleted_at = NULL
                 WHERE id = ?
                 """)
                 .params(userId)
                 .update();
-        System.out.println("deleted : " + deleted);
-        return deleted;
+        System.out.println("deleted : " + revived);
+        return revived;
     }
 
     // ロール追加

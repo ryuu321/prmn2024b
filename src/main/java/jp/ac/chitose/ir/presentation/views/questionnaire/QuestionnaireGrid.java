@@ -113,10 +113,10 @@ public class QuestionnaireGrid extends VerticalLayout {
             String subjectId = subject_id;
 
 
+            var classTests = classSelect.getClassQPOJFICHKVJB(subjectId).data();
 
             Button subjectButton = new Button(subjectName);
             subjectButton.getElement().getStyle().set("cursor", "pointer");
-            var classTests = classSelect.getClassQPOJFICHKVJB(subject_id).data();
 
             subjectButton.addClickListener(event -> {
                 removeAll();

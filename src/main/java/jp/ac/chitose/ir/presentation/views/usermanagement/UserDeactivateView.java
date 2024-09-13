@@ -21,18 +21,23 @@ import jp.ac.chitose.ir.presentation.component.notification.SuccessNotification;
 
 import java.util.Set;
 
-@PageTitle("UserDelete")
-@Route(value = "/user_management/delete", layout = MainLayout.class)
+@PageTitle("UserDeactivate")
+@Route(value = "/user_management/deactivate", layout = MainLayout.class)
 @RolesAllowed({"administrator"})
-public class UserDeleteView extends VerticalLayout {
+public class UserDeactivateView extends VerticalLayout {
     private final UserManagementService userManagementService;
     private final UsersService usersService;
-    private Button deleteAccount;
+    private Button deactivateAccount;
     private Button cancelButton;
     private final UsersDataGrid usersDataGrid;
 
     // コンストラクタ
-    public UserDeleteView(UserManagementService userManagementService, UsersService usersService) {
+    public UserDeactivateView(UserManagementService userManagementService, UsersService usersService) {
+        // 文字列がセッションに渡されていたら成功メッセージを出力→セッションの文字列をnullに戻す
+        if(UI.getCurrent().getSession().getAttribute(String.class) != null) {
+            new SuccessNotification(UI.getCurrent().getSession().getAttribute(String.class));
+            UI.getCurrent().getSession().setAttribute(String.class, null);
+        }
         this.userManagementService = userManagementService;
         this.usersService = usersService;
         initializeButton();
@@ -43,15 +48,17 @@ public class UserDeleteView extends VerticalLayout {
 
     // ボタンの初期設定
     private void initializeButton() {
-        deleteAccount = new Button("削除", new Icon(VaadinIcon.MINUS), buttonClickEvent -> {
+        deactivateAccount = new Button("無効化", new Icon(VaadinIcon.BAN), buttonClickEvent -> {
             // 選択されているユーザーの情報を取得
             Set<UsersData> selectedUsers = usersDataGrid.getGrid().getSelectedItems();
 
-            // ユーザ削除処理
+            // ユーザ無効化処理
             // 正常終了→成功メッセージ 異常終了→エラーメッセージ
             try {
                 usersService.deleteUsers(selectedUsers);
-                new SuccessNotification(selectedUsers.size() + " 件のユーザの削除に成功");
+                // 成功メッセージをセッションに渡して画面をリロード
+                UI.getCurrent().getSession().setAttribute(String.class, selectedUsers.size() + " 件のユーザの無効化に成功");
+                UI.getCurrent().getPage().reload();
             } catch (UserManagementException e){
                 if(e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
                 else new ErrorNotification(e.getMessage());
@@ -60,7 +67,7 @@ public class UserDeleteView extends VerticalLayout {
                 new ErrorNotification("エラーが発生しました");
             }
         });
-        deleteAccount.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        deactivateAccount.addThemeVariants(ButtonVariant.LUMO_ERROR);
         cancelButton = new Button("戻る", buttonClickEvent -> {
             UI.getCurrent().navigate("/user_management");
         });
@@ -68,9 +75,9 @@ public class UserDeleteView extends VerticalLayout {
 
     // 各種コンポーネントの追加
     private void addComponents() {
-        add(new H1("ユーザーの削除"), new Paragraph("ユーザーを削除することができます。削除したいユーザーを選んで削除ボタンを押してください。"));
+        add(new H1("ユーザーの無効化"), new Paragraph("ユーザーのアクセス権限を無効化することができます。無効化したいユーザーを選んで無効化ボタンを押してください。"));
         add(cancelButton);
         add(usersDataGrid);
-        add(deleteAccount);
+        add(deactivateAccount);
     }
 }

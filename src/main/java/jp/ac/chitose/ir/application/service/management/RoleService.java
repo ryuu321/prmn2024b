@@ -18,7 +18,6 @@ public class RoleService {
 
     // すべてのロールをMap型で取得
     // キー: display_name, 値: id
-    // 戻り値のMapの keySet メソッドを適応して checkboxGroup.setItems メソッドの引数に入れればいけそう?
     public Map<String, Integer> getAllRolesMap(){
         HashMap<String, Integer> allRolesMap = new HashMap<>();
         for(Role role : roleRepository.getAllRolesList())
