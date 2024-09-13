@@ -33,7 +33,7 @@ public class QPOJFICHKVJBView extends VerticalLayout{
         this.questionDescribe = new QuestionDescribe(classSelect);
         VerticalLayout layout = new VerticalLayout();
 
-
+/*
 
         String subject_id = "AdiXne";  // 実際のsubject_idに置き換えてください
         init1(subject_id);
@@ -57,7 +57,7 @@ public class QPOJFICHKVJBView extends VerticalLayout{
             layout.add(questionMatters.generateQuestionMatters(i, subject_id));
             layout.add(questionnaireGrid.generateGrid(i, subject_id));//自由記述
         }
-        add(layout);
+        add(layout);*/
     }
 
     private void init1(String subject_id) {

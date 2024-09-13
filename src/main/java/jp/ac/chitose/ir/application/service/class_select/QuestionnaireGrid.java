@@ -15,12 +15,12 @@ public class QuestionnaireGrid {
         this.classSelect = classSelect;
     }
 
-    public Component generateGrid(int i, String subject_id) {
+    public Component generateGrid(int i, String subject_id,List<ReviewQPOJFICHKVJBDescription> reviewData) {
         i = i + 4;
         Grid<String> grid = new Grid<>(String.class, false);
         grid.addColumn(description -> String.valueOf(description)).setHeader("Q" + i);
 
-        List<ReviewQPOJFICHKVJBDescription> reviewData = classSelect.getReviewQPOJFICHKVJBDescription(subject_id).data();
+
         if (!reviewData.isEmpty()) {
             Collection<String> valuesCollection = switch (i) {
                 case 7 -> reviewData.get(0).q7().values();

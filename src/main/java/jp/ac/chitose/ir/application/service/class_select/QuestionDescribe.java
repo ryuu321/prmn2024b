@@ -10,9 +10,9 @@ public class QuestionDescribe {
     public QuestionDescribe(ClassSelect classSelect) {
         this.classSelect = classSelect;
     }
-    private H6 stat(int questionNum ,String subject_id){
+    private H6 stat(int questionNum ,String subject_id,ClassQPOJFICHKVJB ranking){
         var statics = classSelect.getReviewDescribe(subject_id).data().get(0);
-        var ranking = classSelect.getClassQPOJFICHKVJB(subject_id).data().get(0);
+
         List resultList = null;
         String rank = null;
         switch (questionNum){
@@ -65,8 +65,8 @@ public class QuestionDescribe {
         return new H6(formatted);
     }
 
-    public H6 getStatics(int questionnum,String subject_id){
-        return stat(questionnum,subject_id);
+    public H6 getStatics(int questionnum,String subject_id,ClassQPOJFICHKVJB ranking){
+        return stat(questionnum,subject_id,ranking);
     }
 
 }
