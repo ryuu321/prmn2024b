@@ -27,6 +27,7 @@ public record ClassQPOJFICHKVJB(
         List<Double> q14_割合,
         List<String> q15_項目,
         List<Double> q15_割合,
+        List<Double> 順位,
         int Flag
 ) {
 

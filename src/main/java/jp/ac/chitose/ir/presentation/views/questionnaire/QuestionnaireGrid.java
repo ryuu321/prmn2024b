@@ -41,7 +41,7 @@ public class QuestionnaireGrid extends VerticalLayout {
         this.questionMatters = new QuestionMatters(classSelect, scrollManager);
         this.questionGrid = new jp.ac.chitose.ir.application.service.class_select.QuestionnaireGrid(classSelect);
         this.questionDescribe = new QuestionDescribe(classSelect);
-        add(new H1("アンケート"));
+        add(new H1("授業評価アンケート"));
         initializeRadioButtons();
         Grid<QuestionnaireTopGrid> grid = initializeGrid(questionnaireService);
         addComponentsToLayout(grid);
@@ -113,18 +113,16 @@ public class QuestionnaireGrid extends VerticalLayout {
             String subjectId = subject_id;
 
 
+            var classTests = classSelect.getClassQPOJFICHKVJB(subjectId).data();
 
             Button subjectButton = new Button(subjectName);
             subjectButton.getElement().getStyle().set("cursor", "pointer");
-            var classTests = classSelect.getClassQPOJFICHKVJB(subject_id).data();
 
             subjectButton.addClickListener(event -> {
                 removeAll();
                 init1(subjectId,questionnaireService,year);
 
                 VerticalLayout layout2 = new VerticalLayout();
-
-
 
                 int flag = classTests.get(0).Flag();
                 for (int i = 0; i < 11; i++) {
@@ -208,10 +206,10 @@ public class QuestionnaireGrid extends VerticalLayout {
 
         String subject_Title = review_data.get(0).科目名().values().iterator().next();
         String subject_teacher = review_data.get(0).担当者().values().iterator().next();
-        backButton = new BackButton();
+        /*backButton = new BackButton();
         backButton.setVisible(true); // ボタンを表示
         backButton.addClickListener(event -> onBackButtonClick(questionnaireService));
-        add(backButton);
+        add(backButton);*/
 
         add(new H1("科目名:"+ subject_Title+"(開講年度:"+year+")"));
         add(new H3("科目担当:"+ subject_teacher));
