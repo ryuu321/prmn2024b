@@ -213,10 +213,10 @@ public class QuestionnaireGrid extends VerticalLayout {
 
         String subject_Title = review_data.get(0).科目名().values().iterator().next();
         String subject_teacher = review_data.get(0).担当者().values().iterator().next();
-        backButton = new BackButton();
+        /*backButton = new BackButton();
         backButton.setVisible(true); // ボタンを表示
         backButton.addClickListener(event -> onBackButtonClick(questionnaireService));
-        add(backButton);
+        add(backButton);*/
 
         add(new H1("科目名:"+ subject_Title+"(開講年度:"+year+")"));
         add(new H3("科目担当:"+ subject_teacher));
