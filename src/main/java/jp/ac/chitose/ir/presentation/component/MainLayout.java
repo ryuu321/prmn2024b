@@ -1,3 +1,4 @@
+
 package jp.ac.chitose.ir.presentation.component;
 
 
@@ -14,17 +15,24 @@ import jp.ac.chitose.ir.presentation.views.class_select.QPOJFICHKVJBView;
 import jp.ac.chitose.ir.presentation.views.commission.ir.IrQuestionView;
 import jp.ac.chitose.ir.presentation.views.commission.seiseki.CommissionView;
 import jp.ac.chitose.ir.presentation.views.commission.university.UniversityView;
+import jp.ac.chitose.ir.presentation.views.common.grade.CommonView;
+import jp.ac.chitose.ir.presentation.views.common.grid.CommonGridView;
 import jp.ac.chitose.ir.presentation.views.questionnaire.QuestionnaireTopView;
 import jp.ac.chitose.ir.presentation.views.student.StudentView;
 import jp.ac.chitose.ir.presentation.views.top.TopView;
-import org.springframework.beans.factory.annotation.Autowired;
+import jp.ac.chitose.ir.presentation.views.usermanagement.UserManagementTopView;
 import org.vaadin.lineawesome.LineAwesomeIcon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * The main view is a top-level placeholder for other views.
  */
 public class MainLayout extends AppLayout {
+
+    private SecurityService securityService;
 
     /**
      * A simple navigation item component, based on ListItem element.
@@ -58,8 +66,7 @@ public class MainLayout extends AppLayout {
 
     }
 
-    private SecurityService securityService;
-    public MainLayout(@Autowired SecurityService securityService) {
+    public MainLayout(SecurityService securityService) {
 //        addToNavbar(createHeaderContent());
 //        setDrawerOpened(false);
 
@@ -115,15 +122,38 @@ public class MainLayout extends AppLayout {
     }
 
     private MenuItemInfo[] createMenuItems() {
-        return new MenuItemInfo[]{ //
-                new MenuItemInfo("Top", LineAwesomeIcon.GLOBE_SOLID.create(), TopView.class), //
-                new MenuItemInfo("成績情報", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class),//
-                new MenuItemInfo("成績統計",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class),//
-                new MenuItemInfo("アンケート", LineAwesomeIcon.CHART_BAR.create(), QuestionnaireTopView.class),//
-                new MenuItemInfo("IRアンケート",LineAwesomeIcon.FILE_ALT.create(), IrQuestionView.class),//
-                new MenuItemInfo("Teacher", LineAwesomeIcon.CHART_AREA_SOLID.create(), QPOJFICHKVJBView.class),//
-                new MenuItemInfo("大学情報",LineAwesomeIcon.CHALKBOARD_TEACHER_SOLID.create(), UniversityView.class),//
-        };
+
+        List<MenuItemInfo> menuItems = new ArrayList<>();
+
+        // 共通画面
+        menuItems.add(new MenuItemInfo("Top", LineAwesomeIcon.GLOBE_SOLID.create(), TopView.class));
+        menuItems.add(new MenuItemInfo("授業に関する情報公開", LineAwesomeIcon.CHART_PIE_SOLID.create(), CommonView.class));
+        menuItems.add(new MenuItemInfo("成績評価分布", LineAwesomeIcon.ALIGN_JUSTIFY_SOLID.create(), CommonGridView.class));
+        menuItems.add(new MenuItemInfo("アンケート", LineAwesomeIcon.CHART_BAR.create(), QuestionnaireTopView.class));
+
+        // 管理者向け
+        if (securityService.getLoginUser().isAdmin()) {
+            menuItems.add(new MenuItemInfo("ユーザ管理", LineAwesomeIcon.ADDRESS_BOOK.create(), UserManagementTopView.class));
+        }
+
+        // IR委員向け
+        if (securityService.getLoginUser().isCommission()) {
+            menuItems.add(new MenuItemInfo("GPA統計",LineAwesomeIcon.ANGLE_DOUBLE_DOWN_SOLID.create(), CommissionView.class));
+            menuItems.add(new MenuItemInfo("大学情報",LineAwesomeIcon.CHALKBOARD_TEACHER_SOLID.create(), UniversityView.class));
+        }
+
+        // 教員向け
+        if (securityService.getLoginUser().isTeacher()) {
+            menuItems.add(new MenuItemInfo("Teacher", LineAwesomeIcon.CHART_AREA_SOLID.create(), QPOJFICHKVJBView.class));
+            menuItems.add(new MenuItemInfo("IRアンケート",LineAwesomeIcon.FILE_ALT.create(), IrQuestionView.class));
+        }
+
+        // 学生向け
+        if (securityService.getLoginUser().isStudent()) {
+            menuItems.add(new MenuItemInfo("成績情報", LineAwesomeIcon.ACCESSIBLE_ICON.create(), StudentView.class));
+        }
+
+        return menuItems.toArray(new MenuItemInfo[0]);
     }
 
 }

@@ -41,7 +41,7 @@ public class QuestionnaireGrid extends VerticalLayout {
         this.questionMatters = new QuestionMatters(classSelect, scrollManager);
         this.questionGrid = new jp.ac.chitose.ir.application.service.class_select.QuestionnaireGrid(classSelect);
         this.questionDescribe = new QuestionDescribe(classSelect);
-        add(new H1("アンケート"));
+        add(new H1("授業評価アンケート"));
         initializeRadioButtons();
         Grid<QuestionnaireTopGrid> grid = initializeGrid(questionnaireService);
         addComponentsToLayout(grid);
@@ -113,6 +113,7 @@ public class QuestionnaireGrid extends VerticalLayout {
             String subjectId = subject_id;
 
 
+            var classTests = classSelect.getClassQPOJFICHKVJB(subjectId).data();
 
             Button subjectButton = new Button(subjectName);
             subjectButton.getElement().getStyle().set("cursor", "pointer");
@@ -122,9 +123,7 @@ public class QuestionnaireGrid extends VerticalLayout {
                 init1(subjectId,questionnaireService,year);
 
                 VerticalLayout layout2 = new VerticalLayout();
-                layout2.getStyle().set("padding", "40px");
 
-                var classTests = classSelect.getClassQPOJFICHKVJB(subjectId).data();
                 int flag = classTests.get(0).Flag();
                 for (int i = 0; i < 11; i++) {
                     if (i == 3 && flag == 1) {
@@ -134,7 +133,7 @@ public class QuestionnaireGrid extends VerticalLayout {
                     }
 
                     layout2.add(questionMatters.generateQuestionMatters(i, subjectId)); // Example
-                    layout2.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, subjectId).getGraph());
+                    layout2.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, subjectId,classTests).getGraph());
                     layout2.add(questionDescribe.getStatics(i + 4, subjectId));
                 }
 
@@ -207,10 +206,10 @@ public class QuestionnaireGrid extends VerticalLayout {
 
         String subject_Title = review_data.get(0).科目名().values().iterator().next();
         String subject_teacher = review_data.get(0).担当者().values().iterator().next();
-        backButton = new BackButton();
+        /*backButton = new BackButton();
         backButton.setVisible(true); // ボタンを表示
         backButton.addClickListener(event -> onBackButtonClick(questionnaireService));
-        add(backButton);
+        add(backButton);*/
 
         add(new H1("科目名:"+ subject_Title+"(開講年度:"+year+")"));
         add(new H3("科目担当:"+ subject_teacher));

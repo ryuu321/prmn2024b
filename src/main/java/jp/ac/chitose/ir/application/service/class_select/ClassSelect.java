@@ -1,7 +1,6 @@
 package jp.ac.chitose.ir.application.service.class_select;
 
 import jp.ac.chitose.ir.application.service.TableData;
-import org.apache.commons.io.input.ObservableInputStream;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
@@ -31,5 +30,6 @@ public interface ClassSelect {
 
     @GetExchange("/describe/{subject_id}")
     TableData<ReviewDescribe> getReviewDescribe(@PathVariable String subject_id);
+
 }
 

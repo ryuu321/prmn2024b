@@ -78,7 +78,7 @@ public class SubjectCommonView extends VerticalLayout {
                 }
 
                 review.add(questionMatters.generateQuestionMatters(i, courseId)); // Example
-                review.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, courseId).getGraph());
+                review.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, courseId, classTests).getGraph());
                 review.add(questionDescribe.getStatics(i + 4, courseId));
             }
 
@@ -107,7 +107,7 @@ public class SubjectCommonView extends VerticalLayout {
                 }
 
                 review.add(questionMatters.generateQuestionMatters(i, courseId)); // Example
-                review.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, courseId).getGraph());
+                review.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, courseId, classTests).getGraph());
                 review.add(questionDescribe.getStatics(i + 4, courseId));
             }
 

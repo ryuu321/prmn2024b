@@ -8,7 +8,6 @@ import com.vaadin.flow.router.RouteAlias;
 import jakarta.annotation.security.PermitAll;
 import jp.ac.chitose.ir.application.service.management.SecurityService;
 import jp.ac.chitose.ir.presentation.component.MainLayout;
-import org.springframework.beans.factory.annotation.Autowired;
 
 // Top画面
 @PageTitle("IRTop")
@@ -17,44 +16,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PermitAll
 public class TopView extends VerticalLayout {
 
-    private SecurityService securityService;
+    private final SecurityService securityService;
 
-    public TopView(@Autowired SecurityService securityService){
+    public TopView(SecurityService securityService) {
         this.securityService = securityService;
 
-        // タイトル表示　（最も簡単なコンポーネントの使用例）
-        H1 title = new H1("CIST IR-Web");
-        add(title);
 
         // 共通メニュー
-        H2 menutitle1 = new H2("共通メニュー");
-        add(menutitle1);
+        H1 menutitle1 = new H1("共通メニュー");
+        Paragraph menutitle1Discription = new Paragraph("全ユーザー共通のメニューです。");
+        add(menutitle1, menutitle1Discription);
 
         // 成績情報ページ（StudentView）の紹介
-        Anchor grade = new Anchor("common/grade", "授業に関する情報公開");
-        grade.getElement().setAttribute("target", "");
-        Paragraph grade_paragraph =  new Paragraph("成績評価分布や授業評価アンケートの結果を科目ごとに確認できます。");
-        grade_paragraph.getStyle().set("top-margin", "0px");
-        add(grade, grade_paragraph);
+        H3 grade = new H3(new Anchor("common/grade", "授業に関する情報公開"));
+        Paragraph gradeDescription = new Paragraph("成績評価分布や授業評価アンケートの結果を科目ごとに確認できます。");
+        add(grade, createIndent(gradeDescription));
 
-        // 成績評価分布状況表
-        Anchor gradegird = new Anchor("common/grid", "成績評価分布状況表");
-        add(gradegird, new Paragraph("成績評価分布をまとめた表を確認できます。"));
+        // 成績評価分布状況表(未実装)
+        H3 gradeGird = new H3(new Anchor("common/grid", "成績評価分布状況表"));
+        Paragraph gradeGridDescription = new Paragraph("成績評価分布をまとめた表を確認できます。");
+        add(gradeGird, createIndent(gradeGridDescription));
 
         // 固有メニュー
-        H2 menutitle2 = new H2("固有メニュー");
+        H1 menutitle2 = new H1("固有メニュー");
         add(menutitle2);
 
-        if(securityService.getLoginUser().isAdmin()){
+        if (securityService.getLoginUser().isAdmin()) {
             addAdminView();
         }
-        if(securityService.getLoginUser().isCommission()){
+        if (securityService.getLoginUser().isCommission()) {
             addCommissionView();
         }
-        if(securityService.getLoginUser().isTeacher()){
+        if (securityService.getLoginUser().isTeacher()) {
             addTeacherView();
         }
-        if(securityService.getLoginUser().isStudent()){
+        if (securityService.getLoginUser().isStudent()) {
             addStudentView();
         }
 
@@ -63,35 +59,46 @@ public class TopView extends VerticalLayout {
 
     // 管理者向け要素の追加
     public void addAdminView() {
-        H3 admin = new H3("管理者向けメニュー");
-        Anchor users = new Anchor("/user_management", "ユーザー管理");
+        H2 admin = new H2("管理者向けメニュー");
+        H3 users = new H3(new Anchor("/user_management", "ユーザー管理"));
         add(admin, users);
-        add(new Paragraph("ユーザー管理を行う画面です。"));
+        Paragraph usersDescription = new Paragraph("ユーザー管理を行う画面です。");
+        add(createIndent(usersDescription));
     }
 
     // IR委員会向け要素の追加
     public void addCommissionView() {
-        H3 commission = new H3("IR委員会向けメニュー");
-        Anchor stat = new Anchor("/commission", "統計情報");
-        Anchor universityInfo = new Anchor("university", "大学情報");
+        H2 commission = new H2("IR委員会向けメニュー");
+        H3 stat = new H3(new Anchor("/commission", "GPAと基本統計量に関するデータ"));
+        H3 universityInfo = new H3(new Anchor("university", "大学情報"));
         add(commission);
-        add(stat, new Paragraph("統計情報が確認できます。"));
-        add(universityInfo, new Paragraph("大学の基本的な情報が確認出来ます"));
+        Paragraph statDescription = new Paragraph("GPAに関する統計情報が確認できます。");
+        Paragraph universityInfoDescription = new Paragraph("大学の基本的な情報が確認出来ます");
+        add(stat, createIndent(statDescription));
+        add(universityInfo, createIndent(universityInfoDescription));
     }
 
     // 教員向け要素の追加
     public void addTeacherView() {
-        H3 teacher = new H3("教員向けメニュー");
-        Anchor grade_assess = new Anchor("/questionnaire", "担当した科目の詳細情報");
-        add(teacher, grade_assess, new Paragraph("担当した科目の詳細情報を確認できます。"));
+        H2 teacher = new H2("教員向けメニュー");
+        H3 gradeAssess = new H3(new Anchor("/questionnaire", "担当した科目の詳細情報"));
+        Paragraph gradeAssessDescription = new Paragraph("担当した科目の詳細情報を確認できます。");
+        add(teacher, gradeAssess, createIndent(gradeAssessDescription));
     }
 
     // 学生向け要素の追加
     public void addStudentView() {
-        H3 student = new H3("学生向けメニュー");
-        Anchor student_assess = new Anchor("/student", "履修した科目の詳細情報");
+        H2 student = new H2("学生向けメニュー");
+        H3 studentAssess = new H3(new Anchor("/grade/student", "履修した科目の詳細情報"));
         add(student);
-        add(student, student_assess, new Paragraph("履修した科目の詳細情報を確認できます"));
+        Paragraph studentAssessDescription = new Paragraph("履修した科目の詳細情報を確認できます");
+        add(studentAssess, createIndent(studentAssessDescription));
+    }
+
+    // paragraphにインデントを付ける
+    private Paragraph createIndent(Paragraph paragraph) {
+        paragraph.getStyle().set("margin-left", "2em");
+        return paragraph;
     }
 
 }

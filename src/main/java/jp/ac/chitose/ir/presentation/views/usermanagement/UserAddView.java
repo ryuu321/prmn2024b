@@ -44,10 +44,10 @@ public class UserAddView extends VerticalLayout {
             String loginID = userManagementTextFields.getLoginID();
             String userName = userManagementTextFields.getUserName();
             String password = userManagementTextFields.getUserPassword();
-            Set<String> selectedRoles = userManagementTextFields.getRoles();
+            Set<Integer> selectedRoleIds = userManagementTextFields.getRoleIds();
 
             try {
-                usersService.addUser(loginID, userName, password, selectedRoles);
+                usersService.addUser(loginID, userName, password, selectedRoleIds);
                 new SuccessNotification(userName + "の追加に成功");
             } catch (UserManagementException e){
                 if(e.getMessage().isEmpty()) new ErrorNotification("エラーが発生しました");
@@ -64,8 +64,8 @@ public class UserAddView extends VerticalLayout {
 
     // 各種コンポーネントの追加
     private void addComponents() {
-        add(cancelButton);
         add(new H1("ユーザーの追加"), new Paragraph("ユーザーを追加することができます。追加したいユーザーのユーザID,ユーザーネーム,12文字以上のパスワードを入力し、ロールを選択してください。"));
+        add(cancelButton);
         add(userManagementTextFields);
         add(createAccount);
     }
