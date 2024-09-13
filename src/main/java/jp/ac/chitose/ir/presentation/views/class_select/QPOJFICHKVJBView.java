@@ -49,7 +49,7 @@ public class QPOJFICHKVJBView extends VerticalLayout{
                 continue;}
 
             layout.add(questionMatters.generateQuestionMatters(i,subject_id));//example
-            layout.add(questionnaireGraph.generateQuestionnaireGraph(i+4,subject_id).getGraph());
+            layout.add(questionnaireGraph.generateQuestionnaireGraph(i+4,subject_id,classTests).getGraph());
             layout.add(questionDescribe.getStatics(i+4,subject_id));
 
         }

@@ -116,15 +116,16 @@ public class QuestionnaireGrid extends VerticalLayout {
 
             Button subjectButton = new Button(subjectName);
             subjectButton.getElement().getStyle().set("cursor", "pointer");
+            var classTests = classSelect.getClassQPOJFICHKVJB(subject_id).data();
 
             subjectButton.addClickListener(event -> {
                 removeAll();
                 init1(subjectId,questionnaireService,year);
 
                 VerticalLayout layout2 = new VerticalLayout();
-                layout2.getStyle().set("padding", "40px");
 
-                var classTests = classSelect.getClassQPOJFICHKVJB(subjectId).data();
+
+
                 int flag = classTests.get(0).Flag();
                 for (int i = 0; i < 11; i++) {
                     if (i == 3 && flag == 1) {
@@ -134,7 +135,7 @@ public class QuestionnaireGrid extends VerticalLayout {
                     }
 
                     layout2.add(questionMatters.generateQuestionMatters(i, subjectId)); // Example
-                    layout2.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, subjectId).getGraph());
+                    layout2.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, subjectId,classTests).getGraph());
                     layout2.add(questionDescribe.getStatics(i + 4, subjectId));
                 }
 
