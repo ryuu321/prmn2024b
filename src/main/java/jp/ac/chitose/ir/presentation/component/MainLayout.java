@@ -14,12 +14,12 @@ import jp.ac.chitose.ir.presentation.views.class_select.QPOJFICHKVJBView;
 import jp.ac.chitose.ir.presentation.views.commission.ir.IrQuestionView;
 import jp.ac.chitose.ir.presentation.views.commission.seiseki.CommissionView;
 import jp.ac.chitose.ir.presentation.views.commission.university.UniversityView;
-import jp.ac.chitose.ir.presentation.views.common.CommonView;
+import jp.ac.chitose.ir.presentation.views.common.grade.CommonView;
+import jp.ac.chitose.ir.presentation.views.common.grid.CommonGridView;
 import jp.ac.chitose.ir.presentation.views.questionnaire.QuestionnaireTopView;
 import jp.ac.chitose.ir.presentation.views.student.StudentView;
 import jp.ac.chitose.ir.presentation.views.top.TopView;
 import jp.ac.chitose.ir.presentation.views.usermanagement.UserManagementTopView;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class MainLayout extends AppLayout {
 
     }
 
-    public MainLayout(@Autowired SecurityService securityService) {
+    public MainLayout(SecurityService securityService) {
 //        addToNavbar(createHeaderContent());
 //        setDrawerOpened(false);
 
@@ -127,6 +127,7 @@ public class MainLayout extends AppLayout {
         // 共通画面
         menuItems.add(new MenuItemInfo("Top", LineAwesomeIcon.GLOBE_SOLID.create(), TopView.class));
         menuItems.add(new MenuItemInfo("授業に関する情報公開", LineAwesomeIcon.CHART_PIE_SOLID.create(), CommonView.class));
+        menuItems.add(new MenuItemInfo("成績評価分布", LineAwesomeIcon.ALIGN_JUSTIFY_SOLID.create(), CommonGridView.class));
         menuItems.add(new MenuItemInfo("アンケート", LineAwesomeIcon.CHART_BAR.create(), QuestionnaireTopView.class));
 
         // 管理者向け
