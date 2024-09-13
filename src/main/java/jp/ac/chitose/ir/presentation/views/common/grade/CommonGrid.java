@@ -1,4 +1,4 @@
-package jp.ac.chitose.ir.presentation.views.common;
+package jp.ac.chitose.ir.presentation.views.common.grade;
 
 import jp.ac.chitose.ir.application.service.student.StudentGrade;
 import jp.ac.chitose.ir.presentation.views.student.filter.Filter;

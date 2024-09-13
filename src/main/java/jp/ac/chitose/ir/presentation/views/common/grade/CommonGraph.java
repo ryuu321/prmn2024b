@@ -1,9 +1,8 @@
-package jp.ac.chitose.ir.presentation.views.common;
+package jp.ac.chitose.ir.presentation.views.common.grade;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import jp.ac.chitose.ir.application.service.student.GradeCount;
-import jp.ac.chitose.ir.application.service.student.StudentGrade;
 import jp.ac.chitose.ir.presentation.component.graph.*;
 
 import java.util.Arrays;

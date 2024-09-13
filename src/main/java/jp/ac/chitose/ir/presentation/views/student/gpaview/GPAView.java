@@ -1,5 +1,6 @@
 package jp.ac.chitose.ir.presentation.views.student.gpaview;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.function.ValueProvider;
 import jp.ac.chitose.ir.application.service.commission.GradeService;
@@ -31,9 +32,8 @@ public class GPAView extends VerticalLayout {
             (grade, str) -> matchesFilter(str, grade.department()),
             (grade, str) -> matchesFilter(str, grade.compulsory_subjects()),
             (grade, str) -> matchesFilter(str, grade.grading()));
-    private final static List<String> GRADE_HEADER_NAMES = List.of("科目名", "対象学年", "対象学科", "必選別", "単位数", "成績評価");
+    private final static List<String> GRADE_HEADER_NAMES = List.of("対象学年", "対象学科", "必選別", "単位数", "成績評価");
     private final static List<ValueProvider<StudentGrade, String>> GRADE_VALUE_PROVIDERS = List.of(
-            StudentGrade::lecture_name,
             StudentGrade::schoolYear,
             StudentGrade::department,
             StudentGrade::compulsory_subjects,
@@ -51,12 +51,16 @@ public class GPAView extends VerticalLayout {
 
     private GradeGrid createGradeGrid(String studentNumber, FilterableComboBox<String, StudentGrade> subjectComboBox) {
         GradeGrid grid = new GradeGrid(createGradeGridFilters(), FilterPosition.TOP);
+        grid.addComponentColumn(grade -> {
+            Button button = new Button(grade.lecture_name());
+            button.addClickListener(buttonClickEvent -> subjectComboBox.setValue(grade));
+            return button;
+        }).setHeader("科目名").setSortable(true);
         for(int i = 0; i < GRADE_HEADER_NAMES.size(); i++) {
-            grid.addColumn(GRADE_VALUE_PROVIDERS.get(i), GRADE_HEADER_NAMES.get(i));
+            grid.addColumn(GRADE_VALUE_PROVIDERS.get(i), GRADE_HEADER_NAMES.get(i)).setSortable(true);
         }
         grid.setAllRowsVisible(true);
         grid.setItems(studentGradeService.getStudentNumberSubjects(studentNumber).data());
-        grid.addItemClickListener(grade -> subjectComboBox.setValue(grade.getItem()));
         return grid;
     }
 

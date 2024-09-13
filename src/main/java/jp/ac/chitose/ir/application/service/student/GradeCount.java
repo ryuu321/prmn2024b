@@ -5,7 +5,9 @@ public record GradeCount(
         int 可,
         int 良,
         int 優,
-        int 秀
+        int 秀,
+        String 教員名,
+        String 科目名
 ) {
     public int 合計の人数() {
         return 不可 + 可 + 良 + 優 + 秀;

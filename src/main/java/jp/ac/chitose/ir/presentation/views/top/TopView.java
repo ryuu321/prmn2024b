@@ -21,18 +21,19 @@ public class TopView extends VerticalLayout {
     public TopView(SecurityService securityService) {
         this.securityService = securityService;
 
+
         // 共通メニュー
         H1 menutitle1 = new H1("共通メニュー");
         Paragraph menutitle1Discription = new Paragraph("全ユーザー共通のメニューです。");
         add(menutitle1, menutitle1Discription);
 
         // 成績情報ページ（StudentView）の紹介
-        H3 grade = new H3(new Anchor("/common", "授業に関する情報公開"));
+        H3 grade = new H3(new Anchor("common/grade", "授業に関する情報公開"));
         Paragraph gradeDescription = new Paragraph("成績評価分布や授業評価アンケートの結果を科目ごとに確認できます。");
         add(grade, createIndent(gradeDescription));
 
         // 成績評価分布状況表(未実装)
-        H3 gradeGird = new H3(new Anchor("", "成績評価分布状況表(未実装)"));
+        H3 gradeGird = new H3(new Anchor("common/grid", "成績評価分布状況表"));
         Paragraph gradeGridDescription = new Paragraph("成績評価分布をまとめた表を確認できます。");
         add(gradeGird, createIndent(gradeGridDescription));
 
