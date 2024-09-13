@@ -3,6 +3,8 @@ package jp.ac.chitose.ir.application.service.class_select;
 import com.vaadin.flow.component.html.H3;
 import jp.ac.chitose.ir.presentation.component.scroll.ScrollManager;
 
+import java.util.List;
+
 public class QuestionMatters {
     private ClassSelect classSelect;
     private ScrollManager scrollManager;
@@ -11,8 +13,8 @@ public class QuestionMatters {
         this.scrollManager = scrollManager;
     }
 
-    private H3 title(int i, String subject_id) {
-        var Classtitle = classSelect.getReviewTitle(subject_id).data();
+    private H3 title(int i, String subject_id, List<ReviewTitle> Classtitle) {
+
         String Title = String.valueOf(Classtitle.get(i));
 
         if (Title != null && Title.length() > 0) {
@@ -29,9 +31,9 @@ public class QuestionMatters {
         return null;
     }
 
-    public H3 generateQuestionMatters(int i,String subject_id){
+    public H3 generateQuestionMatters(int i,String subject_id,List<ReviewTitle>classTitle){
 
-        return title(i,subject_id);
+        return title(i,subject_id,classTitle);
     }
 }
 

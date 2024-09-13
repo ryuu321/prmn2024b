@@ -114,7 +114,9 @@ public class QuestionnaireGrid extends VerticalLayout {
 
 
             var classTests = classSelect.getClassQPOJFICHKVJB(subjectId).data();
-
+            var classTitle = classSelect.getReviewTitle(subject_id).data();
+            var ranking = classTests.get(0);
+            var reviewData = classSelect.getReviewQPOJFICHKVJBDescription(subject_id).data();
             Button subjectButton = new Button(subjectName);
             subjectButton.getElement().getStyle().set("cursor", "pointer");
 
@@ -127,20 +129,20 @@ public class QuestionnaireGrid extends VerticalLayout {
                 int flag = classTests.get(0).Flag();
                 for (int i = 0; i < 11; i++) {
                     if (i == 3 && flag == 1) {
-                        layout2.add(questionMatters.generateQuestionMatters(3, subjectId));
-                        layout2.add(questionGrid.generateGrid(i, subjectId)); // 自由記述
+                        layout2.add(questionMatters.generateQuestionMatters(3, subjectId,classTitle));
+                        layout2.add(questionGrid.generateGrid(i, subjectId,reviewData)); // 自由記述
                         continue;
                     }
 
-                    layout2.add(questionMatters.generateQuestionMatters(i, subjectId)); // Example
+                    layout2.add(questionMatters.generateQuestionMatters(i, subjectId,classTitle)); // Example
                     layout2.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, subjectId,classTests).getGraph());
-                    layout2.add(questionDescribe.getStatics(i + 4, subjectId));
+                    layout2.add(questionDescribe.getStatics(i + 4, subjectId,ranking));
                 }
 
                 // 追加のループで質問と自由記述を追加
                 for (int i = 13; i <= 15; i++) {
-                    layout2.add(questionMatters.generateQuestionMatters(i, subjectId));
-                    layout2.add(questionGrid.generateGrid(i, subjectId)); // 自由記述
+                    layout2.add(questionMatters.generateQuestionMatters(i, subjectId,classTitle));
+                    layout2.add(questionGrid.generateGrid(i, subjectId,reviewData)); // 自由記述
                 }
 
                 // 新しいレイアウトを追加
@@ -206,10 +208,10 @@ public class QuestionnaireGrid extends VerticalLayout {
 
         String subject_Title = review_data.get(0).科目名().values().iterator().next();
         String subject_teacher = review_data.get(0).担当者().values().iterator().next();
-        backButton = new BackButton();
+       /* backButton = new BackButton();
         backButton.setVisible(true); // ボタンを表示
         backButton.addClickListener(event -> onBackButtonClick(questionnaireService));
-        add(backButton);
+        add(backButton);*/
 
         add(new H1("科目名:"+ subject_Title+"(開講年度:"+year+")"));
         add(new H3("科目担当:"+ subject_teacher));
