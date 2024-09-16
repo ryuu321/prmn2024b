@@ -19,35 +19,22 @@ public class AuthenticationService {
     public Optional<User> authenticate(String loginId, String password) {
 
         // DBと接続して情報を取ってくる処理。AuthenticationRepositoryで実際の処理をかく
-        // todo データベースの移行が完了したら以下の分岐処理は削除する
-        Optional<User> userOp = authenticationRepository.getUserInformation(loginId, password);
-        if(userOp.isPresent()){
-            System.out.println("平文で認証します");
-            System.out.println("認証処理");
-            return userOp;
-        }
+        // userOpを空のOptionalで初期化
+        Optional<User> userOp = Optional.empty();
 
         // loginIdからパスワードを取得
         Optional<Password> passwordOp = authenticationRepository.getPassword(loginId);
+        System.out.println("認証処理");
 
-        // そもそもloginIdが存在しなければ空のリストを返す
+        // そもそもloginIdが存在しなければ空のOptionalを返す
         if(passwordOp.isEmpty()){
-            System.out.println("ログインIDが存在しません");
             return userOp;
         }
 
         // ハッシュ化したパスワードが一致していればユーザ情報を取得
-        // todo 全部がハッシュ化に対応したらtry-catchは消しても良いかも
-        try {
-            if (passwordEncoder.matches(password, passwordOp.get().value())) {
-                System.out.println("平文で存在しなかったのでハッシュ化したパスワードで認証します");
-                userOp = authenticationRepository.getUserInformation(loginId);
-            }
-        } catch (IllegalArgumentException ignore){
-
+        if (passwordEncoder.matches(password, passwordOp.get().value())) {
+            userOp = authenticationRepository.getUserInformation(loginId);
         }
-
-        System.out.println("認証処理");
         return userOp;
     }
 }
