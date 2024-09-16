@@ -17,11 +17,10 @@ public class AuthenticationService {
     }
 
     public Optional<User> authenticate(String loginId, String password) {
-
-        // DBと接続して情報を取ってくる処理。AuthenticationRepositoryで実際の処理をかく
         // userOpを空のOptionalで初期化
         Optional<User> userOp = Optional.empty();
 
+        // DBと接続して情報を取ってくる処理。AuthenticationRepositoryで実際の処理をかく
         // loginIdからパスワードを取得
         Optional<Password> passwordOp = authenticationRepository.getPassword(loginId);
         System.out.println("認証処理");
