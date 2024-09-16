@@ -155,7 +155,7 @@ public class UsersService {
         else{
             // パスワードの書式が正しいか判定
             if(!this.checkPasswordFormat(password))
-                throw new UserManagementException("パスワードは要件を満たしていません");
+                throw new UserManagementException("パスワードの要件を満たしていません");
 
             // パスワードのハッシュ化
             password = passwordEncoder.encode(password);
@@ -204,7 +204,7 @@ public class UsersService {
     public void updateLoginUserPassword(String prePassword, String newPassword, String confirmPassword) throws UserManagementException{
         // 入力情報が空の場所があった場合エラーを返す
         if(StringUtils.isEmpty(prePassword) || StringUtils.isEmpty(newPassword) || StringUtils.isEmpty(confirmPassword))
-            throw new UserManagementException("入力が空のフィールドが存在します");
+            throw new UserManagementException("空の入力欄が存在します");
 
         // 現在のパスワードをuser_idから取得
         String encodedDBPassword = authenticationRepository.getPassword(securityService.getLoginUser().getAccountId()).get().value();
