@@ -213,11 +213,11 @@ public class UsersService {
         if(!passwordEncoder.matches(prePassword, encodedDBPassword))
             throw new UserManagementException("現在のパスワードが正しくありません");
 
-        // 新しいパスワードが異なっている場合3を返す
+        // 新しいパスワードが異なっている場合エラーを返す
         if(!newPassword.equals(confirmPassword))
             throw new UserManagementException("新しいパスワードが一致していません");
 
-        // 新しいパスワードと現在のパスワードが一致していた場合4を返す
+        // 新しいパスワードと現在のパスワードが一致していた場合エラーを返す
         if(newPassword.equals(prePassword))
             throw new UserManagementException("現在のパスワードと新しいパスワードが一致しています");
 
