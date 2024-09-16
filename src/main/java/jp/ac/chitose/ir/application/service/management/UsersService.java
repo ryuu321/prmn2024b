@@ -176,7 +176,7 @@ public class UsersService {
 
     // ユーザ無効化
     // 途中でおかしくなったら例外を投げてロールバック
-    public void deleteUsers(Set<UsersData> selectedUsers) throws UserManagementException{
+    public void deactivateUsers(Set<UsersData> selectedUsers) throws UserManagementException{
         // 1件ずつユーザー情報を取り出して操作する
         for (UsersData user : selectedUsers) {
             long id = user.id();
@@ -184,18 +184,18 @@ public class UsersService {
                 throw new UserManagementException("現在ログイン中のユーザが含まれています");
             }
 
-            int deleted = usersRepository.deleteUser(id);
+            int deleted = usersRepository.deactivateUser(id);
 
             if(deleted == 0) throw new UserManagementException(user.user_name() + "の削除に失敗");
         }
     }
 
     // ユーザ有効化
-    public void reviveUsers(Set<UsersData> selectedUsers) throws UserManagementException{
+    public void activateUsers(Set<UsersData> selectedUsers) throws UserManagementException{
         // 1件ずつユーザー情報を取り出して操作する
         for (UsersData user : selectedUsers) {
             long id = user.id();
-            int revived = usersRepository.reviveUser(id);
+            int revived = usersRepository.activateUser(id);
 
             if(revived == 0) throw new UserManagementException(user.user_name() + "の削除に失敗");
         }
