@@ -2,6 +2,8 @@ package jp.ac.chitose.ir.presentation.views.student;
 
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -45,8 +47,12 @@ public class StudentView extends VerticalLayout {
         String studentNumber = securityService.getLoginUser().getLoginId();
         subjectView = new SubjectView(studentGradeService, studentGradeService.getStudentNumberSubjects(studentNumber).data().get(0).account_id());
         gpaView = new GPAView(gradeService, studentGradeService, studentNumber, subjectComboBox);
+        // 画面タイトルと説明
+        H1 title = new H1("履修した科目の詳細情報");
+        Paragraph description = new Paragraph("履修した科目で設定した目標や振り返り、自身の成績などが確認できます。");
 
         initializeSubjectComboBox();
+        add(title, description);
         addComponentToLayout();
     }
 

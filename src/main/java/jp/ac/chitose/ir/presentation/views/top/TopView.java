@@ -21,18 +21,19 @@ public class TopView extends VerticalLayout {
     public TopView(SecurityService securityService) {
         this.securityService = securityService;
 
+
         // 共通メニュー
         H1 menutitle1 = new H1("共通メニュー");
         Paragraph menutitle1Discription = new Paragraph("全ユーザー共通のメニューです。");
         add(menutitle1, menutitle1Discription);
 
         // 成績情報ページ（StudentView）の紹介
-        H3 grade = new H3(new Anchor("/common", "授業に関する情報公開"));
+        H3 grade = new H3(new Anchor("common/grade", "授業に関する情報公開"));
         Paragraph gradeDescription = new Paragraph("成績評価分布や授業評価アンケートの結果を科目ごとに確認できます。");
         add(grade, createIndent(gradeDescription));
 
         // 成績評価分布状況表(未実装)
-        H3 gradeGird = new H3(new Anchor("", "成績評価分布状況表(未実装)"));
+        H3 gradeGird = new H3(new Anchor("common/grid", "成績評価分布状況表"));
         Paragraph gradeGridDescription = new Paragraph("成績評価分布をまとめた表を確認できます。");
         add(gradeGird, createIndent(gradeGridDescription));
 
@@ -68,10 +69,10 @@ public class TopView extends VerticalLayout {
     // IR委員会向け要素の追加
     public void addCommissionView() {
         H2 commission = new H2("IR委員会向けメニュー");
-        H3 stat = new H3(new Anchor("/commission", "統計情報"));
+        H3 stat = new H3(new Anchor("/commission", "GPAと基本統計量に関するデータ"));
         H3 universityInfo = new H3(new Anchor("university", "大学情報"));
         add(commission);
-        Paragraph statDescription = new Paragraph("統計情報が確認できます。");
+        Paragraph statDescription = new Paragraph("GPAに関する統計情報が確認できます。");
         Paragraph universityInfoDescription = new Paragraph("大学の基本的な情報が確認出来ます");
         add(stat, createIndent(statDescription));
         add(universityInfo, createIndent(universityInfoDescription));
