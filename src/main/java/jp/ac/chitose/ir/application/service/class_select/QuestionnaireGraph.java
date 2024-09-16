@@ -9,18 +9,10 @@ import java.util.stream.IntStream;
 
 
 public class QuestionnaireGraph {
-    private ClassSelect classSelect;
-    public QuestionnaireGraph(ClassSelect classSelect){
 
-        this.classSelect = classSelect;
-    }
-
-    private Graph band(int questionNum,String subject_id,List<ClassQPOJFICHKVJB> classTests) {
-        //var classTests = classSelect.getClassQPOJFICHKVJB(subject_id).data();
+    private Graph band(int questionNum,List<ClassQPOJFICHKVJB> classTests) {
 
         List<GraphSeries> seriesList;
-
-
         switch (questionNum) {
             case 4 -> seriesList = createGraphSeries(classTests.get(0).q4_項目(), classTests.get(0).q4_割合(), "Q4");
             case 5 -> seriesList = createGraphSeries(classTests.get(0).q5_項目(), classTests.get(0).q5_割合(), "Q5");
@@ -36,7 +28,6 @@ public class QuestionnaireGraph {
             case 15 -> seriesList = createGraphSeries(classTests.get(0).q15_項目(), classTests.get(0).q15_割合(), "Q15");
             default -> throw new IllegalArgumentException("Invalid Question Number");
         }
-
         return Graph.Builder.get().band()
                 .height("400px")
                 .width("400px")
@@ -54,7 +45,7 @@ public class QuestionnaireGraph {
                 .toList();
     }
 
-    public Graph generateQuestionnaireGraph(int questionNum, String subjectId, List<ClassQPOJFICHKVJB> classTests) {
-        return band(questionNum, subjectId,classTests);
+    public Graph generateQuestionnaireGraph(int questionNum, List<ClassQPOJFICHKVJB> classTests) {
+        return band(questionNum,classTests);
     }
 }

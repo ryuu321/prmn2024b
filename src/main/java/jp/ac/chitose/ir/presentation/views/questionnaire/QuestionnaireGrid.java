@@ -12,7 +12,6 @@ import jp.ac.chitose.ir.application.service.class_select.*;
 import jp.ac.chitose.ir.application.service.questionnaire.QuestionnaireService;
 import jp.ac.chitose.ir.application.service.questionnaire.QuestionnaireTopGrid;
 import jp.ac.chitose.ir.presentation.component.scroll.ScrollManager;
-import jp.ac.chitose.ir.presentation.views.commission.university.components.BackButton;
 
 import java.util.List;
 
@@ -28,24 +27,20 @@ public class QuestionnaireGrid extends VerticalLayout {
     private QuestionMatters questionMatters;
     private jp.ac.chitose.ir.application.service.class_select.QuestionnaireGrid questionGrid;
     private QuestionDescribe questionDescribe;
-    private BackButton backButton;
-    private QuestionnaireService questionnaireService;
-    private QuestionnaireGrid questionnaireGrid;
 
 
     // コンストラクタ
     public QuestionnaireGrid(QuestionnaireService questionnaireService,ClassSelect classSelect) {
         this.classSelect = classSelect;
         this.scrollManager = new ScrollManager();
-        this.questionnaireGraph=new QuestionnaireGraph(classSelect);
-        this.questionMatters = new QuestionMatters(classSelect, scrollManager);
-        this.questionGrid = new jp.ac.chitose.ir.application.service.class_select.QuestionnaireGrid(classSelect);
+        this.questionnaireGraph=new QuestionnaireGraph();
+        this.questionMatters = new QuestionMatters(scrollManager);
+        this.questionGrid = new jp.ac.chitose.ir.application.service.class_select.QuestionnaireGrid();
         this.questionDescribe = new QuestionDescribe(classSelect);
-        add(new H1("アンケート"));
+        add(new H1("授業評価アンケート"));
         initializeRadioButtons();
         Grid<QuestionnaireTopGrid> grid = initializeGrid(questionnaireService);
         addComponentsToLayout(grid);
-
     }
 
     // 各種ラジオボタンの初期化
@@ -96,7 +91,7 @@ public class QuestionnaireGrid extends VerticalLayout {
         grid.setWidthFull();
         grid.setAllRowsVisible(true);
         gridListDataView = grid.setItems(questionnaireService.getQuestionnaireTopGrid().data());
-        
+
         grid.addComponentColumn(item ->{
             String subject_id ="OjfV6m";
 
@@ -117,32 +112,33 @@ public class QuestionnaireGrid extends VerticalLayout {
             var classTitle = classSelect.getReviewTitle(subject_id).data();
             var ranking = classTests.get(0);
             var reviewData = classSelect.getReviewQPOJFICHKVJBDescription(subject_id).data();
+
             Button subjectButton = new Button(subjectName);
             subjectButton.getElement().getStyle().set("cursor", "pointer");
 
             subjectButton.addClickListener(event -> {
                 removeAll();
-                init1(subjectId,questionnaireService,year);
+                addInit(subjectId,year);
 
                 VerticalLayout layout2 = new VerticalLayout();
 
                 int flag = classTests.get(0).Flag();
                 for (int i = 0; i < 11; i++) {
                     if (i == 3 && flag == 1) {
-                        layout2.add(questionMatters.generateQuestionMatters(3, subjectId,classTitle));
-                        layout2.add(questionGrid.generateGrid(i, subjectId,reviewData)); // 自由記述
+                        layout2.add(questionMatters.generateQuestionMatters(3,classTitle));
+                        layout2.add(questionGrid.generateGrid(i,reviewData)); // 自由記述
                         continue;
                     }
 
-                    layout2.add(questionMatters.generateQuestionMatters(i, subjectId,classTitle)); // Example
-                    layout2.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, subjectId,classTests).getGraph());
+                    layout2.add(questionMatters.generateQuestionMatters(i,classTitle)); // Example
+                    layout2.add(questionnaireGraph.generateQuestionnaireGraph(i + 4,classTests).getGraph());
                     layout2.add(questionDescribe.getStatics(i + 4, subjectId,ranking));
                 }
 
                 // 追加のループで質問と自由記述を追加
                 for (int i = 13; i <= 15; i++) {
-                    layout2.add(questionMatters.generateQuestionMatters(i, subjectId,classTitle));
-                    layout2.add(questionGrid.generateGrid(i, subjectId,reviewData)); // 自由記述
+                    layout2.add(questionMatters.generateQuestionMatters(i,classTitle));
+                    layout2.add(questionGrid.generateGrid(i,reviewData)); // 自由記述
                 }
 
                 // 新しいレイアウトを追加
@@ -161,16 +157,6 @@ public class QuestionnaireGrid extends VerticalLayout {
         grid.addColumn(QuestionnaireTopGrid::number_credits_course).setHeader("単位数").setSortable(true);
 
         return grid;
-    }
-
-    // グリッドにカラムを追加
-    private void addColumnsToGrid(Grid<QuestionnaireTopGrid> grid) {
-        grid.addColumn(QuestionnaireTopGrid::lecture_name).setHeader("科目名").setWidth("30%").setSortable(true);
-        grid.addColumn(data -> data.target_grade() + "年生").setHeader("対象学年").setSortable(true);
-        grid.addColumn(data -> data.available_year() + "年").setHeader("開講年次").setSortable(true);
-        grid.addColumn(data -> changeDepartmentValue(data.target_department())).setHeader("対象学科").setSortable(true);
-        grid.addColumn(QuestionnaireTopGrid::compulsory_subjects).setHeader("必選別").setSortable(true);
-        grid.addColumn(QuestionnaireTopGrid::number_credits_course).setHeader("単位数").setSortable(true);
     }
 
     // コンポーネントをレイアウトに追加
@@ -202,37 +188,13 @@ public class QuestionnaireGrid extends VerticalLayout {
         }
     }
 
-    private void init1(String subject_id,QuestionnaireService questionnaireService,String year) {
+    private void addInit(String subject_id,String year) {
         List<ReviewQPOJFICHKVJBDescription> review_data = classSelect.getReviewQPOJFICHKVJBDescription(subject_id).data();
-
 
         String subject_Title = review_data.get(0).科目名().values().iterator().next();
         String subject_teacher = review_data.get(0).担当者().values().iterator().next();
-       /* backButton = new BackButton();
-        backButton.setVisible(true); // ボタンを表示
-        backButton.addClickListener(event -> onBackButtonClick(questionnaireService));
-        add(backButton);*/
 
         add(new H1("科目名:"+ subject_Title+"(開講年度:"+year+")"));
         add(new H3("科目担当:"+ subject_teacher));
     }
-    // 戻るボタンがクリックされたときの処理
-    private void onBackButtonClick(QuestionnaireService questionnaireService) {
-        removeAll();  // 現在のレイアウトをクリア
-        VerticalLayout layout = new VerticalLayout();
-
-        this.classSelect = classSelect;
-        this.questionnaireService = questionnaireService;
-        this.scrollManager = new ScrollManager();
-        this.questionnaireGraph=new QuestionnaireGraph(classSelect);
-        this.questionMatters = new QuestionMatters(classSelect, scrollManager);
-        this.questionGrid = new jp.ac.chitose.ir.application.service.class_select.QuestionnaireGrid(classSelect);
-        this.questionDescribe = new QuestionDescribe(classSelect);
-
-        questionnaireGrid = new QuestionnaireGrid(questionnaireService,classSelect);
-        layout.add(questionnaireGrid);
-
-        add(layout);
-    }
-
 }

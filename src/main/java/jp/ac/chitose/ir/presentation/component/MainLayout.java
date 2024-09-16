@@ -11,8 +11,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import jp.ac.chitose.ir.application.service.management.SecurityService;
-import jp.ac.chitose.ir.presentation.views.class_select.QPOJFICHKVJBView;
-import jp.ac.chitose.ir.presentation.views.commission.ir.IrQuestionView;
 import jp.ac.chitose.ir.presentation.views.commission.seiseki.CommissionView;
 import jp.ac.chitose.ir.presentation.views.commission.university.UniversityView;
 import jp.ac.chitose.ir.presentation.views.common.grade.CommonView;
@@ -143,10 +141,10 @@ public class MainLayout extends AppLayout {
         }
 
         // 教員向け
-        if (securityService.getLoginUser().isTeacher()) {
+        /*if (securityService.getLoginUser().isTeacher()) {
             menuItems.add(new MenuItemInfo("Teacher", LineAwesomeIcon.CHART_AREA_SOLID.create(), QPOJFICHKVJBView.class));
             menuItems.add(new MenuItemInfo("IRアンケート",LineAwesomeIcon.FILE_ALT.create(), IrQuestionView.class));
-        }
+        }*/
 
         // 学生向け
         if (securityService.getLoginUser().isStudent()) {

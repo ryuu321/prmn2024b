@@ -6,14 +6,12 @@ import jp.ac.chitose.ir.presentation.component.scroll.ScrollManager;
 import java.util.List;
 
 public class QuestionMatters {
-    private ClassSelect classSelect;
     private ScrollManager scrollManager;
-    public QuestionMatters(ClassSelect classSelect, ScrollManager scrollManager){
-        this.classSelect = classSelect;
+    public QuestionMatters(ScrollManager scrollManager){
         this.scrollManager = scrollManager;
     }
 
-    private H3 title(int i, String subject_id, List<ReviewTitle> Classtitle) {
+    private H3 title(int i, List<ReviewTitle> Classtitle) {
 
         String Title = String.valueOf(Classtitle.get(i));
 
@@ -31,9 +29,9 @@ public class QuestionMatters {
         return null;
     }
 
-    public H3 generateQuestionMatters(int i,String subject_id,List<ReviewTitle>classTitle){
+    public H3 generateQuestionMatters(int i,List<ReviewTitle>classTitle){
 
-        return title(i,subject_id,classTitle);
+        return title(i,classTitle);
     }
 }
 

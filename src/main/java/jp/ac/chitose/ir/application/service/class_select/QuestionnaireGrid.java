@@ -9,13 +9,7 @@ import java.util.List;
 
 public class QuestionnaireGrid {
 
-    private final ClassSelect classSelect;
-
-    public QuestionnaireGrid(ClassSelect classSelect) {
-        this.classSelect = classSelect;
-    }
-
-    public Component generateGrid(int i, String subject_id,List<ReviewQPOJFICHKVJBDescription> reviewData) {
+    public Component generateGrid(int i,List<ReviewQPOJFICHKVJBDescription> reviewData) {
         i = i + 4;
         Grid<String> grid = new Grid<>(String.class, false);
         grid.addColumn(description -> String.valueOf(description)).setHeader("Q" + i);
