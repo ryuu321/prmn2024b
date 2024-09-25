@@ -42,9 +42,9 @@ public class SubjectCommonView extends VerticalLayout {
         add(lectureName, backButton, years, commonGraph, review);
         this.classSelect = classSelect;
         this.scrollManager = new ScrollManager();
-        this.questionnaireGraph=new QuestionnaireGraph(classSelect);
-        this.questionMatters = new QuestionMatters(classSelect, scrollManager);
-        this.questionGrid = new jp.ac.chitose.ir.application.service.class_select.QuestionnaireGrid(classSelect);
+        this.questionnaireGraph=new QuestionnaireGraph();
+        this.questionMatters = new QuestionMatters(scrollManager);
+        this.questionGrid = new jp.ac.chitose.ir.application.service.class_select.QuestionnaireGrid();
         this.questionDescribe = new QuestionDescribe(classSelect);
     }
 
@@ -72,20 +72,20 @@ public class SubjectCommonView extends VerticalLayout {
             int flag = classTests.get(0).Flag();
             for (int i = 0; i < 11; i++) {
                 if (i == 3 && flag == 1) {
-                    review.add(questionMatters.generateQuestionMatters(3, courseId,Classtitle));
-                    review.add(questionGrid.generateGrid(i, courseId,reviewData)); // 自由記述
+                    review.add(questionMatters.generateQuestionMatters(3,Classtitle));
+                    review.add(questionGrid.generateGrid(i,reviewData)); // 自由記述
                     continue;
                 }
 
-                review.add(questionMatters.generateQuestionMatters(i, courseId,Classtitle)); // Example
-                review.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, courseId, classTests).getGraph());
+                review.add(questionMatters.generateQuestionMatters(i,Classtitle)); // Example
+                review.add(questionnaireGraph.generateQuestionnaireGraph(i + 4,classTests).getGraph());
                 review.add(questionDescribe.getStatics(i + 4, courseId,ranking));
             }
 
             // 追加のループで質問と自由記述を追加
             for (int i = 13; i <= 15; i++) {
-                review.add(questionMatters.generateQuestionMatters(i, courseId,Classtitle));
-                review.add(questionGrid.generateGrid(i, courseId,reviewData)); // 自由記述
+                review.add(questionMatters.generateQuestionMatters(i,Classtitle));
+                review.add(questionGrid.generateGrid(i,reviewData)); // 自由記述
             }
         }
     }
@@ -104,20 +104,20 @@ public class SubjectCommonView extends VerticalLayout {
             int flag = classTests.get(0).Flag();
             for (int i = 0; i < 11; i++) {
                 if (i == 3 && flag == 1) {
-                    review.add(questionMatters.generateQuestionMatters(3, courseId,Classtitle));
-                    review.add(questionGrid.generateGrid(i, courseId,reviewData)); // 自由記述
+                    review.add(questionMatters.generateQuestionMatters(3,Classtitle));
+                    review.add(questionGrid.generateGrid(i,reviewData)); // 自由記述
                     continue;
                 }
 
-                review.add(questionMatters.generateQuestionMatters(i, courseId,Classtitle)); // Example
-                review.add(questionnaireGraph.generateQuestionnaireGraph(i + 4, courseId, classTests).getGraph());
+                review.add(questionMatters.generateQuestionMatters(i,Classtitle)); // Example
+                review.add(questionnaireGraph.generateQuestionnaireGraph(i + 4,classTests).getGraph());
                 review.add(questionDescribe.getStatics(i + 4, courseId,ranking));
             }
 
             // 追加のループで質問と自由記述を追加
             for (int i = 13; i <= 15; i++) {
-                review.add(questionMatters.generateQuestionMatters(i, courseId,Classtitle));
-                review.add(questionGrid.generateGrid(i, courseId,reviewData)); // 自由記述
+                review.add(questionMatters.generateQuestionMatters(i,Classtitle));
+                review.add(questionGrid.generateGrid(i,reviewData)); // 自由記述
             }
         }
     }
