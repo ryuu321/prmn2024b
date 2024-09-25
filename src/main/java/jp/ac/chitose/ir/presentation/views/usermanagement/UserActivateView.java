@@ -55,7 +55,7 @@ public class UserActivateView extends VerticalLayout {
             // ユーザ有効化処理
             // 正常終了→成功メッセージ 異常終了→エラーメッセージ
             try {
-                usersService.reviveUsers(selectedUsers);
+                usersService.activateUsers(selectedUsers);
                 // 成功メッセージをセッションに渡して画面をリロード
                 UI.getCurrent().getSession().setAttribute(String.class, selectedUsers.size() + " 件のユーザの有効化に成功");
                 UI.getCurrent().getPage().reload();

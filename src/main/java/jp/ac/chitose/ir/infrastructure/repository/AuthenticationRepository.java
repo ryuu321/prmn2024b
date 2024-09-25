@@ -25,20 +25,6 @@ public class AuthenticationRepository {
     }
 
     // JDBC Clientを使ったデータ取得のメソッド
-    public Optional<User> getUserInformation(String loginId, String password){
-        Optional<User> userOp = jdbcClient.sql("""
-                SELECT id, login_id, user_name AS name, is_available
-                FROM users
-                WHERE is_available
-                AND login_id = ?
-                AND password = ?
-                """)
-                .params(loginId, password)
-                .query(new DataClassRowMapper<>(User.class))
-                .optional();
-        return userOp;
-    }
-
     public Optional<User> getUserInformation(String loginId){
         Optional<User> userOp = jdbcClient.sql("""
                 SELECT id, login_id, user_name AS name, is_available

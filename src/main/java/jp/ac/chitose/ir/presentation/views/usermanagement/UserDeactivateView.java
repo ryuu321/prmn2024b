@@ -55,7 +55,7 @@ public class UserDeactivateView extends VerticalLayout {
             // ユーザ無効化処理
             // 正常終了→成功メッセージ 異常終了→エラーメッセージ
             try {
-                usersService.deleteUsers(selectedUsers);
+                usersService.deactivateUsers(selectedUsers);
                 // 成功メッセージをセッションに渡して画面をリロード
                 UI.getCurrent().getSession().setAttribute(String.class, selectedUsers.size() + " 件のユーザの無効化に成功");
                 UI.getCurrent().getPage().reload();

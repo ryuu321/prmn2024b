@@ -100,7 +100,6 @@ public class UserManagementTextFields extends VerticalLayout {
         return rolesCheckboxGroup.getSelectedItems();
     }
     public Set<Integer> getRoleIds(){
-        Map<String, Integer> allRolesMap = roleService.getAllRolesMap();
         Set<Integer> selectedRoleId = new HashSet<>();
         for(String displayName : rolesCheckboxGroup.getSelectedItems()){
             selectedRoleId.add(allRolesMap.get(displayName));

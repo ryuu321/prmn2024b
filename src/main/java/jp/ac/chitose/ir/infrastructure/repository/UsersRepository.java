@@ -93,7 +93,7 @@ public class UsersRepository {
     }
 
     // ユーザ無効化
-    public int deleteUser(long userId){
+    public int deactivateUser(long userId){
         // 日付の取得
         Timestamp deletedAt = new Timestamp(System.currentTimeMillis());
 
@@ -109,7 +109,7 @@ public class UsersRepository {
     }
 
     // 削除したユーザを有効化
-    public int reviveUser(long userId){
+    public int activateUser(long userId){
         int revived = jdbcClient.sql("""
                 UPDATE users
                 SET is_available = TRUE, deleted_at = NULL
