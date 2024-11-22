@@ -15,6 +15,7 @@ import jp.ac.chitose.ir.presentation.views.commission.seiseki.CommissionView;
 import jp.ac.chitose.ir.presentation.views.commission.university.UniversityView;
 import jp.ac.chitose.ir.presentation.views.common.grade.CommonView;
 import jp.ac.chitose.ir.presentation.views.common.grid.CommonGridView;
+import jp.ac.chitose.ir.presentation.views.helloworld.HelloWorldView;
 import jp.ac.chitose.ir.presentation.views.questionnaire.QuestionnaireTopView;
 import jp.ac.chitose.ir.presentation.views.student.StudentView;
 import jp.ac.chitose.ir.presentation.views.top.TopView;
@@ -128,6 +129,7 @@ public class MainLayout extends AppLayout {
         menuItems.add(new MenuItemInfo("授業に関する情報公開", LineAwesomeIcon.CHART_PIE_SOLID.create(), CommonView.class));
         menuItems.add(new MenuItemInfo("成績評価分布", LineAwesomeIcon.ALIGN_JUSTIFY_SOLID.create(), CommonGridView.class));
         menuItems.add(new MenuItemInfo("アンケート", LineAwesomeIcon.CHART_BAR.create(), QuestionnaireTopView.class));
+        menuItems.add(new MenuItemInfo("演習用", LineAwesomeIcon.ANGLE_UP_SOLID.create(), HelloWorldView.class));
 
         // 管理者向け
         if (securityService.getLoginUser().isAdmin()) {
