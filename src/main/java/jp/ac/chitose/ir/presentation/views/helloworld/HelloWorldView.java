@@ -26,4 +26,9 @@ import java.util.*;
 @PermitAll
 public class  HelloWorldView extends VerticalLayout {
 
+    public HelloWorldView() {
+
+    }
+
+
 }
