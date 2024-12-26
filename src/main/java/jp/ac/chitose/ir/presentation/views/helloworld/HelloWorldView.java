@@ -26,8 +26,21 @@ import java.util.*;
 @PermitAll
 public class  HelloWorldView extends VerticalLayout {
 
-    public HelloWorldView() {
+    private HelloService helloService;
 
+    public HelloWorldView(HelloService helloService) {
+        this.helloService = helloService;
+        H1 title = new H1("IR System & Data Project にようこそ");
+        Paragraph p = new Paragraph("ここに表⽰されているものはサンプルです。プログラムの書き⽅と⾒え⽅の参考程度です。みなさんと⼀緒に作っていきます。");
+        Button sampleButton = new Button("Button");
+
+        add(title, p, sampleButton);
+
+        sampleButton.addClickListener(event -> {
+            /*
+            ここに追加
+             */
+        });
     }
 
 
